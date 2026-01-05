@@ -10,20 +10,20 @@ public abstract class Usuario {
     private String senha;
 
     public Usuario(int id, String nome, String email, String telefone, String cpf, String login, String senha) {
-        setId(id);
-        setNome(nome);
-        setEmail(email);
-        setTelefone(telefone);
-        setCpf(cpf);
-        setLogin(login);
-        setSenha(senha);
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.login = login;
+        this.senha = senha;
     }
 
-    public Usuario(String email, String cpf, String login, String senha) {
-        setEmail(email);
-        setTelefone(telefone);
-        setLogin(login);
-        setSenha(senha);
+    public Usuario(String email, String telefone, String login, String senha) {
+        this.email = email;
+        this.telefone = telefone;
+        this.login = login;
+        this.senha = senha;
     }
 
     public int getId() {
