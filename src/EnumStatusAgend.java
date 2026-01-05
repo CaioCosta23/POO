@@ -1,0 +1,3 @@
+public enum EnumStatusAgend {
+    AGENDADO, CONFIRMADO, CANCELADO, CONCLUIDO, NAO_COMPARECEU;
+}
