@@ -8,15 +8,12 @@ import java.util.Map;
 
 public class Leitor {
     public Leitor() {
-
     }
 
-    public void leArquivos(Map<String, Barbearia> barbearias) {
-        // Número de linhas que serão ignoradas no arquivo de endereco;
+    public void leEndereco(Map <String, Barbearia> barbearias, String chave) {
         final int SALTOS = 2;
 
-        Barbearia barbearia = null;
-        Endereco endereco = null;
+         Endereco endereco = null;
 
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
         try (InputStream arquivoEndereco = App.class.getResourceAsStream("/dados/endereco.txt")) {
@@ -51,6 +48,8 @@ public class Leitor {
                         endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
                     }
 
+                    barbearias.get(chave).setEndereco(endereco);
+
 
                 }catch (NumberFormatException n) {
                     System.out.println("* Entrada INVALIDA! Insira um dado numerico ao numero do endereco.");
@@ -66,9 +65,16 @@ public class Leitor {
         } catch (IOException i) {
             System.out.println("* Erro na leitura/exibicao (do arquivo) de informacoes.");
         }
+    }
+
+    public void leDadosBarbearia(Map<String, Barbearia> barbearias) {
+        // Número de linhas que serão ignoradas no arquivo de endereco;
+        final int SALTOS = 2;
 
 
 
+        Barbearia barbearia;
+       
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
         try (InputStream arquivoInformacoes = App.class.getResourceAsStream("/dados/infoBarbearia.txt")) {
             // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
@@ -103,7 +109,7 @@ public class Leitor {
                     LocalTime fechamento = LocalTime.parse(informacoes[4], DateTimeFormatter.ofPattern("HH:mm"));
                     
 
-                    barbearia = new Barbearia(informacoes[0], endereco, informacoes[1], informacoes[2], abertura, fechamento, informacoes[5]);
+                    barbearia = new Barbearia(informacoes[0], null, informacoes[1], informacoes[2], abertura, fechamento, informacoes[5]);
 
                     barbearias.put(informacoes[5], barbearia);
 
