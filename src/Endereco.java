@@ -88,7 +88,7 @@ public class Endereco {
     }
 
     public void imprimeEndereco() {
-        System.out.println("# Numero: " + this.getNumero());
+        System.out.println("\t# Numero: " + this.getNumero());
 
         /* 
          * Se as informações de rua e bairro forem existentes, rua, complemento e bairro são exibidos (complemento é irrelevante na comparação pois nem todo local * tem ou necessita de complemento);
