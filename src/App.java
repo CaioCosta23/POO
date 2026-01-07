@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws Exception {
         /*
-         * Linha de Código que limpa o terminal e move o cursor para a primeira linha ao se executar novamente o programa;
+         * Linha de Código que "limpa" o terminal e move o cursor para a primeira linha ao se executar novamente o programa;
 
          * OBS: Pode não funcionar em alguns consoles ou IDEs mais antigos(as);
          */
@@ -96,14 +96,20 @@ public class App {
 
                 // Trata os erros de conversão de informações para os seus respectivos tipos;
                 try {
+                    // Faz a validação dos respectivos dados e verifica se os mesmos estão no formato correto;
+                    ValidacaoEmail.validacao(informacoes[2]);
+                    ValidacaoHorario.validacao(informacoes[3]);
+                    ValidacaoHorario.validacao(informacoes[4]);
+                    
                     LocalTime abertura = LocalTime.parse(informacoes[3], DateTimeFormatter.ofPattern("HH:mm"));
                     LocalTime fechamento = LocalTime.parse(informacoes[4], DateTimeFormatter.ofPattern("HH:mm"));
+                    
 
                     barbearia = new Barbearia(informacoes[0], endereco, informacoes[1], informacoes[2], abertura, fechamento, informacoes[5]);
 
 
-                }catch (NumberFormatException n) {
-                    System.out.println("* Entrada INVALIDA! Insira um dado numerico ao numero do endereco.");
+                }catch (ExceptionFormato em) {
+                    System.out.println("* Entrada de dados INVALIDA! " + em.getMessage());
                 }catch (IllegalArgumentException h) {
                     System.out.println("Entrada INVALIDA! Erro de leitura para os dados de horarios.");
                 }
@@ -118,12 +124,13 @@ public class App {
 
         try (Scanner entrada = new Scanner(System.in)) {
             try {
-                // "Menu" de entrada;
+                // Verifica se a barbearia existe dentro do sistema;
                 if (barbearia == null) {
                     throw new NullPointerException();
                 }
 
 
+                // Menu de exibição;
                 System.out.println("===============================================================================================================");
                 System.out.println("\t\t\t\t\t" + barbearia.getNome());
                 System.out.println("===============================================================================================================");
@@ -141,9 +148,11 @@ public class App {
                     int opcao = entrada.nextInt();
                     System.out.println("................................................................................................................");
 
+                    // Verifica se uma das opções listadas acima foi digitada, caso contrário, lança uma exceção informando ao usuário o problema;
                     if ((opcao < 1) || (opcao > 4)) {
                         throw new IllegalArgumentException();
                     }
+
 
                     switch(opcao) {
                         case 1:
@@ -153,6 +162,7 @@ public class App {
                         case 3:
                             break;
                         case 4:
+                            // Imprime as informações da barearia (se as mesmas existirem!);
                             try {
                                 barbearia.exibirInformacoes();
                             } catch (NullPointerException p) {
