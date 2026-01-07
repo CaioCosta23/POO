@@ -89,10 +89,17 @@ public class Endereco {
 
     public void imprimeEndereco() {
         System.out.println("---------------------------------------------------------------------------------------------------------------");
-        System.out.println("# Rua: " + this.getRua());
         System.out.println("# Numero: " + this.getNumero());
-        System.out.println("# Complemento: " + this.getComplemento());
-        System.out.println("# Bairro: " + this.getBairro());
+
+        /* 
+         * Se as informações de rua e bairro forem existentes, rua, complemento e bairro são exibidos (complemento é irrelevante na comparação pois nem todo local * tem ou necessita de complemento);
+        */
+        if ((!(this.getRua().equals("-"))) && (!(this.getBairro().equals("-")))) {
+            System.out.println("# Rua: " + this.getRua());
+            System.out.println("# Complemento: " + this.getComplemento());
+            System.out.println("# Bairro: " + this.getBairro());
+        }
+        
         System.out.println("# Cidade: " + this.getCidade());
         System.out.println("# Estado: " + this.getEstado());
         System.out.println("# CEP: " + this.getCep());
