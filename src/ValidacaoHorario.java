@@ -1,5 +1,5 @@
 public class ValidacaoHorario {
-        /*
+    /*
      * EXPRESSÃO REGULAR:
      *
      * Trata-se de uma expressão que define um padrão de escrita/validação de algum dado (geralmente também descritivo);
