@@ -14,6 +14,7 @@ public class ValidacaoEmail {
      * "0-9" representa a possibilidade de haver todo e qualquer algarismo de 0 à 9;
      * "+_.-" Indica os simbolos permitidos em um endereço de e-mail;
      * "+" indica que pode haver um ou mais caracteres depois;
+     * "@" indica que ele tem que estar obrigatóriamente nos dados;
      * "$" indica que não pode haver mais nenhum caractere após isso;
      * 
      * OBS: Geralmente essa variável é nomeada como "REGEX";
