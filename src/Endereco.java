@@ -26,7 +26,7 @@ public class Endereco {
     }
 
     public String getRua() {
-        return rua;
+        return this.rua;
     }
 
     public void setRua(String rua) {
@@ -34,7 +34,7 @@ public class Endereco {
     }
 
     public int getNumero() {
-        return numero;
+        return this.numero;
     }
 
     public void setNumero(int numero) {
@@ -42,7 +42,7 @@ public class Endereco {
     }
 
     public String getComplemento() {
-        return complemento;
+        return this.complemento;
     }
 
     public void setComplemento(String complemento) {
@@ -50,7 +50,7 @@ public class Endereco {
     }
 
     public String getBairro() {
-        return bairro;
+        return this.bairro;
     }
 
     public void setBairro(String bairro) {
@@ -58,7 +58,7 @@ public class Endereco {
     }
 
     public String getCidade() {
-        return cidade;
+        return this.cidade;
     }
 
     public void setCidade(String cidade) {
@@ -66,7 +66,7 @@ public class Endereco {
     }
 
     public String getEstado() {
-        return estado;
+        return this.estado;
     }
 
     public void setEstado(String estado) {
@@ -74,7 +74,7 @@ public class Endereco {
     }
 
     public String getCep() {
-        return cep;
+        return this.cep;
     }
 
     public void setCep(String cep) {
