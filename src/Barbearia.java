@@ -8,16 +8,6 @@ public class Barbearia {
     protected LocalTime fechamento;
     private String cnpj;
     private PoliticaCancelamento politica;
-
-
-    public Barbearia(String nome, Endereco endereco, String telefone, String email, String cnpj) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.telefone = telefone;
-        this.email = email;
-        this.cnpj = cnpj;
-    }
-
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
             LocalTime fechamento, String cnpj, PoliticaCancelamento politica) {
