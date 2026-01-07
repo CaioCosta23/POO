@@ -83,4 +83,17 @@ public class Endereco {
     public void setCep(String cep) {
         this.cep = cep;
     }
+
+    public void imprimeEndereco() {
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        System.out.println("# Rua: " + this.getRua());
+        System.out.println("# Numero: " + this.getNumero());
+        System.out.println("# Complemento: " + this.getComplemento());
+        System.out.println("# Bairro: " + this.getBairro());
+        System.out.println("# Cidade: " + this.getCidade());
+        System.out.println("# Estado: " + this.getEstado());
+        System.out.println("# CEP: " + this.getCep());
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+        
+    }
 }
