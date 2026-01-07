@@ -11,7 +11,10 @@ public class Endereco {
      * Alguns endereços não necessitam de tantas especificações, uma vez que o CEP já fornece várias informações primordiais (como rua, bairro, etc.);
      */
     public Endereco(int numero, String cidade, String estado, String cep) {
+        this.rua = "-";
         this.numero = numero;
+        this.complemento = "-";
+        this.bairro = "-";
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
