@@ -15,11 +15,13 @@ public class ValidacaoEmail {
      * "+_.-" Indica os simbolos permitidos em um endereço de e-mail;
      * "+" indica que pode haver um ou mais caracteres depois;
      * "@" indica que ele tem que estar obrigatóriamente nos dados;
+     * "\\." indica que o ponto também é obrigatório (o "\" é necessário para "escapar" o caractere, uma vez que o ponto tem um significado especial em expressões regulares);
+     * "{2,}" indica que deve haver no mínimo 2 caracteres após o ponto (como em .com, .br, .org, etc.);
      * "$" indica que não pode haver mais nenhum caractere após isso;
      * 
      * OBS: Geralmente essa variável é nomeada como "REGEX";
      */
-    private static final String FORMATO = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9+_.-]$";
+    private static final String FORMATO = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9+_.-]+\\.[A-Za-z]{2,}$";
 
 
     /*
