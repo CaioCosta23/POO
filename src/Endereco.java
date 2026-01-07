@@ -88,7 +88,6 @@ public class Endereco {
     }
 
     public void imprimeEndereco() {
-        System.out.println("---------------------------------------------------------------------------------------------------------------");
         System.out.println("# Numero: " + this.getNumero());
 
         /* 
