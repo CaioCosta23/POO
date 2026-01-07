@@ -4,7 +4,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 
 public class App {
@@ -26,6 +30,10 @@ public class App {
 
         Barbearia barbearia = null;
         Endereco endereco = null;
+
+
+        Set <Cliente> clientes = new HashSet<>();
+        Map <String, Barbeiro> barbeiros = new HashMap<>();
 
 
 
@@ -52,12 +60,14 @@ public class App {
 
                 // Trata os erros de conversão de informações para os seus respectivos tipos;
                 try {
+
                     // Verifica se é um endereço simples ou um endereço completo e cria o mesmo com as informações retiradas da(s) linha(s) do arquivo;
                     if (campos.length == 4) {
                         endereco = new Endereco(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3]);
                     }else if (campos.length == 7) {
                         endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
                     }
+
 
                 }catch (NumberFormatException n) {
                     System.out.println("* Entrada INVALIDA! Insira um dado numerico ao numero do endereco.");
@@ -66,6 +76,7 @@ public class App {
                 }
             }
             
+
 
         } catch (IOException i) {
             System.out.println("* Erro na leitura/exibicao (do arquivo) de informacoes.");
@@ -100,6 +111,8 @@ public class App {
                     ValidacaoEmail.validacao(informacoes[2]);
                     ValidacaoHorario.validacao(informacoes[3]);
                     ValidacaoHorario.validacao(informacoes[4]);
+                    ValidacaoCnpj.validacao(informacoes[5]);
+
                     
                     LocalTime abertura = LocalTime.parse(informacoes[3], DateTimeFormatter.ofPattern("HH:mm"));
                     LocalTime fechamento = LocalTime.parse(informacoes[4], DateTimeFormatter.ofPattern("HH:mm"));
@@ -155,7 +168,13 @@ public class App {
 
 
                     switch(opcao) {
+                        // Registro e consulta de clientes;
                         case 1:
+                            try {
+                                
+                            } catch (NullPointerException c) {
+                                System.out.println("ERRO! Falha no registro de cliente!");
+                            }
                             break;
                         case 2:
                             break;
@@ -181,7 +200,7 @@ public class App {
                 
 
             } catch (NullPointerException i) {
-                System.out.println("* Informacoes nao encontradas.");
+                System.out.println("* Informacoes do sistema nao encontradas.");
             }
         }
     }
