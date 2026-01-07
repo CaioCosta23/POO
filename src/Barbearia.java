@@ -110,4 +110,18 @@ public class Barbearia {
     public void setPolitica(PoliticaCancelamento politica) {
         this.politica = politica;
     }
+
+    public void exibirInformacoes() {
+        System.out.println("- Nome do Estabelecimento: " + this.getNome());
+        System.out.println("- Telefone: " + this.getTelefone());
+        System.out.println("- Email: " + getEmail());
+
+        System.out.println("- Endereco:");
+        this.getEndereco().imprimeEndereco();
+
+        System.out.printf("- Horario de Funcionamento %02d:%02d - %02d:%02d\n", this.getAbertura().getHour(), this.getAbertura().getMinute(),
+                                                                                      this.getFechamento().getHour(), this.getFechamento().getMinute());
+        System.out.println("- CNPJ: " + this.getCnpj());
+        System.out.println("---------------------------------------------------------------------------------------------------------------");
+    }
 }
