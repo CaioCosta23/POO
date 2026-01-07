@@ -7,10 +7,10 @@ public class Barbearia {
     protected LocalTime abertura;
     protected LocalTime fechamento;
     private String cnpj;
-    private PoliticaCancelamento politica;
+    //private PoliticaCancelamento politica;
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
-            LocalTime fechamento, String cnpj, PoliticaCancelamento politica) {
+            LocalTime fechamento, String cnpj) {
         this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
@@ -18,7 +18,7 @@ public class Barbearia {
         this.abertura = abertura;
         this.fechamento = fechamento;
         this.cnpj = cnpj;
-        this.politica = politica;
+        //this.politica = null;
     }
 
 
@@ -91,7 +91,7 @@ public class Barbearia {
         this.cnpj = cnpj;
     }
 
-
+/* 
     public PoliticaCancelamento getPolitica() {
         return this.politica;
     }
@@ -100,6 +100,7 @@ public class Barbearia {
     public void setPolitica(PoliticaCancelamento politica) {
         this.politica = politica;
     }
+        */
 
     public void exibirInformacoes() {
         System.out.println("- Nome do Estabelecimento: " + this.getNome());
