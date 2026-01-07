@@ -19,7 +19,7 @@ public class ValidacaoHorario {
      * 
      * OBS: Geralmente essa variável é nomeada como "REGEX";
      */
-    private static final String REGEXHORARIO = "^[0-20-3]+:[0-50-9]$";
+    private static final String REGEXHORARIO = "^([01][0-9]|2[0-3]):[0-5][0-9]$";
 
 
     /*
