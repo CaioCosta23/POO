@@ -19,7 +19,7 @@ public class Endereco {
         this.estado = estado;
         this.cep = cep;
     }
-    // Método de Sobre Carga;
+    // Método de Sobrecarga;
     public Endereco(String rua, int numero, String complemento, String bairro, String cidade, String estado,
             String cep) {
         this.rua = rua;
@@ -99,7 +99,7 @@ public class Endereco {
             System.out.println("# Complemento: " + this.getComplemento());
             System.out.println("# Bairro: " + this.getBairro());
         }
-        
+
         System.out.println("# Cidade: " + this.getCidade());
         System.out.println("# Estado: " + this.getEstado());
         System.out.println("# CEP: " + this.getCep());
