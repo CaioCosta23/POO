@@ -7,13 +7,16 @@ public class Endereco {
     private String estado;
     private String cep;
 
+    /*
+     * Alguns endereços não necessitam de tantas especificações, uma vez que o CEP já fornece várias informações primordiais (como rua, bairro, etc.);
+     */
     public Endereco(int numero, String cidade, String estado, String cep) {
         this.numero = numero;
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
     }
-
+    // Método de Sobre Carga;
     public Endereco(String rua, int numero, String complemento, String bairro, String cidade, String estado,
             String cep) {
         this.rua = rua;
