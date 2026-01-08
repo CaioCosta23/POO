@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -150,7 +149,7 @@ public class Leitor {
         }
         return opcao;
     }
-    
+
 
     public Usuario lerLoginSenhaUsuarios(Map <String, Usuario> usuarios) {
         try(Scanner entrada = new Scanner(System.in)) {
