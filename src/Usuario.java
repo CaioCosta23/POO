@@ -105,4 +105,12 @@ public abstract class Usuario implements Menu{
             }
         }
     }
+
+    @Override
+    public void exibirInformacoes() {
+        System.out.println("- Nome:" + this.getNome());
+        System.out.println("- E-mail:" + this.getEmail());
+        System.out.println("- Telefone:" + this.getTelefone());
+        System.out.println("- CPF:" + this.getCpf());
+    }
 }
