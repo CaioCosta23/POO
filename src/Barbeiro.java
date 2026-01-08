@@ -15,6 +15,13 @@ public class Barbeiro extends Usuario{
         this.salario = salario;
     }
 
+    // Realiza uma cópia profunda de todos os dados de um objeto para outro (sem ligar a referência de um objeto ao outro);
+    public Barbeiro(Barbeiro original) {
+        super(original);
+        this.contratacao = original.getContratacao();
+        this.salario = original.getSalario();
+    }
+
     public LocalDate getContratacao() {
         return this.contratacao;
     }
