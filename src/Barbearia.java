@@ -116,8 +116,8 @@ public class Barbearia implements Menu{
         System.out.println("\t[1] Acessar area do cliente\t[2] Acessar area do prestador de servico");
         System.out.println("\t[3] Avaliacoes             \t[4] Informacoes");
     }
-    
 
+    @Override
     public void exibirInformacoes() {
         System.out.println("- Nome do Estabelecimento: " + this.getNome());
         System.out.println("- Telefone: " + this.getTelefone());
