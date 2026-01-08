@@ -131,6 +131,27 @@ public class Leitor {
         }
     }
 
+    public int leOpcoes(int qtdOpcoes) {
+        int opcao = -1;
+
+        try (Scanner entrada = new Scanner(System.in)) {
+            try {
+                System.out.printf("\n- Digite o numero da opcao: ");
+                opcao = Integer.parseInt(entrada.nextLine());
+                System.out.println("................................................................................................................");
+
+                // Verifica se uma das opções listadas acima foi digitada, caso contrário, lança uma exceção informando ao usuário o problema;
+                if ((opcao < 1) || (opcao > qtdOpcoes)) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (IllegalArgumentException o) {
+                System.out.println("* Opcao INVALIDA! Por Favor, digite uma das opcoes listadas acima.");
+            }
+        }
+        return opcao;
+    }
+    
+
     public Usuario lerLoginSenhaUsuarios(Map <String, Usuario> usuarios) {
         try(Scanner entrada = new Scanner(System.in)) {
             System.out.printf("@ Login: ");
