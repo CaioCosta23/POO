@@ -20,10 +20,23 @@ public abstract class Usuario implements Menu{
     }
 
     public Usuario(String email, String telefone, String login, String senha) {
+        this.id = -1;
+        this.nome = "-";
         this.email = email;
         this.telefone = telefone;
+        this.cpf = "-";
         this.login = login;
         this.senha = senha;
+    }
+
+    public Usuario(Usuario original) {
+        this.id = original.id;
+        this.nome = original.nome;
+        this.email = original.email;
+        this.telefone = original.telefone;
+        this.cpf = original.cpf;
+        this.login = original.login;
+        this.senha = original.senha;
     }
 
     public int getId() {
