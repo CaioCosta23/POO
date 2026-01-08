@@ -4,7 +4,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Leitor {
     public Leitor() {
@@ -127,5 +129,24 @@ public class Leitor {
         } catch (IOException i) {
             System.out.println("* Erro na leitura/exibicao (do arquivo) de informacoes.");
         }
+    }
+
+    public Usuario lerLoginSenhaUsuarios(Map <String, Usuario> usuarios) {
+        try(Scanner entrada = new Scanner(System.in)) {
+            System.out.printf("@ Login: ");
+            String login = entrada.nextLine();
+
+            System.out.printf("@ Senha: ");
+            String senha = entrada.nextLine();
+
+
+            for (Map.Entry<String, Usuario> valor : usuarios.entrySet()) {
+                if (valor.getValue().autenticar(login, senha)) {
+                    return valor.getValue();
+                }
+            }
+
+        }
+        return null;
     }
 }
