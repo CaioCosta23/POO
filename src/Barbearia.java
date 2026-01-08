@@ -113,8 +113,7 @@ public class Barbearia implements Menu{
 
         System.out.println("# Informe o servico do qual deseja acessar:\n");
 
-        System.out.println("\t[1] Acessar area do cliente\t[2] Acessar area do prestador de servico");
-        System.out.println("\t[3] Avaliacoes             \t[4] Informacoes");
+        System.out.println("\t[1] Acessar area do usuario\t[2] Avaliacoes\t[3] Informacoes");
     }
 
     @Override
