@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Barbeiro extends Usuario implements Menu{
+public class Barbeiro extends Usuario{
     private LocalDate contratacao;
     private float salario;
     
@@ -34,5 +34,18 @@ public class Barbeiro extends Usuario implements Menu{
     @Override
     public void exibirMenu() {
 
+        System.out.println("@ Digite a opcao que deseja executar no momento:\n");
+
+        System.out.println("[A] Consultar Dados de Agendamento\t[B] Editar Servicos");
+        System.out.println("[C]Alterar Senha de Login\t[D] Visualizar Dados Cadastrais");
+    }
+
+    @Override
+    public void exibirInformacoes() {
+        System.out.println("- ID: " + this.getId());
+        super.exibirInformacoes();
+        System.out.printf("- Salario: R$%.2f\n" , this.getSalario());
+        System.out.printf("- Data de Admissao: %02d/%02d/%04d\n", this.getContratacao().getDayOfMonth(),
+                                                                        this.getContratacao().getMonthValue(), getContratacao().getYear());
     }
 }
