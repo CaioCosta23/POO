@@ -1,5 +1,5 @@
 import java.time.LocalTime;
-public class Barbearia {
+public class Barbearia implements Menu{
     private String nome;
     protected Endereco endereco;
     private String telefone;
@@ -101,6 +101,22 @@ public class Barbearia {
         this.politica = politica;
     }
         */
+    
+    @Override
+    public void exibirMenu() {
+        // Menu de exibição;
+        System.out.println("===============================================================================================================");
+        System.out.println("\t\t\t\t\t" + this.getNome());
+        System.out.println("===============================================================================================================");
+
+        System.out.println("-> Bem-Vindo!\n");
+
+        System.out.println("# Informe o servico do qual deseja acessar:\n");
+
+        System.out.println("\t[1] Acessar area do cliente\t[2] Acessar area do prestador de servico");
+        System.out.println("\t[3] Avaliacoes             \t[4] Informacoes");
+    }
+    
 
     public void exibirInformacoes() {
         System.out.println("- Nome do Estabelecimento: " + this.getNome());
