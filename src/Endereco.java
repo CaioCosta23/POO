@@ -88,20 +88,23 @@ public class Endereco {
     }
 
     public void imprimeEndereco() {
-        System.out.println("\t# Numero: " + this.getNumero());
-
         /* 
          * Se as informações de rua e bairro forem existentes, rua, complemento e bairro são exibidos (complemento é irrelevante na comparação pois nem todo local * tem ou necessita de complemento);
         */
-        if ((!(this.getRua().equals("-"))) && (!(this.getBairro().equals("-")))) {
-            System.out.println("\t# Rua: " + this.getRua());
-            System.out.println("\t# Complemento: " + this.getComplemento());
-            System.out.println("\t# Bairro: " + this.getBairro());
-        }
+        if (this.getCep().equals("-")) {
+            System.out.println("\t# Sem informacoes de endereco.");
+        }else {
+            System.out.println("\t# Numero: " + this.getNumero());
+            if ((!(this.getRua().equals("-"))) && (!(this.getBairro().equals("-")))) {
+                System.out.println("\t# Rua: " + this.getRua());
+                System.out.println("\t# Complemento: " + this.getComplemento());
+                System.out.println("\t# Bairro: " + this.getBairro());
+            }
 
-        System.out.println("\t# Cidade: " + this.getCidade());
-        System.out.println("\t# Estado: " + this.getEstado());
-        System.out.println("\t# CEP: " + this.getCep());
+            System.out.println("\t# Cidade: " + this.getCidade());
+            System.out.println("\t# Estado: " + this.getEstado());
+            System.out.println("\t# CEP: " + this.getCep());
+        }
         
     }
 }
