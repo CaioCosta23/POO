@@ -1,24 +1,19 @@
-import java.util.Map;
 import java.util.Set;
 
 public class Gerenciador {
-    private final static String CODIGO = "15.457.146/7923-48";
+
     
     public Gerenciador() {
     }
 
-    public String getCodigo() {
-        return CODIGO;
-    }
-
-    public void iniciarSistema(Map<String, Barbearia> barbearias) {
+    public void iniciarSistema(Barbearia barbearia) {
         // Verifica se a barbearia existe dentro do sistema;
         try {
-            if (barbearias.isEmpty()) {
+            if (barbearia == null) {
                 throw new Exception("* Barbearia(s) inexistente(s) no sistema. ");
             }
 
-            barbearias.get(CODIGO).exibirMenu();
+            barbearia.exibirMenu();
 
         }catch (Exception v) {
             System.out.println(v.getMessage() + "Nao existem informacoes no sistema.");
@@ -27,7 +22,7 @@ public class Gerenciador {
 
     
 
-    public void executarPrograma(Map <String, Barbearia> barbearias, Set <Cliente> clientes, Leitor leitor) {
+    public void executarPrograma(Barbearia barbearia, Set <Cliente> clientes, Leitor leitor) {
         final int QTDOPCOES = 3;
 
 
@@ -39,23 +34,31 @@ public class Gerenciador {
             if ((opcao == 1) || (opcao == 2)) {
                 // Acesso à area do Pretador de Serviços (Barbeiro ou Administrador - do Sistema);
                 System.out.print("\033[H\033[2J");
-                System.out.flush();
+                System.out.flush();  
 
                 if (opcao == 1) {
-                    
+                    Cliente cliente = (Cliente)leitor.lerLoginSenhaUsuarios(clientes);
+                    if (cliente == null) {
+                        throw new ExceptionObjetoInexistente("Usuario ou objeto nao encontrado.");
+                    }
                 }
                 if (opcao == 2) {
-
+                    Barbeiro barbeiro = (Barbeiro)leitor.lerLoginSenhaUsuarios(barbearia.getBarbeiros());
+                    if (barbeiro == null) {
+                        throw new ExceptionObjetoInexistente("Usuario ou objeto nao encontrado.");
+                    }
                 }
             }
             if (opcao == 3) {
                 // Imprime as informações da barearia (se as mesmas existirem!);
                 try {
-                    barbearias.get(CODIGO).exibirInformacoes();
+                    barbearia.exibirInformacoes();
                 } catch (NullPointerException p) {
                     System.out.println("* Informacoes nao encontradas.");
                 }
             }
+        }catch (ExceptionObjetoInexistente u) {
+            System.out.println(u.getMessage());
         } catch (Exception o) {
             System.out.println(o.getMessage());
         }
