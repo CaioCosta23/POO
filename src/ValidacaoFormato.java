@@ -13,7 +13,7 @@ public class ValidacaoFormato {
          * .matches(): verifica se a string (neste caso) segue 100% a regra estipulada no "formato"; 
         */
         if (!(dado).matches(formato)) {
-            throw new ExceptionFormato("CEP Invalido.");
+            throw new ExceptionFormato("* Dado(s) Invalido!");
         }
     }
 }
