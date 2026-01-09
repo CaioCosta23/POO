@@ -124,7 +124,7 @@ public class Leitor {
     public int leOpcoes(int qtdOpcoes) {
         int opcao = -1;
 
-        try (Scanner entrada = new Scanner(System.in)) {
+        Scanner entrada = new Scanner(System.in);
             try {
                 System.out.printf("\n- Digite o numero da opcao: ");
                 opcao = Integer.parseInt(entrada.nextLine());
@@ -132,15 +132,38 @@ public class Leitor {
 
                 // Verifica se uma das opções listadas acima foi digitada, caso contrário, lança uma exceção informando ao usuário o problema;
                 if ((opcao < 1) || (opcao > qtdOpcoes)) {
+                    entrada.close();
                     throw new IllegalArgumentException();
                 }
             } catch (IllegalArgumentException o) {
                 System.out.println("* Opcao INVALIDA! Por Favor, digite uma das opcoes listadas acima.");
             }
-        }
+            entrada.close();
         return opcao;
     }
 
+    public Cliente leCliente() {
+        Scanner entrada = new Scanner(System.in);
+        System.out.printf("- Informe o nome: ");
+        String nome = entrada.nextLine();
+
+        System.out.printf("- Insira um endereco de e-mail: ");
+        String email = entrada.nextLine();
+        //ValidacaoFormato.validacao(email, EnumFormato.EMAIL.FORMATO);
+
+        System.out.printf("- Insira um telefone (com o DDD, como 027, por exemplo, e 9 digitos): ");
+        String telefone = entrada.nextLine();
+
+        System.out.printf("- Digite um nome de Login: ");
+        String login = entrada.nextLine();
+
+        System.out.printf("- Digite uma senha (com ao menos 5 caracteres): ");
+        String senha = entrada.nextLine();
+
+        entrada.close();
+
+        return new Cliente(nome, email, telefone, login, senha);
+    }
 
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
 
