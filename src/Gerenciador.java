@@ -1,4 +1,3 @@
-import java.util.Set;
 public class Gerenciador {
 
     
@@ -17,8 +16,9 @@ public class Gerenciador {
     }
 
 
-    public void executarPrograma(Barbearia barbearia, Set <Cliente> clientes, Leitor leitor) throws Exception {
+    public void executarPrograma(Barbearia barbearia) throws Exception {
         final int QTDOPCOES = 3;
+        Leitor leitor = new Leitor();
 
         int opcao = leitor.leOpcoes(QTDOPCOES);
 
@@ -28,15 +28,21 @@ public class Gerenciador {
         if ((opcao == 1) || (opcao == 2)) {
             // Acesso à area do Pretador de Serviços (Barbeiro ou Administrador - do Sistema);
             System.out.print("\033[H\033[2J");
-            System.out.flush();  
+            System.out.flush(); 
 
             if (opcao == 1) {
+                Cliente cliente = leitor.leCliente();
+                leitor.armazenarUsuario(cliente);
+            }
+            if (opcao == 2) {
+                /* 
                 Cliente cliente = (Cliente)leitor.lerLoginSenhaUsuarios(clientes);
                 if (cliente == null) {
                     throw new ExceptionObjetoInexistente("Usuario ou objeto nao encontrado.");
                 }
-            }
-            if (opcao == 2) {
+                cliente.exibirMenu();
+                */
+
                 Barbeiro barbeiro = (Barbeiro)leitor.lerLoginSenhaUsuarios(barbearia.getBarbeiros());
                 if (barbeiro == null) {
                     throw new ExceptionObjetoInexistente("Usuario ou objeto nao encontrado.");
