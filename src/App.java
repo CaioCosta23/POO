@@ -23,12 +23,14 @@ public class App {
 
         
         barbearia = leitor.leDadosBarbearia(barbearia);
-        
+
         try {
             gerenciador.iniciarSistema(barbearia);
             gerenciador.executarPrograma(barbearia, clientes, leitor);
         } catch (ExceptionObjetoInexistente e) {
             System.out.println(e.getMessage());
+        } catch (IllegalArgumentException s) {
+            System.out.println("* Erro de leitura para os dados descritivos da barbearia.");
         }
     }
 }
