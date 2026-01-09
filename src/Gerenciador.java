@@ -1,26 +1,21 @@
 import java.util.Set;
-
 public class Gerenciador {
 
     
     public Gerenciador() {
     }
 
-    public void iniciarSistema(Barbearia barbearia) {
+    public void iniciarSistema(Barbearia barbearia)throws ExceptionObjetoInexistente {
         // Verifica se a barbearia existe dentro do sistema;
-        try {
-            if (barbearia == null) {
-                throw new Exception("* Barbearia(s) inexistente(s) no sistema. ");
-            }
-
-            barbearia.exibirMenu();
-
-        }catch (Exception v) {
-            System.out.println(v.getMessage() + "Nao existem informacoes no sistema.");
+        if (barbearia == null) {
+            throw new ExceptionObjetoInexistente("* Informacoes faltantes ou incompletos na criacao da barbearia. ");
         }
+        Leitor leitor = new Leitor();
+        leitor.leEndereco(barbearia);
+
+        barbearia.exibirMenu();
     }
 
-    
 
     public void executarPrograma(Barbearia barbearia, Set <Cliente> clientes, Leitor leitor) {
         final int QTDOPCOES = 3;
