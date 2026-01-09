@@ -4,8 +4,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Leitor {
     public Leitor() {
@@ -147,7 +149,8 @@ public class Leitor {
     }
 
 
-    public Usuario lerLoginSenhaUsuarios(Map <String, Usuario> usuarios) {
+    public Usuario lerLoginSenhaUsuarios(Object usuarios) {
+
         try(Scanner entrada = new Scanner(System.in)) {
             System.out.printf("@ Login: ");
             String login = entrada.nextLine();
@@ -155,13 +158,39 @@ public class Leitor {
             System.out.printf("@ Senha: ");
             String senha = entrada.nextLine();
 
+            if (usuarios instanceof Map) {
+                Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
+                
+                for (Object valor : mapeados.entrySet()) {
+                    if (valor instanceof Barbeiro) {
+                        Barbeiro barbeiro = (Barbeiro)valor;
 
-            for (Map.Entry<String, Usuario> valor : usuarios.entrySet()) {
-                if (valor.getValue().autenticar(login, senha)) {
-                    return valor.getValue();
+                        if (barbeiro.autenticar(login, senha)) {
+                            return barbeiro;
+                        }
+                    }
+                }
+            }else if (usuarios instanceof Set){
+                Set<?> mapeados = (Set<?>)usuarios;
+
+                Iterator<?> iterador = mapeados.iterator();
+
+                while(iterador.hasNext()) {
+                    Object valor = iterador.next();
+
+                    if (valor instanceof Cliente) {
+                        Cliente cliente = (Cliente)valor;
+                        if (cliente.autenticar(login, senha)) {
+                            return cliente;
+                        }
+                    }
+                }
+            }else if (usuarios instanceof Administrador) {
+                Administrador administrador = (Administrador)usuarios;
+                if (administrador.autenticar(login, senha)) {
+                    return administrador;
                 }
             }
-
         }
         return null;
     }
