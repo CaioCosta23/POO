@@ -23,16 +23,12 @@ public class App {
 
         
         barbearia = leitor.leDadosBarbearia(barbearia);
-        leitor.leEndereco(barbearia);
-
-        // Cria um tempo de espera (em segundos) no terminal antes de executar as próximas açõe;
-        TimeUnit.SECONDS.sleep(6);
-
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-
-        gerenciador.iniciarSistema(barbearia);
-        gerenciador.executarPrograma(barbearia, clientes, leitor);
-
+        
+        try {
+            gerenciador.iniciarSistema(barbearia);
+            gerenciador.executarPrograma(barbearia, clientes, leitor);
+        } catch (ExceptionObjetoInexistente e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
