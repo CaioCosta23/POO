@@ -111,6 +111,8 @@ public class Barbearia implements Menu{
     
     @Override
     public void exibirMenu() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush(); 
         // Menu de exibição;
         System.out.println("===============================================================================================================");
         System.out.println("\t\t\t\t\t" + this.getNome());
