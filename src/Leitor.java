@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
@@ -149,7 +150,7 @@ public class Leitor {
     }
 
 
-    public Cliente leCliente() {
+    public Cliente cadastrarCliente() {
         Scanner entrada = new Scanner(System.in);
 
         System.out.printf("- Informe o nome: ");
@@ -206,6 +207,27 @@ public class Leitor {
         }catch (IOException a) {
             System.out.println("Erro! Nao foi possivel realizar o cadastro.");
         }
+    }
+
+    public Set<Cliente>lerCliente() {
+        Set<Cliente> clientes = new HashSet<>();
+
+        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+
+            String linha;
+                
+            while ((linha = br.readLine()) != null) {
+                String[] campos = linha.split(";");
+
+                clientes.add(new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                
+            }
+        } catch(IOException c) {
+            System.out.println("Lista de clientes nao encontrada.");
+        }
+
+        return clientes;
     }
 
 
