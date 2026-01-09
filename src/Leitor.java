@@ -11,7 +11,7 @@ public class Leitor {
     public Leitor() {
     }
 
-    public void leEndereco(Map <String, Barbearia> barbearias, String chave) {
+    public void leEndereco(Barbearia barbearia) {
         final int SALTOS = 2;
 
          Endereco endereco = null;
@@ -49,7 +49,7 @@ public class Leitor {
                         endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
                     }
 
-                    barbearias.get(chave).setEndereco(endereco);
+                    barbearia.setEndereco(endereco);
 
 
                 }catch (NumberFormatException n) {
@@ -68,13 +68,9 @@ public class Leitor {
         }
     }
 
-    public void leDadosBarbearia(Map<String, Barbearia> barbearias) {
+    public Barbearia leDadosBarbearia(Barbearia barbearia) {
         // Número de linhas que serão ignoradas no arquivo de endereco;
         final int SALTOS = 2;
-
-
-
-        Barbearia barbearia;
        
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
         try (InputStream arquivoInformacoes = App.class.getResourceAsStream("/dados/infoBarbearia.txt")) {
@@ -112,8 +108,6 @@ public class Leitor {
 
                     barbearia = new Barbearia(informacoes[0], null, informacoes[1], informacoes[2], abertura, fechamento, informacoes[5]);
 
-                    barbearias.put(informacoes[5], barbearia);
-
 
                 }catch (ExceptionFormato em) {
                     System.out.println("* Entrada de dados INVALIDA! " + em.getMessage());
@@ -128,6 +122,8 @@ public class Leitor {
         } catch (IOException i) {
             System.out.println("* Erro na leitura/exibicao (do arquivo) de informacoes.");
         }
+        
+        return barbearia;
     }
 
     public int leOpcoes(int qtdOpcoes) {
