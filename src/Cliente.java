@@ -21,6 +21,14 @@ public class Cliente extends Usuario {
     }
 
     @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d", this.getId(), this.getNome(), this.getEmail(), this.getTelefone(),
+                                                     this.getCpf(), this.getLogin(), this.getSenha(),
+                                                     this.nascimento.getDayOfMonth(), this.nascimento.getMonthValue(),
+                                                     this.nascimento.getYear());
+    }
+
+    @Override
     public void exibirMenu() {
         System.out.println("@ Selecione uma das opcoes abaixo:");
         
