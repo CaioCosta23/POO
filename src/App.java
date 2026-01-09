@@ -1,6 +1,4 @@
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class App {
@@ -14,18 +12,18 @@ public class App {
         System.out.flush();
         
 
-        Map <String, Barbearia> barbearias = new HashMap<>();
+        Barbearia barbearia = null;
         Set <Cliente> clientes = new HashSet<>();
 
         Leitor leitor = new Leitor();
         Gerenciador gerenciador = new Gerenciador();
 
 
-        leitor.leDadosBarbearia(barbearias);
-        leitor.leEndereco(barbearias, gerenciador.getCodigo());
+        barbearia = leitor.leDadosBarbearia(barbearia);
+        leitor.leEndereco(barbearia);
 
-        gerenciador.iniciarSistema(barbearias);
-        gerenciador.executarPrograma(barbearias, clientes, leitor);
+        gerenciador.iniciarSistema(barbearia);
+        gerenciador.executarPrograma(barbearia, clientes, leitor);
 
     }
 }
