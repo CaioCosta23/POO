@@ -8,8 +8,9 @@ public class Cliente extends Usuario {
         this.nascimento = nascimento;
     }
 
-    public Cliente(String nome, String email, String telefone, String login, String senha) {
-        super(nome, email, telefone, login, senha);
+    public Cliente(Cliente original) {
+        super(original);
+        this.nascimento = original.getNascimento();
     }
 
     public LocalDate getNascimento() {
