@@ -5,12 +5,11 @@ public class Cliente extends Usuario {
     
     public Cliente(int id, String nome, String email, String telefone, String cpf, String login, String senha, LocalDate nascimento) {
         super(id, nome, email, telefone, cpf, login, senha);
-        this.nascimento= nascimento;
+        this.nascimento = nascimento;
     }
 
-    public Cliente(String email, String telefone, String login, String senha, LocalDate nascimento) {
-        super(email, telefone, login, senha);
-        this.nascimento = nascimento;
+    public Cliente(String nome, String email, String telefone, String login, String senha) {
+        super(nome, email, telefone, login, senha);
     }
 
     public LocalDate getNascimento() {
