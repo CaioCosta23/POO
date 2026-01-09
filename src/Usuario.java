@@ -93,13 +93,20 @@ public abstract class Usuario implements Menu{
 
     // O retorno desa função foi criado com o tipo 'booleano' para que possa ser usado para comparações em outras partes do projeto;
     public boolean autenticar(String login, String senha) {
+        boolean logado;
+
+        System.out.println("................................................................................................................");
+
         if (login.equals(this.getLogin()) && senha.equals(this.getSenha())) {
             System.out.println("LOGADO.");
-            return true;
+            logado = true;
         }else {
             System.out.println("Senha ou login incorreto(s)!");
-            return false;
+            logado = false;
         }
+        System.out.println("................................................................................................................");
+
+        return logado;
     }
 
     public void alterarSenha() {
