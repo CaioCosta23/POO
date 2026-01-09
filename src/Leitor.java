@@ -1,7 +1,13 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -19,7 +25,7 @@ public class Leitor {
         final int SALTOS = 2;
        
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
-        try (InputStream arquivoInformacoes = App.class.getResourceAsStream("/dados/infoBarbearia.txt")) {
+        try (InputStream arquivoInformacoes = new FileInputStream("dados/infoBarbearia.txt")) {
             // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
             BufferedReader info = new BufferedReader(new InputStreamReader(arquivoInformacoes));
 
@@ -69,7 +75,7 @@ public class Leitor {
     public void leEndereco(Barbearia barbearia) {
         final int SALTOS = 2;
 
-        try (InputStream arquivoEndereco = App.class.getResourceAsStream("/dados/endereco.txt")) {
+        try (InputStream arquivoEndereco = new FileInputStream("dados/endereco.txt")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
 
             String linha;
@@ -132,18 +138,20 @@ public class Leitor {
 
                 // Verifica se uma das opções listadas acima foi digitada, caso contrário, lança uma exceção informando ao usuário o problema;
                 if ((opcao < 1) || (opcao > qtdOpcoes)) {
-                    entrada.close();
+                    //entrada.close();
                     throw new IllegalArgumentException();
                 }
             } catch (IllegalArgumentException o) {
                 System.out.println("* Opcao INVALIDA! Por Favor, digite uma das opcoes listadas acima.");
             }
-            entrada.close();
+            //entrada.close();
         return opcao;
     }
 
+
     public Cliente leCliente() {
         Scanner entrada = new Scanner(System.in);
+
         System.out.printf("- Informe o nome: ");
         String nome = entrada.nextLine();
 
@@ -154,16 +162,52 @@ public class Leitor {
         System.out.printf("- Insira um telefone (com o DDD, como 027, por exemplo, e 9 digitos): ");
         String telefone = entrada.nextLine();
 
+        System.out.printf("- Digite o CPF: ");
+        String cpf = entrada.nextLine();
+
         System.out.printf("- Digite um nome de Login: ");
         String login = entrada.nextLine();
 
         System.out.printf("- Digite uma senha (com ao menos 5 caracteres): ");
         String senha = entrada.nextLine();
 
-        entrada.close();
+        System.out.printf("- Informe a data de nascimento (no formato dd/MM/yyyy): ");
+        String nascimento = entrada.nextLine();
 
-        return new Cliente(nome, email, telefone, login, senha);
+        LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        //entrada.close();
+        
+        // O ID do cliente será registrado quando for feito o armazenamento do mesmo no arquivo;
+        return new Cliente(-1, nome, email, telefone, cpf, login, senha, data);
     }
+
+
+    public void armazenarUsuario(Usuario usuario) throws IOException {
+        Path caminho = Path.of("dados/clientes.txt");
+        
+        if (!caminho.toFile().exists()) {
+            usuario.setId(1);
+        }else {
+            long qtdUsuarios = Files.lines(caminho).count();
+            usuario.setId((int)qtdUsuarios + 1);
+        }
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter("dados/clientes.txt", true))) {
+
+            if (usuario instanceof Cliente) {
+                Cliente cliente = (Cliente)usuario;
+                arquivo.write(cliente.toString());
+                arquivo.newLine();
+            }
+            System.out.println("................................................................................................................");
+            System.out.println("@ Cadastro realizado com sucesso!");
+
+        }catch (IOException a) {
+            System.out.println("Erro! Nao foi possivel realizar o cadastro.");
+        }
+    }
+
 
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
 
@@ -197,6 +241,7 @@ public class Leitor {
                     if (valor instanceof Cliente) {
                         Cliente cliente = (Cliente)valor;
                         if (cliente.autenticar(login, senha)) {
+                            //cliente.exibirInformacoes();
                             return cliente;
                         }
                     }
