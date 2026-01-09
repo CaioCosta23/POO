@@ -19,16 +19,6 @@ public abstract class Usuario implements Menu{
         this.senha = senha;
     }
 
-    public Usuario(String nome, String email, String telefone, String login, String senha) {
-        this.id = -1;
-        this.nome = "-";
-        this.email = email;
-        this.telefone = telefone;
-        this.cpf = "-";
-        this.login = login;
-        this.senha = senha;
-    }
-
     public Usuario(Usuario original) {
         this.id = original.id;
         this.nome = original.nome;
@@ -93,6 +83,12 @@ public abstract class Usuario implements Menu{
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%s", this.getId(), this.getNome(), this.getEmail(), this.getTelefone(),
+                                                     this.getCpf(), this.getLogin(), this.getSenha());
     }
 
     // O retorno desa função foi criado com o tipo 'booleano' para que possa ser usado para comparações em outras partes do projeto;
