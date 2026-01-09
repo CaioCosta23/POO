@@ -1,5 +1,3 @@
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class App {
@@ -16,7 +14,6 @@ public class App {
         
 
         Barbearia barbearia = null;
-        Set <Cliente> clientes = new HashSet<>();
 
         Leitor leitor = new Leitor();
         Gerenciador gerenciador = new Gerenciador();
@@ -26,7 +23,7 @@ public class App {
 
         try {
             gerenciador.iniciarSistema(barbearia);
-            gerenciador.executarPrograma(barbearia, clientes, leitor);
+            gerenciador.executarPrograma(barbearia);
         } catch (ExceptionObjetoInexistente e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException s) {
