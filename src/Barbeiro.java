@@ -9,10 +9,6 @@ public class Barbeiro extends Usuario{
         this.contratacao = contratacao;
         this.salario = salario;
     }
-    public Barbeiro(String nome, String email, String telefone, String login, String senha, float salario) {
-        super(nome, email, telefone, login, senha);
-        this.salario = salario;
-    }
 
     // Realiza uma cópia profunda de todos os dados de um objeto para outro (sem ligar a referência de um objeto ao outro);
     public Barbeiro(Barbeiro original) {
