@@ -19,7 +19,7 @@ public abstract class Usuario implements Menu{
         this.senha = senha;
     }
 
-    public Usuario(String email, String telefone, String login, String senha) {
+    public Usuario(String nome, String email, String telefone, String login, String senha) {
         this.id = -1;
         this.nome = "-";
         this.email = email;
