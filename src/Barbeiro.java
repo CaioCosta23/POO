@@ -9,9 +9,8 @@ public class Barbeiro extends Usuario{
         this.contratacao = contratacao;
         this.salario = salario;
     }
-    public Barbeiro(String email, String telefone, String login, String senha, LocalDate contratacao, float salario) {
-        super(email, telefone, login, senha);
-        this.contratacao = contratacao;
+    public Barbeiro(String nome, String email, String telefone, String login, String senha, float salario) {
+        super(nome, email, telefone, login, senha);
         this.salario = salario;
     }
 
