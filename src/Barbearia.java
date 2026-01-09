@@ -1,4 +1,6 @@
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 public class Barbearia implements Menu{
     private String nome;
     protected Endereco endereco;
@@ -8,6 +10,7 @@ public class Barbearia implements Menu{
     protected LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
+    Map <String, Barbeiro> barbeiros = new HashMap<>();
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
             LocalTime fechamento, String cnpj) {
@@ -101,6 +104,10 @@ public class Barbearia implements Menu{
         this.politica = politica;
     }
         */
+
+    public Map<String, Barbeiro> getBarbeiros() {
+        return new HashMap<>(this.barbeiros);
+    }
     
     @Override
     public void exibirMenu() {
