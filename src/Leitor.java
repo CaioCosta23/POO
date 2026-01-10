@@ -157,7 +157,7 @@ public class Leitor {
             }
         } catch(IOException c) {
             System.out.println("................................................................................................................");
-            System.out.println("\nt* Lista de clientes vazia! Nenhum cliente registrado ate o momento.\n");
+            //System.out.println("\n* Lista de clientes vazia! Nenhum cliente registrado ate o momento.\n");
         }
         return clientes;
     }
@@ -178,7 +178,7 @@ public class Leitor {
             }
         } catch(IOException c) {
             System.out.println("................................................................................................................");
-            System.out.println("\n* Lista de barbeiros vazia! Nenhum barbeiro foi registrado ate o momento.");
+            //System.out.println("\n* Lista de barbeiros vazia! Nenhum barbeiro foi registrado ate o momento.");
         }
         return barbeiros;
     }
@@ -227,7 +227,7 @@ public class Leitor {
                 
             }
         } catch(IOException c) {
-            System.out.println("Lista de servicos vazia! Nenhum servico registrado ate o momento.");
+            //System.out.println("* Lista de servicos vazia! Nenhum servico registrado ate o momento.");
         }
         return servicos;
     }
@@ -261,8 +261,13 @@ public class Leitor {
         System.out.printf("@ Senha: ");
         String senha = entrada.nextLine();
 
-        if (usuarios instanceof Map) {
-            Map<Integer, ?> mapeados  = (Map<Integer, ?>)usuarios;
+        if (usuarios instanceof Administrador) {
+            Administrador administrador = (Administrador)usuarios;
+            if (administrador.autenticar(login, senha)) {
+                return administrador;
+            }
+        }else {
+            Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
             
             for (Object valor : mapeados.entrySet()) {
                 if (valor instanceof Barbeiro) {
@@ -278,11 +283,6 @@ public class Leitor {
                         return cliente;
                     }
                 }
-            }
-        }else if (usuarios instanceof Administrador) {
-            Administrador administrador = (Administrador)usuarios;
-            if (administrador.autenticar(login, senha)) {
-                return administrador;
             }
         }
         return null;
