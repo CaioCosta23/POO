@@ -114,6 +114,14 @@ public class Barbearia{
         return new HashMap<>(this.servicos);
     }
     
+    public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
+        this.barbeiros.putAll(barbeiros);
+    }
+
+    public void adicionarServicos(Map<Integer, Servico>servicos) {
+        this.servicos.putAll(servicos);
+    }
+    
     public void exibirMenu() {
         System.out.print("\033[H\033[2J");
         System.out.flush(); 
