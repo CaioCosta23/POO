@@ -4,7 +4,7 @@ public class Servico {
     private String descricao;
     private float preco;
     private static final int DURACAO = 40;
-    
+
     public Servico(int id, String nome, String descricao, float preco) {
         this.id = id;
         this.nome = nome;
@@ -49,6 +49,10 @@ public class Servico {
 
     public void setId(float preco) {
         this.preco = preco;
+    }
+
+    public static int getDuracao() {
+        return DURACAO;
     }
 
     @Override
