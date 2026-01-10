@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+
 
 public class Registrador {
     public Registrador() {   
@@ -100,6 +104,71 @@ public class Registrador {
     }
 
 
+    public void criarAgendamento(Map<Integer, Agendamento> agendamentos, Barbearia barbearia, Cliente cliente) throws Exception {
+        Map<Integer, Barbeiro> barbeiros = barbearia.getBarbeiros();
+        Map<Integer, Servico> servicos = barbearia.getServicos();
+
+        Leitor leitor = new Leitor();
+        Servico servico;
+        Barbeiro barbeiro;
+
+        System.out.println("* Selecione o servico a ser prestado: ");
+        for(Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
+            valor.getValue().exibirInformacoes();
+            System.out.println();
+        }
+        servico = servicos.get((int)leitor.leOpcoes());
+
+        if (servico == null) {
+            throw new ExceptionObjetoInexistente("- Servico nao pertencente ao catalogo.");
+        }
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
+
+        System.out.println("* Selecione o prestador de servico que desejado: ");
+        for(Map.Entry<Integer, Barbeiro> valor : barbeiros.entrySet()) {
+            System.out.printf("(%d)%s\n", (int)valor.getKey(), valor.getValue().getNome());
+        }
+        barbeiro = barbeiros.get((int)leitor.leOpcoes());
+
+        if (barbeiro == null) {
+            throw new ExceptionObjetoInexistente("- Prestador de servico nao registrado.");
+        }
+        System.out.println("----------------------------------------------------------------------------------------------------------------");
+
+        Iterator<Disponibilidade> impressao = barbeiro.getDisponibilidade().iterator();
+
+        System.out.println("* Selecione o horario desejado: ");
+        while(impressao.hasNext()) {
+            Disponibilidade disponibilidade = impressao.next();
+            disponibilidade.exibirInformacoes();
+            System.out.println();
+        }
+        Scanner entrada = new Scanner(System.in);
+        
+        System.out.println("+ Digite a data: ");
+        LocalDate data = LocalDate.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        
+        System.out.printf("+ Digite o horario inicial para selecionar um dos horarios: ");
+        LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
+
+        boolean disponivel = false;
+
+        Iterator<Disponibilidade> iterador = barbeiro.getDisponibilidade().iterator();
+        System.out.println("* Selecione o horario desejado: ");
+        while(iterador.hasNext()) {
+            Disponibilidade disponibilidade = iterador.next();
+            if ((disponibilidade.getData().equals(data)) && (disponibilidade.getHoraInicio().equals(horario))) {
+                disponivel = true;
+                disponibilidade.setDisponivel(disponivel);
+                break;
+            }
+        }        
+        if (!(disponivel)) {
+            System.out.println("Data e/ou horario indisponivel ou inexistente");
+        }
+    }
+
+
     public void armazenarUsuario(Usuario usuario, String caminhoUsuario) throws IOException {
         Path caminho = Path.of(caminhoUsuario);
         
@@ -130,6 +199,7 @@ public class Registrador {
             System.out.println("Erro! Nao foi possivel realizar o cadastro.");
         }
     }
+    
     
     public void armazenarServico(Servico servico, String caminhoUsuario) throws IOException {
         Path caminho = Path.of(caminhoUsuario);
