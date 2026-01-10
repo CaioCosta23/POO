@@ -3,10 +3,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +45,6 @@ public class Registrador {
         String nascimento = entrada.nextLine();
 
         LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-        //entrada.close();
         
         // O ID do cliente será registrado quando for feito o armazenamento do mesmo no arquivo;
         return new Cliente(-1, nome, email, telefone, cpf, login, senha, data);
@@ -112,18 +112,20 @@ public class Registrador {
         System.out.printf("- Digite o preco do servico: ");
         float preco = Float.parseFloat(entrada.nextLine());
 
-        //entrada.close();
         return new Servico(-1, nome, descricao, preco);
     }
 
 
+
     public void criarAgendamento(Map<Integer, Agendamento> agendamentos, Barbearia barbearia, Cliente cliente) throws Exception {
-        Map<Integer, Barbeiro> barbeiros = barbearia.getBarbeiros();
-        Map<Integer, Servico> servicos = barbearia.getServicos();
+        Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
+        Map<Integer, Servico> servicos = new HashMap<>(barbearia.getServicos());
+
 
         Leitor leitor = new Leitor();
         Servico servico;
         Barbeiro barbeiro;
+
 
         System.out.println("* Selecione o servico a ser prestado: ");
         for(Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
@@ -137,16 +139,18 @@ public class Registrador {
         }
         System.out.println("----------------------------------------------------------------------------------------------------------------");
 
+
         System.out.println("* Selecione o prestador de servico que desejado: ");
-        for(Map.Entry<Integer, Barbeiro> valor : barbeiros.entrySet()) {
-            System.out.printf("(%d)%s\n", (int)valor.getKey(), valor.getValue().getNome());
+        for(Map.Entry<String, Barbeiro> valor : barbeiros.entrySet()) {
+            System.out.printf("(%d)%s\n", (int)valor.getValue().getId(), valor.getValue().getNome());
         }
-        barbeiro = barbeiros.get((int)leitor.leOpcoes());
+        barbeiro = barbeiros.get(leitor.leIdentificadorUsuario());
 
         if (barbeiro == null) {
             throw new ExceptionObjetoInexistente("- Prestador de servico nao registrado.");
         }
         System.out.println("----------------------------------------------------------------------------------------------------------------");
+
 
         Iterator<Disponibilidade> impressao = barbeiro.getDisponibilidade().iterator();
 
@@ -155,11 +159,9 @@ public class Registrador {
             Disponibilidade disponibilidade = impressao.next();
             disponibilidade.exibirInformacoes();
             System.out.println();
-        }
-        
+        }        
         System.out.println("+ Digite a data: ");
         LocalDate data = LocalDate.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        
         System.out.printf("+ Digite o horario inicial para selecionar um dos horarios: ");
         LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
 
@@ -169,8 +171,6 @@ public class Registrador {
         System.out.println("* Selecione o horario desejado: ");
 
         Disponibilidade disponibilidade = null;
-
-
         while(iterador.hasNext()) {
             disponibilidade = iterador.next();
             if ((disponibilidade.getData().equals(data)) && (disponibilidade.getHoraInicio().equals(horario))) {
@@ -192,6 +192,7 @@ public class Registrador {
             System.out.println("Erro! Disponibilidade nao encontrada.");
         }
     }
+
 
 
     public void armazenarUsuario(Usuario usuario, String caminhoUsuario) throws IOException {
@@ -246,5 +247,26 @@ public class Registrador {
         }catch (IOException a) {
             System.out.println("Erro! Nao foi possivel realizar o cadastro.");
         }
+    }
+
+    
+    public void editarLista(String local, int id) {
+        Path caminho = Paths.get(local);
+
+        try {
+            List<String> conjuntoDados = Files.readAllLines(caminho);
+            
+            List<String> novoConjunto = new ArrayList<>();
+
+            for (int c = 0; c < conjuntoDados.size(); c++) {
+                if (c != (id - 1)) {
+                    novoConjunto.add(conjuntoDados.get(c));
+                }
+            }
+            Files.write(caminho, novoConjunto);
+            System.out.println("* Usuario removido com sucesso");
+        } catch (IOException f)  {
+            System.out.println("* Caminho ou arquivo nao encontrado(s).");
+        } 
     }
 }
