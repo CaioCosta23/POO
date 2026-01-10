@@ -7,7 +7,7 @@ import java.util.Map;
 public class Barbeiro extends Usuario{
     private LocalDate contratacao;
     private float salario;
-    private Map <Integer, Servico> servicos = new HashMap<>();
+    private final Map <Integer, Servico> servicos = new HashMap<>();
     private final List<Disponibilidade> disponibilidades = new ArrayList<>();
     
     public Barbeiro(int id, String nome, String email, String telefone, String cpf, String login, String senha, LocalDate contratacao, float salario) {
@@ -69,6 +69,6 @@ public class Barbeiro extends Usuario{
                                                                         this.getContratacao().getMonthValue(), getContratacao().getYear());
         Consulta consulta = new Consulta();
 
-        consulta.consultaServicos(this.servicos);
+        consulta.exibirServicos(this.servicos);
     }
 }
