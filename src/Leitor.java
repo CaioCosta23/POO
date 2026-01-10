@@ -7,11 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Leitor {
@@ -135,9 +132,17 @@ public class Leitor {
         return opcao;
     }
 
+    public String leIdentificadorUsuario() {
+        System.out.printf("\n- Digite o CPF (caso cliente) ou CNPJ (caso prestador de servico): ");
+        String identificador = entrada.nextLine();
+        System.out.println("................................................................................................................");
+            
+        return identificador;
+    }    
 
-    public Set<Cliente>lerCliente() {
-        Set<Cliente> clientes = new HashSet<>();
+
+    public Map<String, Cliente>lerCliente() throws ExceptionObjetoInexistente {
+        Map<String, Cliente> clientes = new HashMap<>();
 
         try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
@@ -147,19 +152,20 @@ public class Leitor {
             while ((linha = br.readLine()) != null) {
                 String[] campos = linha.split(";");
 
-                clientes.add(new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+                clientes.put(campos[4], new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
                 
             }
         } catch(IOException c) {
-            System.out.println("Erro na leitura de dados e do arquivo da lista de clientes");
+            System.out.println("................................................................................................................");
+            System.out.println("\nt* Lista de clientes vazia! Nenhum cliente registrado ate o momento.\n");
         }
         return clientes;
     }
 
-    public Map<Integer, Barbeiro>lerBarbeiro() {
-        Map<Integer, Barbeiro> barbeiros = new HashMap<>();
+    public Map<String, Barbeiro>lerBarbeiro() {
+        Map<String, Barbeiro> barbeiros = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+        try (InputStream arquivoEndereco = new FileInputStream("dados/barbeiros.txt")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
             
             String linha;
@@ -167,11 +173,12 @@ public class Leitor {
             while ((linha = br.readLine()) != null) {
                 String[] campos = linha.split(";");
 
-                barbeiros.put(Integer.valueOf(campos[0]), new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[9])));
+                barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[9])));
                 
             }
         } catch(IOException c) {
-            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
+            System.out.println("................................................................................................................");
+            System.out.println("\n* Lista de barbeiros vazia! Nenhum barbeiro foi registrado ate o momento.");
         }
         return barbeiros;
     }
@@ -198,7 +205,7 @@ public class Leitor {
                 throw new ExceptionObjetoInexistente("");
             }
         } catch(IOException c) {
-            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
+            System.out.println("Administrador nao registrado.");
         }
         return administrador;
     }
@@ -208,7 +215,7 @@ public class Leitor {
     public Map<Integer, Servico>lerServico() {
         Map<Integer, Servico> servicos = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+        try (InputStream arquivoEndereco = new FileInputStream("dados/servicos.txt")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
             
             String linha;
@@ -220,7 +227,7 @@ public class Leitor {
                 
             }
         } catch(IOException c) {
-            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
+            System.out.println("Lista de servicos vazia! Nenhum servico registrado ate o momento.");
         }
         return servicos;
     }
@@ -264,20 +271,10 @@ public class Leitor {
                     if (barbeiro.autenticar(login, senha)) {
                         return barbeiro;
                     }
-                }
-            }
-        }else if (usuarios instanceof Set){
-            Set<?> mapeados = (Set<?>)usuarios;
-
-            Iterator<?> iterador = mapeados.iterator();
-
-            while(iterador.hasNext()) {
-                Object valor = iterador.next();
-
-                if (valor instanceof Cliente) {
+                }else if (valor instanceof Cliente) {
                     Cliente cliente = (Cliente)valor;
+
                     if (cliente.autenticar(login, senha)) {
-                        //cliente.exibirInformacoes();
                         return cliente;
                     }
                 }
