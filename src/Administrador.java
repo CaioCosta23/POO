@@ -8,11 +8,11 @@ public class Administrador extends Usuario {
     public void exibirMenu() {
         System.out.println("# Informe o servico do qual deseja acessar:\n");
 
-        System.out.println("[1] Criar agendamento\t[2] Excluir Agendamento");
-        System.out.println("[3] Adicionar Servico\t[4] Remover Servico");
-        System.out.println("[5] Adicioanar Usuario\t[6] Excluir Usuario");
+        System.out.println("[1] Criar agendamento\t\t[2] Excluir Agendamento");
+        System.out.println("[3] Adicionar Servico\t\t[4] Remover Servico");
+        System.out.println("[5] Adicioanar Usuario\t\t[6] Excluir Usuario");
         System.out.println("[7] Consultar agendamento\t[8] Consultar Dados Usuarios ");
-        System.out.println("[9] Buscar Servico\t[10] Informacoes do estabelecimento "); 
+        System.out.println("[9] Buscar Servico\t\t[10] Confirmar Conclusao de Servico "); 
     }
 
     @Override
