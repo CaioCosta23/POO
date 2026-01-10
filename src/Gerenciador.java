@@ -51,25 +51,68 @@ public class Gerenciador {
                         break;
                     case 2:
                         break;
+                        
                     case 3:
                         Servico servico = registrador.cadastrarServico();
                         registrador.armazenarServico(servico, caminho);
                         break;
+
                     case 4:
                         
                         break;
                     case 5:
-                        System.out.println("* Selecione um dos tipos de usuario abaixo:");
+                        System.out.println("* Selecione um dos tipos de usuario abaixo que deseja cadastrar:");
                         System.out.println("[1] Cliente\t[2] Barbeiro");
-                        int opcaoUsuario = leitor.leOpcoes();
-                        if (opcaoUsuario == 1) {
+                        int opcaoAdicao = leitor.leOpcoes();
+
+                        if (opcaoAdicao == 1) {
                             clientes = leitor.lerCliente();
                             Cliente novo = registrador.cadastrarCliente();
                             clientes.put(novo.getCpf(), novo);
                             registrador.armazenarUsuario(novo, "dados/clientes.txt");
+                        }else if (opcaoAdicao == 2) {
+                            clientes = leitor.lerCliente();
+                            Cliente novo = registrador.cadastrarCliente();
+                            clientes.put(novo.getCpf(), novo);
+                            registrador.armazenarUsuario(novo, "dados/clientes.txt");
+                        }else {
+                            throw new IllegalArgumentException("* Opcao Invalida ou inexistente!");
                         }
                         break;
+
                     case 6:
+                        System.out.println("* Selecione um dos tipos de usuario abaixo que deseja excluir:");
+                        System.out.println("[1] Cliente\t[2] Barbeiro");
+                        int opcaoRemocao = leitor.leOpcoes();
+
+                        if (opcaoRemocao == 1) {
+                            if (!(leitor.lerCliente().isEmpty())) {
+                                String identificador = leitor.leIdentificadorUsuario();
+                                clientes = leitor.lerCliente();
+                                if (clientes.containsKey(identificador)) {
+                                    registrador.editarLista("dados/clientes.txt", clientes.get(identificador).getId());
+                                }else {
+                                    throw new ExceptionObjetoInexistente("Cliente nao encontrado/registrado.");
+                                }
+                            }else {
+                                throw new IllegalArgumentException();
+                            }
+                            
+                        }else if (opcaoRemocao == 2) {
+                            if (!(leitor.lerBarbeiro().isEmpty())) {
+                                String identificador = leitor.leIdentificadorUsuario();
+                                barbearia.barbeiros = leitor.lerBarbeiro();
+                                if (barbearia.barbeiros.containsKey(identificador)) {
+                                    registrador.editarLista("dados/barbeiros.txt", barbearia.barbeiros.get(identificador).getId());
+                                }else {
+                                    throw new ExceptionObjetoInexistente("Cliente nao encontrado/registrado.");
+                                }
+                            }else {
+                                throw new IllegalArgumentException();
+                            }
+                        }else {
+                            throw new IllegalArgumentException("* Opcao Invalida ou inexistente!");
+                        }
                         break;
                     case 7:
                         break;
