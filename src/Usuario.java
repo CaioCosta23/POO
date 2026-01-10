@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public abstract class Usuario implements Menu{
+public abstract class Usuario implements Impressao{
     private int id;
     private String nome;
     private String email;
