@@ -61,7 +61,11 @@ public class Barbeiro extends Usuario{
 
     @Override
     public void exibirMenu() {
-
+        System.out.println("* Escolha uma das opcoes abaixo:");
+        
+        System.out.println("[1] Criar agendamento\t[2]Excluir Agendamento");
+        System.out.println("[3] Adicionar Especialidade\t[4] Remover Especialidade");
+        System.out.println("[5] Alterar senha de usuario\t[6]Consultar Dados Cadastrais");
     }
 
     @Override
