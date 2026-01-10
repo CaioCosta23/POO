@@ -66,6 +66,7 @@ public class Servico implements Menu {
         // Vazio (Por enquanto);
     }
 
+    @Override
     public void exibirInformacoes() {
         System.out.println("- ID: " + this.getId());
         System.out.println("- Nome: " + this.getNome());
