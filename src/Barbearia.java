@@ -11,6 +11,7 @@ public class Barbearia implements Impressao{
     private String cnpj;
     //private PoliticaCancelamento politica;
     Map <Integer, Barbeiro> barbeiros = new HashMap<>();
+    Map<Integer, Servico> servicos = new HashMap<>();
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
             LocalTime fechamento, String cnpj) {
@@ -107,6 +108,10 @@ public class Barbearia implements Impressao{
 
     public Map<Integer, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
+    }
+
+    public Map<Integer, Servico> getServicos() {
+        return new HashMap<>(this.servicos);
     }
     
     public void exibirMenu() {
