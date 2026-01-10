@@ -3,7 +3,6 @@ import java.util.Map;
 
 public class Gerenciador {
 
-    
     public Gerenciador() {
     }
 
@@ -25,7 +24,7 @@ public class Gerenciador {
         Leitor leitor = new Leitor();
         Registrador registrador = new Registrador();
 
-        Map <String, Cliente> clientes = new HashMap<>();
+        Map <String, Cliente> clientes;
         Map <Integer, Agendamento> agendamentos = new HashMap<>();
 
         //clientes = leitor.lerCliente();
@@ -47,7 +46,7 @@ public class Gerenciador {
                 switch (leitor.leOpcoes()) {
                     case 1:
                         
-                        barbearia.barbeiros = leitor.lerBarbeiro();
+                        
                         break;
                     case 2:
                         break;
@@ -101,9 +100,9 @@ public class Gerenciador {
                         }else if (opcaoRemocao == 2) {
                             if (!(leitor.lerBarbeiro().isEmpty())) {
                                 String identificador = leitor.leIdentificadorUsuario();
-                                barbearia.barbeiros = leitor.lerBarbeiro();
-                                if (barbearia.barbeiros.containsKey(identificador)) {
-                                    registrador.editarLista("dados/barbeiros.txt", barbearia.barbeiros.get(identificador).getId());
+                                barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+                                if (barbearia.getBarbeiros().containsKey(identificador)) {
+                                    registrador.editarLista("dados/barbeiros.txt", barbearia.getBarbeiros().get(identificador).getId());
                                 }else {
                                     throw new ExceptionObjetoInexistente("Cliente nao encontrado/registrado.");
                                 }
@@ -128,12 +127,12 @@ public class Gerenciador {
                                 }
                             }
                         }else if (!(leitor.lerBarbeiro().isEmpty())) {
-                            barbearia.barbeiros = leitor.lerBarbeiro();
+                            barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
 
-                            if (!(barbearia.barbeiros.isEmpty())) {
+                            if (!(barbearia.getBarbeiros().isEmpty())) {
                                 String identificador = leitor.leIdentificadorUsuario();
-                                if (barbearia.barbeiros.containsKey(identificador)) {
-                                    barbearia.barbeiros.get(identificador).exibirInformacoes();;
+                                if (barbearia.getBarbeiros().containsKey(identificador)) {
+                                    barbearia.getBarbeiros().get(identificador).exibirInformacoes();;
                                 }else {
                                     System.out.println("Prestador de servicos nao encontrado.");
                                 }
@@ -143,14 +142,15 @@ public class Gerenciador {
                         }
                         break;
                     case 9:
-                        barbearia.servicos = leitor.lerServico();
-
-                        if (!(barbearia.servicos.isEmpty())) {
-
+                        if (!(leitor.lerServico().isEmpty())) {
+                            barbearia.adicionarServicos(leitor.lerServico());
                             int opcaoServico = leitor.leOpcoes();
-                            if (barbearia.servicos.containsKey(opcaoServico)) {
-                                barbearia.servicos.get(opcaoServico).exibirInformacoes();
+                            
+                            if (barbearia.getServicos().containsKey(opcaoServico)) {
+                                barbearia.getServicos().get(opcaoServico).exibirInformacoes();
                             }
+                        }else {
+                            System.out.println("* Lista de servicos vazia.");
                         }
                         break;
                     case 10:
