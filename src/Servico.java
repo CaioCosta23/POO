@@ -51,6 +51,11 @@ public class Servico {
         this.preco = preco;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%d;%s%s%.2f%d", this.getId(), this.getNome(), this.getDescricao(), this.getPreco(), DURACAO);
+    }
+
     public void exibirInformacoes() {
         System.out.println("- ID: " + this.getId());
         System.out.println("- Nome: " + this.getNome());
