@@ -1,3 +1,8 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -67,7 +72,7 @@ public class Registrador {
         LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         
         System.out.println("- Digite o valor do salario a ser recebido (em R$): ");
-        Float salario = Float.parseFloat(entrada.nextLine());
+        Float salario = Float.valueOf(entrada.nextLine());
 
         //entrada.close();
         
@@ -92,5 +97,59 @@ public class Registrador {
         float preco = Float.parseFloat(entrada.nextLine());
 
         return new Servico(-1, nome, descricao, duracao, preco);
+    }
+
+
+    public void armazenarUsuario(Usuario usuario, String caminhoUsuario) throws IOException {
+        Path caminho = Path.of(caminhoUsuario);
+        
+        if (!caminho.toFile().exists()) {
+            usuario.setId(1);
+        }else {
+            long qtdUsuarios = Files.lines(caminho).count();
+            usuario.setId((int)qtdUsuarios + 1);
+        }
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoUsuario, true))) {
+
+            if (usuario instanceof Cliente) {
+                Cliente cliente = (Cliente)usuario;
+                arquivo.write(cliente.toString());
+                arquivo.newLine();
+            }
+            if (usuario instanceof Barbeiro) {
+                Barbeiro barbeiro = (Barbeiro)usuario;
+                arquivo.write(barbeiro.toString());
+                arquivo.newLine();
+            }
+
+            System.out.println("................................................................................................................");
+            System.out.println("@ Usuario cadastrado com sucesso!");
+
+        }catch (IOException a) {
+            System.out.println("Erro! Nao foi possivel realizar o cadastro.");
+        }
+    }
+    
+    public void armazenarServico(Servico servico, String caminhoUsuario) throws IOException {
+        Path caminho = Path.of(caminhoUsuario);
+        
+        if (!caminho.toFile().exists()) {
+            servico.setId(1);
+        }else {
+            long qtdUsuarios = Files.lines(caminho).count();
+            servico.setId((int)qtdUsuarios + 1);
+        }
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoUsuario, true))) {
+            arquivo.write(servico.toString());
+            arquivo.newLine();
+
+            System.out.println("................................................................................................................");
+            System.out.println("@ Servico cadastrado com sucesso!");
+
+        }catch (IOException a) {
+            System.out.println("Erro! Nao foi possivel realizar o cadastro.");
+        }
     }
 }
