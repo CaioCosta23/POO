@@ -70,9 +70,12 @@ public class Gerenciador {
                             clientes.put(novo.getCpf(), novo);
                             registrador.armazenarUsuario(novo, "dados/clientes.txt");
                         }else if (opcaoAdicao == 2) {
-                            clientes = leitor.lerCliente();
-                            Cliente novo = registrador.cadastrarCliente();
-                            clientes.put(novo.getCpf(), novo);
+                            Map<String, Barbeiro> barbeiros = new HashMap<>();
+                            
+                            barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+                            Barbeiro novo = registrador.cadastrarBarbeiro();
+                            barbeiros.put(novo.getCpf(), novo);
+                            barbearia.adicionarBarbeiros(barbeiros);
                             registrador.armazenarUsuario(novo, "dados/clientes.txt");
                         }else {
                             throw new IllegalArgumentException("* Opcao Invalida ou inexistente!");
@@ -154,6 +157,10 @@ public class Gerenciador {
                         }
                         break;
                     case 10:
+                        break;
+                    case 11:
+                        break;
+                    case 12:
                         break;
                     default:
                         throw new IllegalArgumentException();

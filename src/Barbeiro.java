@@ -51,6 +51,10 @@ public class Barbeiro extends Usuario{
         this.servicos.putAll(servicos);
     }
 
+    public void adicionarDisponibilidade(List<Disponibilidade>disponibilidades) {
+        this.disponibilidades.addAll(disponibilidades);
+    }
+
     @Override
     public String toString() {
         return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d", this.getId(), this.getNome(), this.getEmail(), 

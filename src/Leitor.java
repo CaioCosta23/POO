@@ -231,6 +231,48 @@ public class Leitor {
         }
         return servicos;
     }
+    
+    public Map<String, Barbeiro> lerEspecialidade(Barbearia barbearia) throws ExceptionObjetoInexistente{
+        Map<String, Barbeiro> barbeiros = new HashMap<>();
+        Map<Integer, Servico> servicos = new HashMap<>();
+
+        try (InputStream arquivoEndereco = new FileInputStream("dados/servicos.txt")) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+            
+            String linha;
+            int contador = 0;
+                
+            while ((linha = br.readLine()) != null) {
+                if (contador % 2 == 1) {
+                    String[] campos = linha.split(";");
+
+                    if (barbearia.getServicos().isEmpty()) {
+                        throw new ExceptionObjetoInexistente("* Servico nao registrado na barbearia.");
+                    }
+
+                    int id = Integer.parseInt(campos[1]);
+                    if (barbearia.getServicos().containsKey(id)) {
+                        servicos.put(id, new Servico(barbearia.getServicos().get(id)));
+                    }
+                }else {
+                    try {
+                        if (barbearia.getBarbeiros().containsKey(linha)) {
+                            throw new ExceptionObjetoInexistente("|Aviso|");
+                        }
+                        Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(linha));
+                        barbeiro.adicionarServicos(servicos);
+                        barbeiros.put(linha, barbeiro);   
+                    }catch (ExceptionObjetoInexistente s) {
+                        System.out.format(s.getMessage(),"\n* O prestador de servico com o documento %s nao existe ou foi removido do sistema.\n", linha);
+                        System.out.println("................................................................................................................");
+                    }
+                }
+            }
+        } catch(IOException u) {
+            //System.out.println("* Lista de servicos vazia! Nenhum servico registrado ate o momento.");
+        }
+        return barbeiros;
+    }
 /* 
     public Map<Integer, Agendamento>lerAgendamento() {
         Map<Integer, Agendamento> agendamentos = new HashMap<>();

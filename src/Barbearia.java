@@ -10,8 +10,8 @@ public class Barbearia{
     protected LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
-    Map <String, Barbeiro> barbeiros = new HashMap<>();
-    Map<Integer, Servico> servicos = new HashMap<>();
+    private Map <String, Barbeiro> barbeiros = new HashMap<>();
+    private Map<Integer, Servico> servicos = new HashMap<>();
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
             LocalTime fechamento, String cnpj) {

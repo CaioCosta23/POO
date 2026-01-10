@@ -82,7 +82,7 @@ public class Registrador {
 
         Barbeiro barbeiro = new Barbeiro(-1, nome, email, telefone, cpf, login, senha, data, salario);
 
-        //barbeiro.getDisponibilidade();
+        barbeiro.adicionarDisponibilidade(criarDisponibilidade());
         
         // O ID do barbeiro será registrado quando for feito o armazenamento do mesmo no arquivo;
         return barbeiro;
@@ -92,10 +92,15 @@ public class Registrador {
         LocalTime horario = LocalTime.of(8, 0);
         LocalTime ultimoHorario = LocalTime.of(17, 20);
 
+        LocalDate data = LocalDate.of(2026, 06, 10);
+
         List<Disponibilidade> disponibilidades = new ArrayList<>();
 
         while(horario.equals(ultimoHorario)) {
-
+            if (!(horario.equals(ultimoHorario))) {
+                Disponibilidade disponibilidade = new Disponibilidade(data, horario, horario.plusMinutes(Servico.getDuracao()));
+                disponibilidades.add(disponibilidade);
+            }
         }
         return disponibilidades;
     }
@@ -249,7 +254,7 @@ public class Registrador {
         }
     }
 
-    
+
     public void editarLista(String local, int id) {
         Path caminho = Paths.get(local);
 
