@@ -30,14 +30,6 @@ public class Cliente extends Usuario {
     }
 
     @Override
-    public void exibirMenu() {
-        System.out.println("@ Selecione uma das opcoes abaixo:");
-        
-        System.out.println(("\t[1] Agendar Servico  \t[2] Consultar Agendamento"));
-        System.out.println(("\t[3] Consultar Servico\t[4] Cancelar Agendamento "));
-    }
-
-    @Override
     public void exibirInformacoes() {
         System.out.println("- Nome: " + this.getNome());
         System.out.println("- E-mail: " + this.getEmail());
