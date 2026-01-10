@@ -13,6 +13,12 @@ public class Disponibilidade{
         this.horaFim = horaFim;
     }
 
+    public Disponibilidade(Disponibilidade original) {
+        this.data = original.getData();
+        this.horaInicio = original.getHoraInicio();
+        this.horaFim = original.getHoraFim();
+    }
+
     public LocalDate getData() {
         return this.data;
     }
