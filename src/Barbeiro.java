@@ -47,6 +47,10 @@ public class Barbeiro extends Usuario{
         return new ArrayList<>(this.disponibilidades);
     }
 
+    public void adicionarServicos(Map<Integer, Servico>servicos) {
+        this.servicos.putAll(servicos);
+    }
+
     @Override
     public String toString() {
         return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d", this.getId(), this.getNome(), this.getEmail(), 
