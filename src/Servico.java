@@ -3,7 +3,7 @@ public class Servico implements Impressao {
     private String nome;
     private String descricao;
     private float preco;
-    private static int duracao = 40;
+    private static final int DURACAO = 40;
     
     public Servico(int id, String nome, String descricao, int duracao, float preco) {
         this.id = id;
@@ -43,10 +43,6 @@ public class Servico implements Impressao {
         this.descricao = descricao;
     }
 
-    public int getDuracao() {
-        return this.duracao;
-    }
-
     public float getPreco() {
         return this.preco;
     }
@@ -60,7 +56,7 @@ public class Servico implements Impressao {
         System.out.println("- ID: " + this.getId());
         System.out.println("- Nome: " + this.getNome());
         System.out.println("- Descricao: " + this.getDescricao());
-        System.out.printf("- Duracao: %02d minutos\n" + this.getDuracao());
+        System.out.printf("- Duracao: %02d minutos\n",  DURACAO);
         System.out.printf("- Preco: %.2f\n",  this.getPreco());
     }
 }
