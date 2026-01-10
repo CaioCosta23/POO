@@ -13,6 +13,14 @@ public class Servico implements Menu {
         this.preco = preco;
     }
 
+    public Servico(Servico original) {
+        this.id = original.id;
+        this.nome = original.nome;
+        this.descricao = original.descricao;
+        this.duracao = original.duracao;
+        this.preco = original.preco;
+    }
+
     public int getId() {
         return this.id;
     }
