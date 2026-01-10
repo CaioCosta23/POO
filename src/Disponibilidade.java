@@ -5,6 +5,7 @@ public class Disponibilidade implements Impressao{
     private LocalDate data;
     private LocalDateTime horaInicio;
     private LocalDateTime horaFim;
+    private boolean disponivel;
 
     public Disponibilidade(LocalDate data, LocalDateTime horaInicio, LocalDateTime horaFim) {
         this.data = data;
@@ -34,6 +35,14 @@ public class Disponibilidade implements Impressao{
 
     public void setHoraFim(LocalDateTime horaFim) {
         this.horaFim = horaFim;
+    }
+
+    public boolean isDisponivel() {
+        return this.disponivel;
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 
     @Override
