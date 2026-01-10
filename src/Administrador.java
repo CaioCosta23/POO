@@ -5,18 +5,6 @@ public class Administrador extends Usuario {
     }
 
     @Override
-    public void exibirMenu() {
-        System.out.println("@ Selecione uma das opcoes abaixo:\n");
-
-        System.out.println("[1]  Criar agendamento\t[2] Excluir Agendamento");
-        System.out.println("[4] Adicionar Servico\t[4] Remover Servico");
-        System.out.println("[5] Adicioanar Usuario\t[] Excluir Usuario");
-        System.out.println("[7] Consultar agendamento\t[8] Consultar Dados Usuarios ");
-        System.out.println("[9] Consultar Servico\t[10] Consultar Dados Pessoais ");
-    }
-
-
-    @Override
     public void exibirInformacoes() {
         System.out.println("- Nome: "+ this.getNome());
         System.out.println("- E-mail: " + this.getEmail());
