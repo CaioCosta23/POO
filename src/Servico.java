@@ -1,4 +1,4 @@
-public class Servico implements Menu {
+public class Servico implements Impressao {
     private int id;
     private String nome;
     private String descricao;
@@ -59,11 +59,6 @@ public class Servico implements Menu {
 
     public void setId(float preco) {
         this.preco = preco;
-    }
-
-    @Override
-    public void exibirMenu() {
-        // Vazio (Por enquanto);
     }
 
     @Override
