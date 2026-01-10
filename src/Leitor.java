@@ -126,12 +126,10 @@ public class Leitor {
 
 
     public int leOpcoes() {
-        int opcao = -1;
-
         Scanner entrada = new Scanner(System.in);
 
         System.out.printf("\n- Digite o numero da opcao: ");
-        opcao = Integer.parseInt(entrada.nextLine());
+        int opcao = Integer.parseInt(entrada.nextLine());
         System.out.println("................................................................................................................");
             
         //entrada.close();
@@ -175,12 +173,32 @@ public class Leitor {
                 
             }
         } catch(IOException c) {
-            System.out.println("Erro na leitura de dados e do arquivo da lista de clientes");
+            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
         }
         return barbeiros;
     }
 
+    public Map<Integer, Servico>lerServico() {
+        Map<Integer, Servico> servicos = new HashMap<>();
 
+        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+            
+            String linha;
+                
+            while ((linha = br.readLine()) != null) {
+                String[] campos = linha.split(";");
+
+                servicos.put(Integer.valueOf(campos[0]), new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3])));
+                
+            }
+        } catch(IOException c) {
+            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
+        }
+        return servicos;
+    }
+
+    
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
 
         try(Scanner entrada = new Scanner(System.in)) {
