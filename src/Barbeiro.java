@@ -34,15 +34,6 @@ public class Barbeiro extends Usuario{
     }
 
     @Override
-    public void exibirMenu() {
-
-        System.out.println("@ Digite a opcao que deseja executar no momento:\n");
-
-        System.out.println("[A] Consultar Dados de Agendamento\t[B] Editar Servicos");
-        System.out.println("[C]Alterar Senha de Login\t[D] Visualizar Dados Cadastrais");
-    }
-
-    @Override
     public void exibirInformacoes() {
         System.out.println("- ID: " + this.getId());
         super.exibirInformacoes();
