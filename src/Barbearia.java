@@ -1,7 +1,7 @@
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
-public class Barbearia implements Impressao{
+public class Barbearia{
     private String nome;
     protected Endereco endereco;
     private String telefone;
@@ -124,16 +124,8 @@ public class Barbearia implements Impressao{
 
         System.out.println("-> Bem-Vindo!\n");
 
-        System.out.println("# Informe o servico do qual deseja acessar:\n");
-
-        System.out.println("[1] Criar agendamento\t[2] Excluir Agendamento");
-        System.out.println("[4] Adicionar Servico\t[4] Remover Servico");
-        System.out.println("[5] Adicioanar Usuario\t[6] Excluir Usuario");
-        System.out.println("[7] Consultar agendamento\t[8] Consultar Dados Usuarios ");
-        System.out.println("[9] Buscar Servico\t[10] Informacoes do estabelecimento ");
     }
 
-    @Override
     public void exibirInformacoes() {
         System.out.println("- Nome do Estabelecimento: " + this.getNome());
         System.out.println("- Telefone: " + this.getTelefone());

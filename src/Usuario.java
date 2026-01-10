@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public abstract class Usuario implements Impressao{
+public abstract class Usuario{
     private int id;
     private String nome;
     private String email;
@@ -95,8 +95,6 @@ public abstract class Usuario implements Impressao{
     public boolean autenticar(String login, String senha) {
         boolean logado;
 
-        System.out.println("................................................................................................................");
-
         if (login.equals(this.getLogin()) && senha.equals(this.getSenha())) {
             System.out.println("LOGADO.");
             logado = true;
@@ -122,11 +120,12 @@ public abstract class Usuario implements Impressao{
         }
     }
 
-    @Override
     public void exibirInformacoes() {
         System.out.println("- Nome:" + this.getNome());
         System.out.println("- E-mail:" + this.getEmail());
         System.out.println("- Telefone:" + this.getTelefone());
         System.out.println("- CPF:" + this.getCpf());
     }
+
+    public abstract void exibirMenu();
 }

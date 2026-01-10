@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Leitor {
+    private static final Scanner entrada = new Scanner(System.in);
+
     public Leitor() {
     }
 
@@ -126,14 +128,10 @@ public class Leitor {
 
 
     public int leOpcoes() {
-        Scanner entrada = new Scanner(System.in);
-
         System.out.printf("\n- Digite o numero da opcao: ");
         int opcao = Integer.parseInt(entrada.nextLine());
         System.out.println("................................................................................................................");
             
-        //entrada.close();
-
         return opcao;
     }
 
@@ -178,6 +176,35 @@ public class Leitor {
         return barbeiros;
     }
 
+    public Administrador lerAdministrador() throws Exception {
+        final int SALTOS = 2;
+        Administrador administrador = null;
+
+        try (InputStream arquivoEndereco = new FileInputStream("dados/administrador.txt")) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+            
+            String linha;
+
+            for (int l = 0; l < SALTOS; l++) {
+                br.readLine();
+            }
+                
+            while ((linha = br.readLine()) != null) {
+                String[] campos = linha.split(";");
+
+                administrador = new Administrador(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6]);
+            }
+            if (administrador == null) {
+                throw new ExceptionObjetoInexistente("");
+            }
+        } catch(IOException c) {
+            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
+        }
+        return administrador;
+    }
+
+
+
     public Map<Integer, Servico>lerServico() {
         Map<Integer, Servico> servicos = new HashMap<>();
 
@@ -197,50 +224,68 @@ public class Leitor {
         }
         return servicos;
     }
+/* 
+    public Map<Integer, Agendamento>lerAgendamento() {
+        Map<Integer, Agendamento> agendamentos = new HashMap<>();
 
-    
+        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+            
+            String linha;
+                
+            while ((linha = br.readLine()) != null) {
+                String[] campos = linha.split(";");
+
+                servicos.put(Integer.valueOf(campos[0]), new Agendamento(Integer.parseInt(), cliente, barbeiro, servico, disponibilidade.getData(), EnumStatusAgend.AGENDADO));
+                
+            }
+        } catch(IOException c) {
+            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
+        }
+        return servicos;
+    }
+*/
+
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
 
-        try(Scanner entrada = new Scanner(System.in)) {
-            System.out.printf("@ Login: ");
-            String login = entrada.nextLine();
+        System.out.printf("@ Login: ");
+        String login = entrada.nextLine();
 
-            System.out.printf("@ Senha: ");
-            String senha = entrada.nextLine();
+        System.out.printf("@ Senha: ");
+        String senha = entrada.nextLine();
 
-            if (usuarios instanceof Map) {
-                Map<Integer, ?> mapeados  = (Map<Integer, ?>)usuarios;
-                
-                for (Object valor : mapeados.entrySet()) {
-                    if (valor instanceof Barbeiro) {
-                        Barbeiro barbeiro = (Barbeiro)valor;
+        if (usuarios instanceof Map) {
+            Map<Integer, ?> mapeados  = (Map<Integer, ?>)usuarios;
+            
+            for (Object valor : mapeados.entrySet()) {
+                if (valor instanceof Barbeiro) {
+                    Barbeiro barbeiro = (Barbeiro)valor;
 
-                        if (barbeiro.autenticar(login, senha)) {
-                            return barbeiro;
-                        }
+                    if (barbeiro.autenticar(login, senha)) {
+                        return barbeiro;
                     }
                 }
-            }else if (usuarios instanceof Set){
-                Set<?> mapeados = (Set<?>)usuarios;
+            }
+        }else if (usuarios instanceof Set){
+            Set<?> mapeados = (Set<?>)usuarios;
 
-                Iterator<?> iterador = mapeados.iterator();
+            Iterator<?> iterador = mapeados.iterator();
 
-                while(iterador.hasNext()) {
-                    Object valor = iterador.next();
+            while(iterador.hasNext()) {
+                Object valor = iterador.next();
 
-                    if (valor instanceof Cliente) {
-                        Cliente cliente = (Cliente)valor;
-                        if (cliente.autenticar(login, senha)) {
-                            //cliente.exibirInformacoes();
-                            return cliente;
-                        }
+                if (valor instanceof Cliente) {
+                    Cliente cliente = (Cliente)valor;
+                    if (cliente.autenticar(login, senha)) {
+                        //cliente.exibirInformacoes();
+                        return cliente;
                     }
                 }
-            }else if (usuarios instanceof Administrador) {
-                Administrador administrador = (Administrador)usuarios;
-                if (administrador.autenticar(login, senha)) {
-                    return administrador;
-                }
+            }
+        }else if (usuarios instanceof Administrador) {
+            Administrador administrador = (Administrador)usuarios;
+            if (administrador.autenticar(login, senha)) {
+                return administrador;
             }
         }
         return null;

@@ -1,3 +1,4 @@
+
 public class Gerenciador {
 
     
@@ -17,45 +18,46 @@ public class Gerenciador {
 
 
     public void executarPrograma(Barbearia barbearia) throws Exception {
-        final int QTDOPCOES = 3;
+        String caminho = "dados/servicos.txt";
+
         Leitor leitor = new Leitor();
+        Registrador registrador = new Registrador();
 
-        int opcao = leitor.leOpcoes(QTDOPCOES);
 
-        if ((opcao < 1) || (opcao > QTDOPCOES)) {
-            throw new IllegalArgumentException("* Erro de leitura/entrada.");
-        }
-        if ((opcao == 1) || (opcao == 2)) {
-            // Acesso à area do Pretador de Serviços (Barbeiro ou Administrador - do Sistema);
-            System.out.print("\033[H\033[2J");
-            System.out.flush(); 
-
-            if (opcao == 1) {
-                Cliente cliente = leitor.leCliente();
-                leitor.armazenarUsuario(cliente);
-            }
-            if (opcao == 2) {
-                /* 
-                Cliente cliente = (Cliente)leitor.lerLoginSenhaUsuarios(clientes);
-                if (cliente == null) {
-                    throw new ExceptionObjetoInexistente("Usuario ou objeto nao encontrado.");
+        switch (leitor.leOpcoes()) {
+            case 1:
+                
+                break;
+            case 2:
+                break;
+            case 3:
+                Administrador administrador = leitor.lerAdministrador();
+                if (leitor.lerLoginSenhaUsuarios(administrador) != null) {
+                    Servico servico = registrador.cadastrarServico();
+                    registrador.armazenarServico(servico, caminho);
                 }
-                cliente.exibirMenu();
-                */
-
-                Barbeiro barbeiro = (Barbeiro)leitor.lerLoginSenhaUsuarios(barbearia.getBarbeiros());
-                if (barbeiro == null) {
-                    throw new ExceptionObjetoInexistente("Usuario ou objeto nao encontrado.");
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                try {
+                    barbearia.exibirInformacoes();
+                } catch (NullPointerException p) {
+                    System.out.println("* Informacoes nao encontradas.");
                 }
-            }
-        }
-        if (opcao == 3) {
-            // Imprime as informações da barearia (se as mesmas existirem!);
-            try {
-                barbearia.exibirInformacoes();
-            } catch (NullPointerException p) {
-                System.out.println("* Informacoes nao encontradas.");
-            }
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 }

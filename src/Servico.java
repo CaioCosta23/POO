@@ -1,4 +1,4 @@
-public class Servico implements Impressao {
+public class Servico {
     private int id;
     private String nome;
     private String descricao;
@@ -51,7 +51,6 @@ public class Servico implements Impressao {
         this.preco = preco;
     }
 
-    @Override
     public void exibirInformacoes() {
         System.out.println("- ID: " + this.getId());
         System.out.println("- Nome: " + this.getNome());

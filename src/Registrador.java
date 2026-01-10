@@ -6,18 +6,20 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 
 public class Registrador {
+    private static final Scanner entrada = new Scanner(System.in);
+
     public Registrador() {   
     }
 
     public Cliente cadastrarCliente() {
-        Scanner entrada = new Scanner(System.in);
-
         System.out.printf("- Informe o nome: ");
         String nome = entrada.nextLine();
 
@@ -50,8 +52,6 @@ public class Registrador {
 
 
     public Barbeiro cadastrarBarbeiro() {
-        Scanner entrada = new Scanner(System.in);
-
         System.out.printf("- Informe o nome: ");
         String nome = entrada.nextLine();
 
@@ -79,28 +79,41 @@ public class Registrador {
         Float salario = Float.valueOf(entrada.nextLine());
 
         //entrada.close();
+
+        Barbeiro barbeiro = new Barbeiro(-1, nome, email, telefone, cpf, login, senha, data, salario);
+
+        //barbeiro.getDisponibilidade();
         
         // O ID do barbeiro será registrado quando for feito o armazenamento do mesmo no arquivo;
-        return new Barbeiro(-1, nome, email, telefone, cpf, login, senha, data, salario);
+        return barbeiro;
     }
 
-    public Servico cadastrarServico() {
-        Scanner entrada = new Scanner(System.in);
+    private List<Disponibilidade> criarDisponibilidade() {
+        LocalTime horario = LocalTime.of(8, 0);
+        LocalTime ultimoHorario = LocalTime.of(17, 20);
 
+        List<Disponibilidade> disponibilidades = new ArrayList<>();
+
+        while(horario.equals(ultimoHorario)) {
+
+        }
+        return disponibilidades;
+    }
+
+
+    public Servico cadastrarServico() {
         System.out.printf("- Informe o nome: ");
         String nome = entrada.nextLine();
 
-        System.out.printf("- Insira um endereco de e-mail: ");
+        System.out.printf("- Insira a descricao do servico: ");
         String descricao = entrada.nextLine();
         //ValidacaoFormato.validacao(email, EnumFormato.EMAIL.FORMATO);
-
-        System.out.printf("- Digite a duracao do servico (em minutos): ");
-        int duracao = Integer.parseInt(entrada.nextLine());
 
         System.out.printf("- Digite o preco do servico: ");
         float preco = Float.parseFloat(entrada.nextLine());
 
-        return new Servico(-1, nome, descricao, duracao, preco);
+        //entrada.close();
+        return new Servico(-1, nome, descricao, preco);
     }
 
 
@@ -143,7 +156,6 @@ public class Registrador {
             disponibilidade.exibirInformacoes();
             System.out.println();
         }
-        Scanner entrada = new Scanner(System.in);
         
         System.out.println("+ Digite a data: ");
         LocalDate data = LocalDate.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -155,8 +167,12 @@ public class Registrador {
 
         Iterator<Disponibilidade> iterador = barbeiro.getDisponibilidade().iterator();
         System.out.println("* Selecione o horario desejado: ");
+
+        Disponibilidade disponibilidade = null;
+
+
         while(iterador.hasNext()) {
-            Disponibilidade disponibilidade = iterador.next();
+            disponibilidade = iterador.next();
             if ((disponibilidade.getData().equals(data)) && (disponibilidade.getHoraInicio().equals(horario))) {
                 disponivel = true;
                 disponibilidade.setDisponivel(disponivel);
@@ -165,6 +181,15 @@ public class Registrador {
         }        
         if (!(disponivel)) {
             System.out.println("Data e/ou horario indisponivel ou inexistente");
+        }
+        try {
+            if (disponibilidade == null) {
+                throw new NullPointerException();
+            }
+
+            agendamentos.put(-1, new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData(), EnumStatusAgend.AGENDADO));
+        } catch (NullPointerException d) {
+            System.out.println("Erro! Disponibilidade nao encontrada.");
         }
     }
 
@@ -200,9 +225,9 @@ public class Registrador {
         }
     }
     
-    
-    public void armazenarServico(Servico servico, String caminhoUsuario) throws IOException {
-        Path caminho = Path.of(caminhoUsuario);
+
+    public void armazenarServico(Servico servico, String caminhoServico) throws IOException {
+        Path caminho = Path.of(caminhoServico);
         
         if (!caminho.toFile().exists()) {
             servico.setId(1);
@@ -211,7 +236,7 @@ public class Registrador {
             servico.setId((int)qtdUsuarios + 1);
         }
 
-        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoUsuario, true))) {
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoServico, true))) {
             arquivo.write(servico.toString());
             arquivo.newLine();
 

@@ -1,10 +1,13 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Barbeiro extends Usuario{
     private LocalDate contratacao;
     private float salario;
+    private Map <Integer, Servico> servicos = new HashMap<>();
     private final List<Disponibilidade> disponibilidades = new ArrayList<>();
     
     public Barbeiro(int id, String nome, String email, String telefone, String cpf, String login, String senha, LocalDate contratacao, float salario) {
@@ -36,8 +39,25 @@ public class Barbeiro extends Usuario{
         this.salario = salario;
     }
 
+    public Map<Integer, Servico> getServicos() {
+        return new HashMap<>(this.servicos);
+    }
+
     public List<Disponibilidade> getDisponibilidade() {
         return new ArrayList<>(this.disponibilidades);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d", this.getId(), this.getNome(), this.getEmail(), 
+                                                                                    this.getTelefone(), this.getCpf(), this.getLogin(),
+                                                                                    this.getSenha(), this.contratacao.getDayOfMonth(),
+                                                                                    this.contratacao.getMonthValue(),this.contratacao.getYear());
+    }
+
+    @Override
+    public void exibirMenu() {
+
     }
 
     @Override
@@ -47,5 +67,8 @@ public class Barbeiro extends Usuario{
         System.out.printf("- Salario: R$%.2f\n" , this.getSalario());
         System.out.printf("- Data de Admissao: %02d/%02d/%04d\n", this.getContratacao().getDayOfMonth(),
                                                                         this.getContratacao().getMonthValue(), getContratacao().getYear());
+        Consulta consulta = new Consulta();
+
+        consulta.consultaServicos(this.servicos);
     }
 }

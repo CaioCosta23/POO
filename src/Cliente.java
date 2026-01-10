@@ -30,6 +30,15 @@ public class Cliente extends Usuario {
     }
 
     @Override
+    public void exibirMenu() {
+        System.out.println("[1] Cadastrar-se\t[2] Fazer Agendamento");
+        System.out.println("[3]Consultar Servicos\t[4] Cancelar Agendamento");
+        System.out.println("[5] Consultar Dados Pessoais\t [6] Alterar Senha de Usuario");
+        System.out.println("[7] Excluir Usuario");
+    }
+
+
+    @Override
     public void exibirInformacoes() {
         System.out.println("- Nome: " + this.getNome());
         System.out.println("- E-mail: " + this.getEmail());

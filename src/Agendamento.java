@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Agendamento implements Impressao {
+public class Agendamento {
     private int id;
     private Cliente cliente;
     private Barbeiro barbeiro;
@@ -56,7 +56,6 @@ public class Agendamento implements Impressao {
         this.data = data;
     }
 
-    @Override
     public void exibirInformacoes() {
         System.out.println("- ID: " + this.getId());
         System.out.println("- Cliente: " + this.getCliente().getNome());
