@@ -150,40 +150,6 @@ public class Leitor {
     }
 
 
-    public Cliente cadastrarCliente() {
-        Scanner entrada = new Scanner(System.in);
-
-        System.out.printf("- Informe o nome: ");
-        String nome = entrada.nextLine();
-
-        System.out.printf("- Insira um endereco de e-mail: ");
-        String email = entrada.nextLine();
-        //ValidacaoFormato.validacao(email, EnumFormato.EMAIL.FORMATO);
-
-        System.out.printf("- Insira um telefone (com o DDD, como 027, por exemplo, e 9 digitos): ");
-        String telefone = entrada.nextLine();
-
-        System.out.printf("- Digite o CPF: ");
-        String cpf = entrada.nextLine();
-
-        System.out.printf("- Digite um nome de Login: ");
-        String login = entrada.nextLine();
-
-        System.out.printf("- Digite uma senha (com ao menos 5 caracteres): ");
-        String senha = entrada.nextLine();
-
-        System.out.printf("- Informe a data de nascimento (no formato dd/MM/yyyy): ");
-        String nascimento = entrada.nextLine();
-
-        LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-        //entrada.close();
-        
-        // O ID do cliente será registrado quando for feito o armazenamento do mesmo no arquivo;
-        return new Cliente(-1, nome, email, telefone, cpf, login, senha, data);
-    }
-
-
     public void armazenarUsuario(Usuario usuario) throws IOException {
         Path caminho = Path.of("dados/clientes.txt");
         
@@ -213,6 +179,7 @@ public class Leitor {
         Set<Cliente> clientes = new HashSet<>();
 
         try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
 
             String linha;
@@ -224,9 +191,8 @@ public class Leitor {
                 
             }
         } catch(IOException c) {
-            System.out.println("Lista de clientes nao encontrada.");
+            System.out.println("Erro na leitura de dados e do arquivo da lista de clientes");
         }
-
         return clientes;
     }
 
