@@ -1,7 +1,7 @@
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
-public class Barbearia implements Menu{
+public class Barbearia implements Impressao{
     private String nome;
     protected Endereco endereco;
     private String telefone;
@@ -109,7 +109,6 @@ public class Barbearia implements Menu{
         return new HashMap<>(this.barbeiros);
     }
     
-    @Override
     public void exibirMenu() {
         System.out.print("\033[H\033[2J");
         System.out.flush(); 
