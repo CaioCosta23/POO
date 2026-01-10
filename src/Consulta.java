@@ -7,9 +7,10 @@ public class Consulta {
     public Consulta() {
     }
 
-    public void consultarUsuario(Object usuarios) {
+
+    public void exibirUsuarios(Object usuarios) {
         if (usuarios instanceof Map) {
-            Map<Integer, ?> mapeados  = (Map<Integer, ?>)usuarios;
+            Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
             
             for (Object valor : mapeados.entrySet()) {
                 if (valor instanceof Barbeiro) {
@@ -31,8 +32,7 @@ public class Consulta {
         }
     }
 
-
-    public void consultaServicos(Map<Integer, Servico> servicos) {
+    public void exibirServicos(Map<Integer, Servico> servicos) {
         for(Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
             valor.getValue().exibirInformacoes();
         }
