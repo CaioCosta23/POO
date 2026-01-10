@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Agendamento implements Menu {
+public class Agendamento implements Impressao {
     private int id;
     private Cliente cliente;
     private Barbeiro barbeiro;
@@ -54,11 +54,6 @@ public class Agendamento implements Menu {
 
     public void setData(LocalDate data) {
         this.data = data;
-    }
-
-    @Override
-    public void exibirMenu() {
-        // Vazio;
     }
 
     @Override
