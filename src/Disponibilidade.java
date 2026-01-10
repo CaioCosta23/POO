@@ -1,13 +1,13 @@
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Disponibilidade implements Impressao{
     private LocalDate data;
-    private LocalDateTime horaInicio;
-    private LocalDateTime horaFim;
+    private LocalTime horaInicio;
+    private LocalTime horaFim;
     private boolean disponivel;
 
-    public Disponibilidade(LocalDate data, LocalDateTime horaInicio, LocalDateTime horaFim) {
+    public Disponibilidade(LocalDate data, LocalTime horaInicio, LocalTime horaFim) {
         this.data = data;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
@@ -21,19 +21,19 @@ public class Disponibilidade implements Impressao{
         this.data = data;
     }
 
-    public LocalDateTime getHoraInicio() {
+    public LocalTime getHoraInicio() {
         return this.horaInicio;
     }
 
-    public void setHoraInicio(LocalDateTime horaInicio) {
+    public void setHoraInicio(LocalTime horaInicio) {
         this.horaInicio = horaInicio;
     }
 
-    public LocalDateTime getHoraFim() {
+    public LocalTime getHoraFim() {
         return this.horaFim;
     }
 
-    public void setHoraFim(LocalDateTime horaFim) {
+    public void setHoraFim(LocalTime horaFim) {
         this.horaFim = horaFim;
     }
 
