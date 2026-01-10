@@ -7,6 +7,20 @@ public class Consulta {
     public Consulta() {
     }
 
+    public Cliente getCliente(Set<Cliente> clientes, String identificador) {
+        Cliente cliente = null;
+
+        Iterator<Cliente> iterador = clientes.iterator();
+
+        while(iterador.hasNext()) {
+            if (iterador.next().getCpf().equals(identificador)) {
+                cliente = iterador.next();
+            }
+        }
+
+        return cliente;
+    }
+
 
     public void exibirUsuarios(Object usuarios) {
         if (usuarios instanceof Map) {
