@@ -10,7 +10,7 @@ public class Barbearia implements Impressao{
     protected LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
-    Map <String, Barbeiro> barbeiros = new HashMap<>();
+    Map <Integer, Barbeiro> barbeiros = new HashMap<>();
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
             LocalTime fechamento, String cnpj) {
@@ -105,7 +105,7 @@ public class Barbearia implements Impressao{
     }
         */
 
-    public Map<String, Barbeiro> getBarbeiros() {
+    public Map<Integer, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
     }
     
