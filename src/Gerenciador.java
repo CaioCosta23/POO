@@ -1,7 +1,5 @@
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Gerenciador {
 
@@ -27,14 +25,12 @@ public class Gerenciador {
         Leitor leitor = new Leitor();
         Registrador registrador = new Registrador();
 
-        Set <Cliente> clientes = new HashSet<>();
-        Map<String, Barbeiro> barbeiros = new HashMap<>();
-        Map<Integer, Servico> servicos = new HashMap<>();
+        Map <String, Cliente> clientes = new HashMap<>();
         Map <Integer, Agendamento> agendamentos = new HashMap<>();
 
         //clientes = leitor.lerCliente();
-        barbearia.barbeiros = leitor.lerBarbeiro();
-        servicos = leitor.lerServico();
+        //barbearia.barbeiros = leitor.lerBarbeiro();
+        //servicos = leitor.lerServico();
 
         int opcao = leitor.leOpcoes();
 
@@ -50,7 +46,7 @@ public class Gerenciador {
 
                 switch (leitor.leOpcoes()) {
                     case 1:
-                        clientes = leitor.lerCliente();
+                        
                         barbearia.barbeiros = leitor.lerBarbeiro();
                         break;
                     case 2:
@@ -60,27 +56,64 @@ public class Gerenciador {
                         registrador.armazenarServico(servico, caminho);
                         break;
                     case 4:
+                        
                         break;
                     case 5:
+                        System.out.println("* Selecione um dos tipos de usuario abaixo:");
+                        System.out.println("[1] Cliente\t[2] Barbeiro");
+                        int opcaoUsuario = leitor.leOpcoes();
+                        if (opcaoUsuario == 1) {
+                            clientes = leitor.lerCliente();
+                            Cliente novo = registrador.cadastrarCliente();
+                            clientes.put(novo.getCpf(), novo);
+                            registrador.armazenarUsuario(novo, "dados/clientes.txt");
+                        }
                         break;
                     case 6:
                         break;
                     case 7:
                         break;
                     case 8:
+                        if (!(leitor.lerCliente().isEmpty())) {
+                            clientes = leitor.lerCliente();
+                            if (!(clientes.isEmpty())) {
+                                String identificador = leitor.leIdentificadorUsuario();
+                                if (clientes.containsKey(identificador)) {
+                                    clientes.get(identificador).exibirInformacoes();
+                                }else {
+                                    System.out.println("Prestador de servicos nao encontrado.");
+                                }
+                            }
+                        }else if (!(leitor.lerBarbeiro().isEmpty())) {
+                            barbearia.barbeiros = leitor.lerBarbeiro();
+
+                            if (!(barbearia.barbeiros.isEmpty())) {
+                                String identificador = leitor.leIdentificadorUsuario();
+                                if (barbearia.barbeiros.containsKey(identificador)) {
+                                    barbearia.barbeiros.get(identificador).exibirInformacoes();;
+                                }else {
+                                    System.out.println("Prestador de servicos nao encontrado.");
+                                }
+                            }
+                        }else {
+                            System.out.println("Nenhum usuario registrado ate o momento.");
+                        }
                         break;
                     case 9:
-                        servicos = leitor.lerServico();
-                        if (!(servicos.isEmpty())) {
+                        barbearia.servicos = leitor.lerServico();
+
+                        if (!(barbearia.servicos.isEmpty())) {
+
                             int opcaoServico = leitor.leOpcoes();
-                            if (servicos.containsKey(opcaoServico)) {
-                                servicos.get(opcaoServico).exibirInformacoes();
+                            if (barbearia.servicos.containsKey(opcaoServico)) {
+                                barbearia.servicos.get(opcaoServico).exibirInformacoes();
                             }
                         }
                         break;
                     case 10:
-                        throw new IllegalArgumentException();
+                        break;
                     default:
+                        throw new IllegalArgumentException();
                 }
             }
             
