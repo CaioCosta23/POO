@@ -66,7 +66,7 @@ public class Servico implements Impressao {
         System.out.println("- ID: " + this.getId());
         System.out.println("- Nome: " + this.getNome());
         System.out.println("- Descricao: " + this.getDescricao());
-        System.out.printf("- Duracao: %02d minutos" + this.getDuracao());
-        System.out.printf("- Preco %.2f: " + this.getPreco());
+        System.out.printf("- Duracao: %02d minutos\n" + this.getDuracao());
+        System.out.printf("- Preco: %.2f\n",  this.getPreco());
     }
 }
