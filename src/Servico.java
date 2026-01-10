@@ -5,7 +5,7 @@ public class Servico implements Impressao {
     private float preco;
     private static final int DURACAO = 40;
     
-    public Servico(int id, String nome, String descricao, int duracao, float preco) {
+    public Servico(int id, String nome, String descricao, float preco) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
