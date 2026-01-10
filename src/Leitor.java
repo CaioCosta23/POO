@@ -1,15 +1,12 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -128,60 +125,27 @@ public class Leitor {
     }
 
 
-    public int leOpcoes(int qtdOpcoes) {
+    public int leOpcoes() {
         int opcao = -1;
 
         Scanner entrada = new Scanner(System.in);
-            try {
-                System.out.printf("\n- Digite o numero da opcao: ");
-                opcao = Integer.parseInt(entrada.nextLine());
-                System.out.println("................................................................................................................");
 
-                // Verifica se uma das opções listadas acima foi digitada, caso contrário, lança uma exceção informando ao usuário o problema;
-                if ((opcao < 1) || (opcao > qtdOpcoes)) {
-                    //entrada.close();
-                    throw new IllegalArgumentException();
-                }
-            } catch (IllegalArgumentException o) {
-                System.out.println("* Opcao INVALIDA! Por Favor, digite uma das opcoes listadas acima.");
-            }
-            //entrada.close();
+        System.out.printf("\n- Digite o numero da opcao: ");
+        opcao = Integer.parseInt(entrada.nextLine());
+        System.out.println("................................................................................................................");
+            
+        //entrada.close();
+
         return opcao;
     }
 
-
-    public void armazenarUsuario(Usuario usuario) throws IOException {
-        Path caminho = Path.of("dados/clientes.txt");
-        
-        if (!caminho.toFile().exists()) {
-            usuario.setId(1);
-        }else {
-            long qtdUsuarios = Files.lines(caminho).count();
-            usuario.setId((int)qtdUsuarios + 1);
-        }
-
-        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter("dados/clientes.txt", true))) {
-
-            if (usuario instanceof Cliente) {
-                Cliente cliente = (Cliente)usuario;
-                arquivo.write(cliente.toString());
-                arquivo.newLine();
-            }
-            System.out.println("................................................................................................................");
-            System.out.println("@ Cadastro realizado com sucesso!");
-
-        }catch (IOException a) {
-            System.out.println("Erro! Nao foi possivel realizar o cadastro.");
-        }
-    }
 
     public Set<Cliente>lerCliente() {
         Set<Cliente> clientes = new HashSet<>();
 
         try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
-
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
-
+            
             String linha;
                 
             while ((linha = br.readLine()) != null) {
@@ -196,6 +160,26 @@ public class Leitor {
         return clientes;
     }
 
+    public Map<Integer, Barbeiro>lerBarbeiro() {
+        Map<Integer, Barbeiro> barbeiros = new HashMap<>();
+
+        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+            
+            String linha;
+                
+            while ((linha = br.readLine()) != null) {
+                String[] campos = linha.split(";");
+
+                barbeiros.put(Integer.valueOf(campos[0]), new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[9])));
+                
+            }
+        } catch(IOException c) {
+            System.out.println("Erro na leitura de dados e do arquivo da lista de clientes");
+        }
+        return barbeiros;
+    }
+
 
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
 
@@ -207,7 +191,7 @@ public class Leitor {
             String senha = entrada.nextLine();
 
             if (usuarios instanceof Map) {
-                Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
+                Map<Integer, ?> mapeados  = (Map<Integer, ?>)usuarios;
                 
                 for (Object valor : mapeados.entrySet()) {
                     if (valor instanceof Barbeiro) {
