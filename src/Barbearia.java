@@ -10,7 +10,7 @@ public class Barbearia{
     protected LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
-    Map <Integer, Barbeiro> barbeiros = new HashMap<>();
+    Map <String, Barbeiro> barbeiros = new HashMap<>();
     Map<Integer, Servico> servicos = new HashMap<>();
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
@@ -106,7 +106,7 @@ public class Barbearia{
     }
         */
 
-    public Map<Integer, Barbeiro> getBarbeiros() {
+    public Map<String, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
     }
 
@@ -123,6 +123,11 @@ public class Barbearia{
         System.out.println("===============================================================================================================");
 
         System.out.println("-> Bem-Vindo!\n");
+
+        System.out.println("+ Selecione uma das opcoes abaixo:");
+
+        System.out.println("[1] Acessar Area do Cliente\t\t [2] Acessar Area do prestador de Servicos");
+        System.out.println("[3] Acessar Area do Administrador\t [4] Consultar informacoes do estabelecimento");
 
     }
 
