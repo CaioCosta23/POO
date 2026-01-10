@@ -2,14 +2,13 @@ public class Servico implements Impressao {
     private int id;
     private String nome;
     private String descricao;
-    private int duracao;
     private float preco;
+    private static int duracao = 40;
     
     public Servico(int id, String nome, String descricao, int duracao, float preco) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
-        this.duracao = duracao;
         this.preco = preco;
     }
 
@@ -17,7 +16,6 @@ public class Servico implements Impressao {
         this.id = original.id;
         this.nome = original.nome;
         this.descricao = original.descricao;
-        this.duracao = original.duracao;
         this.preco = original.preco;
     }
 
@@ -47,10 +45,6 @@ public class Servico implements Impressao {
 
     public int getDuracao() {
         return this.duracao;
-    }
-
-    public void setDuracao(int duracao) {
-        this.duracao = duracao;
     }
 
     public float getPreco() {
