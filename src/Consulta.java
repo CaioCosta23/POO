@@ -10,14 +10,14 @@ public class Consulta {
     public Cliente getCliente(Set<Cliente> clientes, String identificador) {
         Cliente cliente = null;
 
-        Iterator<Cliente> iterador = clientes.iterator();
+        Iterator<Cliente> iterator = clientes.iterator();
 
-        while(iterador.hasNext()) {
-            if (iterador.next().getCpf().equals(identificador)) {
-                cliente = iterador.next();
+        while(iterator.hasNext()) {
+            cliente = iterator.next();
+            if (cliente.getCpf().equals(identificador)) {
+                break;
             }
         }
-
         return cliente;
     }
 
