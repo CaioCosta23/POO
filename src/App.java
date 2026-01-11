@@ -20,7 +20,7 @@ public class App {
         Gerenciador gerenciador = new Gerenciador();
         
         try {
-            Barbearia barbearia = leitor.leDadosBarbearia(EnumCaminho.BARBEARIA.getValue());
+            Barbearia barbearia = leitor.leDadosBarbearia();
 
             gerenciador.iniciarSistema(barbearia);
             gerenciador.executarPrograma(barbearia);
