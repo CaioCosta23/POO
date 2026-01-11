@@ -17,54 +17,47 @@ public class Leitor {
     public Leitor() {
     }
 
-    public Barbearia leDadosBarbearia(Barbearia barbearia) {
-        // Número de linhas que serão ignoradas no arquivo de endereco;
+    public Barbearia leDadosBarbearia(String camminho) throws Exception {
+        Barbearia barbearia = null;
+
+        // Número de linhas que serão ignoradas no arquivo (Linhas de comentarios);
         final int SALTOS = 2;
        
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
-        try (InputStream arquivoInformacoes = new FileInputStream("dados/infoBarbearia.txt")) {
-            // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
-            BufferedReader info = new BufferedReader(new InputStreamReader(arquivoInformacoes));
+        InputStream arquivo= new FileInputStream("dados/infoBarbearia.txt");
+         // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
-            String dados;
-
-            // Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
-            for (int l = 0; l < SALTOS; l++) {
-                info.readLine();
-            }
-
-            while ((dados = info.readLine()) != null) {
-                /*
-                 * Lê o a(s) linhas do arquivo (de forma parecida com um arquivo .csv) e divide as informações, usando como referência o ";"
-                 * indicando onde começa e onde termina cada dado/informação;
-                */
-                String[] informacoes = dados.split(";");
-
-                // Trata os erros de conversão e erros de leituras de informações e para os seus respectivos tipos;
-                try {
-                    ValidacaoFormato.validacao(informacoes[2], EnumFormato.EMAIL.FORMATO);
-                    ValidacaoFormato.validacao(informacoes[3], EnumFormato.HORARIO.FORMATO);
-                    ValidacaoFormato.validacao(informacoes[4], EnumFormato.HORARIO.FORMATO);
-                    ValidacaoFormato.validacao(informacoes[5], EnumFormato.CNPJ.FORMATO);
-
-                    // Coverte a informação de horário lida de "String" para "LocalTime";
-                    LocalTime abertura = LocalTime.parse(informacoes[3], DateTimeFormatter.ofPattern("HH:mm"));
-                    LocalTime fechamento = LocalTime.parse(informacoes[4], DateTimeFormatter.ofPattern("HH:mm"));
-                    
-                    // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
-                    barbearia = new Barbearia(informacoes[0], null, informacoes[1], informacoes[2], abertura, fechamento, informacoes[5]);
-                }catch (ExceptionFormato em) {
-                    System.out.println(em.getMessage());
-                }catch (IllegalArgumentException h) {
-                    System.out.println("Entrada INVALIDA! Erro de leitura para os dados de horarios.");
-                }catch (NullPointerException b) {
-                    System.out.println("Erro! Dados do sistema da barbearia nao encontrados.");
-                }
-            }
-        // Trata os erros de leitura do arquivo;
-        } catch (IOException i) {
-            System.out.println("* Erro na leitura/exibicao (do arquivo) de informacoes.");
+        String linha;
+        // Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
+        for (int l = 0; l < SALTOS; l++) {
+            br.readLine();
         }
+
+        while ((linha = br.readLine()) != null) {
+            /*
+                * Lê o a(s) linhas do arquivo (de forma parecida com um arquivo .csv) e divide as informações, usando como referência o ";"
+                * indicando onde começa e onde termina cada dado/informação;
+            */
+            String[] campos = linha.split(";");
+
+            ValidacaoFormato.validacao(campos[2], EnumFormato.EMAIL.FORMATO);
+            ValidacaoFormato.validacao(campos[3], EnumFormato.HORARIO.FORMATO);
+            ValidacaoFormato.validacao(campos[4], EnumFormato.HORARIO.FORMATO);
+            ValidacaoFormato.validacao(campos[5], EnumFormato.CNPJ.FORMATO);
+
+            // Coverte a informação de horário lida de "String" para "LocalTime";
+            LocalTime abertura = LocalTime.parse(campos[3], DateTimeFormatter.ofPattern("HH:mm"));
+            LocalTime fechamento = LocalTime.parse(campos[4], DateTimeFormatter.ofPattern("HH:mm"));
+                
+                // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
+            barbearia = new Barbearia(campos[0], null, campos[1], campos[2], abertura, fechamento, campos[5]);
+        }
+        
+        if (barbearia == null) {
+            throw new NullPointerException("");
+        }
+        
         return barbearia;
     }
 
@@ -173,7 +166,7 @@ public class Leitor {
             while ((linha = br.readLine()) != null) {
                 String[] campos = linha.split(";");
 
-                barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[9])));
+                barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8])));
                 
             }
         } catch(IOException c) {
@@ -273,11 +266,12 @@ public class Leitor {
         }
         return barbeiros;
     }
-/* 
-    public Map<Integer, Agendamento>lerAgendamento() {
-        Map<Integer, Agendamento> agendamentos = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
+    public Map<Integer, Agendamento>lerAgendamento(Map<String, Cliente> clientes, Barbearia barbearia) {
+        Map<Integer, Agendamento> agendamentos = new HashMap<>();
+        Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
+
+        try (InputStream arquivoEndereco = new FileInputStream("dados/agendamentos.txt")) {
             BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
             
             String linha;
@@ -285,15 +279,25 @@ public class Leitor {
             while ((linha = br.readLine()) != null) {
                 String[] campos = linha.split(";");
 
-                servicos.put(Integer.valueOf(campos[0]), new Agendamento(Integer.parseInt(), cliente, barbeiro, servico, disponibilidade.getData(), EnumStatusAgend.AGENDADO));
+                
+                if (clientes.containsKey(campos[1]) && (barbearia.getBarbeiros().containsKey(campos[2]))) {
+                    if (barbeiros.get(campos[2]).getServicos().containsKey(Integer.valueOf(campos[3]))) {
+                        Cliente cliente = new Cliente(clientes.get(campos[1]));
+                        Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(campos[2]));
+                        Servico servico = new Servico(barbeiros.get(campos[2]).getServicos().get(Integer.valueOf(campos[3])));
+                        Disponibilidade disponibilidade = new Disponibilidade(barbeiro.getDisponibilidade().get(0));
+
+                        agendamentos.put(Integer.valueOf(campos[0]), new Agendamento(Integer.parseInt(campos[0]), cliente, 
+                        barbeiro, servico, disponibilidade.getData()));
+                    }
+                }
                 
             }
         } catch(IOException c) {
             System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
         }
-        return servicos;
+        return agendamentos;
     }
-*/
 
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
 
