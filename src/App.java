@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.concurrent.TimeUnit;
 
 public class App {
@@ -13,19 +14,20 @@ public class App {
         TimeUnit.SECONDS.sleep(2);
         
 
-        Barbearia barbearia = null;
-
         Leitor leitor = new Leitor();
         Gerenciador gerenciador = new Gerenciador();
 
-        
-        barbearia = leitor.leDadosBarbearia(barbearia);
-
         try {
+            Barbearia barbearia = leitor.leDadosBarbearia(EnumCaminho.BARBEARIA.getValue());
+
             gerenciador.iniciarSistema(barbearia);
             gerenciador.executarPrograma(barbearia);
-        } catch (ExceptionObjetoInexistente e) {
-            System.out.println(e.getMessage());
+        } catch (FileNotFoundException a) {
+            System.out.println("* Erro na leitura do arquivo! Um dos arquivos de confinguracao e leitura nao foi encontrado.");
+        } catch (NullPointerException v) {
+            System.out.println("Erro! Dado(s) nao encontrado(s) ou nao lidos.");
+        }catch (ExceptionObjetoInexistente o) {
+            System.out.println("Erro no registro/obtencao de dados!" + o.getMessage());
         } catch (IllegalArgumentException s) {
             System.out.println("* Erro de leitura para os dados descritivos da barbearia.");
         }
