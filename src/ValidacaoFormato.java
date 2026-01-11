@@ -5,7 +5,7 @@ public class ValidacaoFormato {
     public static void validacao(String dado, String formato) throws ExceptionFormato {
         // Verifica se o dado foi preenchido na hora da captura das informações ou se o campo está vazio;
         if ((dado == null) || dado.isBlank()) {
-            throw new ExceptionFormato("CEP vazio ou inexistente.");
+            throw new ExceptionFormato("Campo de informacao vazio ou inexistente.");
         }
 
         /*
