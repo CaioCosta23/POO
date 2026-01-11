@@ -2,7 +2,7 @@ public class ValidacaoFormato {
     /*
      * Este trecho de código realiza a validação de um dado, verificando se o mesmo está no formato padrão utilizado ou não;
      */
-    public static void validacao(String dado, String formato) throws ExceptionFormato {
+    public static final void validacao(String dado, String formato) throws ExceptionFormato {
         // Verifica se o dado foi preenchido na hora da captura das informações ou se o campo está vazio;
         if ((dado == null) || dado.isBlank()) {
             throw new ExceptionFormato("Campo de informacao vazio ou inexistente.");
