@@ -18,7 +18,7 @@ public class App {
 
         Leitor leitor = new Leitor();
         Gerenciador gerenciador = new Gerenciador();
-        /* */
+        
         try {
             Barbearia barbearia = leitor.leDadosBarbearia(EnumCaminho.BARBEARIA.getValue());
 
