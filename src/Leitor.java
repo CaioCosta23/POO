@@ -29,7 +29,10 @@ public class Leitor {
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
         String linha;
-        // Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
+        /* 
+         * Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
+         * estas linhas são a linha de instruções e uma quebra de linha. Caso elas sejam retiradas do arquivo, pode-se retirar esse trecho 'for';
+        */
         for (int l = 0; l < SALTOS; l++) {
             br.readLine();
         }
@@ -50,71 +53,90 @@ public class Leitor {
             LocalTime abertura = LocalTime.parse(campos[3], DateTimeFormatter.ofPattern("HH:mm"));
             LocalTime fechamento = LocalTime.parse(campos[4], DateTimeFormatter.ofPattern("HH:mm"));
                 
-                // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
-            barbearia = new Barbearia(campos[0], null, campos[1], campos[2], abertura, fechamento, campos[5]);
+            // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
+            barbearia = new Barbearia(campos[0], this.leEndereco(barbearia, EnumCaminho.ENDERECO.getValue()), campos[1], campos[2], abertura, fechamento, campos[5]);
+
+            
         }
         
         if (barbearia == null) {
-            throw new NullPointerException("");
+            throw new NullPointerException(" (arquivo) de barbearia");
         }
-        
         return barbearia;
     }
 
 
-    public void leEndereco(Barbearia barbearia) {
+
+    public Endereco leEndereco(Barbearia barbearia, String caminho) throws Exception {
+        Endereco endereco = null;
+
         final int SALTOS = 2;
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/endereco.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivo = new FileInputStream(caminho);
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
-            String linha;
-
-            for (int l = 0; l < SALTOS; l++) {
-                br.readLine();
-            }
+        String linha;
+        for (int l = 0; l < SALTOS; l++) {
+            br.readLine();
+        }
                 
-            while ((linha = br.readLine()) != null) {
-                String[] campos = linha.split(";");
-                
-                try {
-                    /*
-                     * Verifica se é um endereço simples ou um endereço completo e cria o mesmo com as informações retiradas da(s) linha(s) do arquivo;
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
 
-                     *OBS: Verifique o arquivo de entrada "endereco.txt" para entender melhor o formato dos dados;
-                    */
+            /*
+             * Verifica se é um endereço simples ou um endereço completo e cria o mesmo com as informações retiradas da(s) linha(s) do arquivo;
+
+             * OBS: Verifique o arquivo de entrada "endereco.txt" para entender melhor o formato dos dados;
+            */
+
+            try {
+                if ((campos.length != 4) && (campos.length != 7)) {
                     if (campos.length == 4) {
                         ValidacaoFormato.validacao(campos[3], EnumFormato.CEP.FORMATO);
-                        barbearia.setEndereco(new Endereco(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3]));
+                        endereco = new Endereco(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3]);
                     }else if (campos.length == 7) {
                         ValidacaoFormato.validacao(campos[6], EnumFormato.CEP.FORMATO);
-                        barbearia.setEndereco(new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]));
-                    }
-                }catch (NumberFormatException n) {
-                    System.out.println("* Entrada INVALIDA! Insira um dado numerico ao numero do endereco.");
-                }catch (IllegalArgumentException s) {
-                    System.out.println("Entrada INVALIDA! Erro de leitura para os dados descritivos de endereco.");
-                }catch (ExceptionFormato c) {
-                    System.out.println("|AVISO|");
-                    System.out.println(c.getMessage() + " Erro na validacao do formato de CEP.");
-                    System.out.println("* O endereco criado com campos nulos/incompletos e sem informacoes.");
-                    barbearia.setEndereco(new Endereco(-1 , "-", "-", "-"));
-                    
-                    try {
-                        // Cria um tempo de espera (em segundos) no terminal antes de executar as próximas açõe;
-                        TimeUnit.SECONDS.sleep(6);
-
-                        System.out.print("\033[H\033[2J");
-                        System.out.flush();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                        endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
+                    }else{
+                        throw new IllegalArgumentException("Quantidade de dados incorreta no arquivo de leitura.");
                     }
                 }
+            }catch (ExceptionFormato c) {
+                System.out.println("|AVISO|");
+                System.out.println(c.getMessage() + " Erro na validacao do formato de CEP.");
+                System.out.println("* O endereco criado com campos nulos/incompletos e sem informacoes.");
+
+                endereco = new Endereco(-1 , "-", "-", "-");
+                try {
+                    // Cria um tempo de espera (em segundos) no terminal antes de executar as próximas açõe;
+                    TimeUnit.SECONDS.sleep(6);
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            } catch (IllegalArgumentException q) {
+                System.out.println("|AVISO|");
+                System.out.println("Erro na leitura de campos de endereco! " + q.getMessage());
+                System.out.println("* O endereco criado com campos nulos/incompletos e sem informacoes.");
+
+                endereco = new Endereco(-1 , "-", "-", "-");
+                try {
+                    TimeUnit.SECONDS.sleep(6);
+                    System.out.print("\033[H\033[2J");
+                    System.out.flush();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
-        } catch (IOException i) {
-            System.out.println("* Erro na leitura/exibicao (do arquivo) de informacoes.");
         }
+        
+        if (endereco == null) {
+            throw new ExceptionObjetoInexistente("Endereco nao lido corretamente");
+        }
+        return endereco;
     }
+
 
 
     public int leOpcoes() {
@@ -125,8 +147,10 @@ public class Leitor {
         return opcao;
     }
 
+
+
     public String leIdentificadorUsuario() {
-        System.out.printf("\n- Digite o CPF (caso cliente) ou CNPJ (caso prestador de servico): ");
+        System.out.printf("\n- Digite o CPF cliente ou prestador de servico: ");
         String identificador = entrada.nextLine();
         System.out.println("................................................................................................................");
             
