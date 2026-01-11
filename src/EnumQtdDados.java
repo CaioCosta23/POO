@@ -1,4 +1,5 @@
 public enum EnumQtdDados {
+    QTD_DADOS_ADMINISTRADOR(7),
     QTD_DADOS_CLIENTES(8),
     QTD_DADOS_BARBEIRO(7),
     QTD_DADOS_SERVICOS(6),
