@@ -10,6 +10,7 @@ public class Barbearia{
     protected LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
+    private Map<String, Cliente> clientes = new HashMap<>();
     private Map <String, Barbeiro> barbeiros = new HashMap<>();
     private Map<Integer, Servico> servicos = new HashMap<>();
     
@@ -106,12 +107,20 @@ public class Barbearia{
     }
         */
 
+    public Map<String, Cliente> getClientes() {
+        return new HashMap<>(this.clientes);
+    }
+
     public Map<String, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
     }
 
     public Map<Integer, Servico> getServicos() {
         return new HashMap<>(this.servicos);
+    }
+
+    public void adicionarClientes(Map<String, Cliente>clientes) {
+        this.clientes.putAll(clientes);
     }
     
     public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
