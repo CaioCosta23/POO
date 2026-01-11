@@ -6,15 +6,15 @@ public class Agendamento {
     private Barbeiro barbeiro;
     private Servico servico;
     private LocalDate data;
-    private final EnumStatusAgend status;
+    private boolean status;
 
-    public Agendamento(int id, Cliente cliente, Barbeiro barbeiro, Servico servico, LocalDate data, EnumStatusAgend status) {
+    public Agendamento(int id, Cliente cliente, Barbeiro barbeiro, Servico servico, LocalDate data) {
         this.id = id;
         this.cliente = cliente;
         this.barbeiro = barbeiro;
         this.servico = servico;
         this.data = data;
-        this.status = status;
+        this.status = false;
     }
 
     public int getId() {
@@ -54,6 +54,14 @@ public class Agendamento {
 
     public void setData(LocalDate data) {
         this.data = data;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public void exibirInformacoes() {
