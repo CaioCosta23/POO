@@ -28,6 +28,7 @@ public class Gerenciador {
 
         Leitor leitor = new Leitor();
         Registrador registrador = new Registrador();
+        Consulta consulta = new Consulta();
 
         Map <Integer, Agendamento> agendamentos = new HashMap<>();
 
@@ -178,16 +179,16 @@ public class Gerenciador {
                         if (!(barbearia.getClientes().isEmpty())) {
                             if (barbearia.getClientes().containsKey(identificador)){
                                 barbearia.getClientes().get(identificador).exibirInformacoes();
-                            }else if (!(barbearia.getBarbeiros().isEmpty())) {
-                                if (barbearia.getBarbeiros().containsKey(identificador)) {
-                                    barbearia.getBarbeiros().get(identificador).exibirInformacoes();
-                                }else {
-                                    System.out.println("* Usuario nao encontrado.");
+                            }
+                        }else if (!(barbearia.getBarbeiros().isEmpty())) {
+                            if (barbearia.getBarbeiros().containsKey(identificador)) {
+                                barbearia.getBarbeiros().get(identificador).exibirInformacoes();
+                            }else {
+                                System.out.println("* Usuario nao encontrado.");
                                 }
                             }else {
-                                System.out.println("Lista de usuarios (clientes e prestadores de servicos) vazia.");
+                                System.out.println("Lista de usuarios (clientes e/ou prestadores de servicos) vazia.");
                             }
-                        }
                         break;
                     case 9:
                         if (!(leitor.lerServico().isEmpty())) {
@@ -220,7 +221,7 @@ public class Gerenciador {
                     System.out.println("* Informacoes nao encontradas.");
                 }
         }else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("pois a opcao digitada nao existe no sistema.");
         }
     }
 }
