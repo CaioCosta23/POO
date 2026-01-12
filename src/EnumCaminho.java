@@ -6,6 +6,7 @@ public enum EnumCaminho {
     BARBEIROS("dados/barbeiros.txt"),
     CLIENTES("dados/clientes.txt"),
     SERVICOS("dados/servicos.txt"),
+    ESPECIALIDADES("dados/especialidades.txt"),
     DISPONIBILIDADES("dados/disponibilidades.txt");
 
     private final String value;
