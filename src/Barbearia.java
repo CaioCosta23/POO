@@ -184,6 +184,5 @@ public class Barbearia{
         System.out.printf("- Horario de Funcionamento %02d:%02d - %02d:%02d\n", this.getAbertura().getHour(), this.getAbertura().getMinute(),
                                                                                       this.getFechamento().getHour(), this.getFechamento().getMinute());
         System.out.println("- CNPJ: " + this.getCnpj());
-        System.out.println("---------------------------------------------------------------------------------------------------------------");
     }
 }
