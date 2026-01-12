@@ -114,24 +114,24 @@ public class Registrador {
         return barbeiro;
     }
 
-    
 
-    private List<Disponibilidade> criarDisponibilidade() {
+
+    public List<Disponibilidade> criarDisponibilidade() {
         LocalTime horario = LocalTime.of(8, 0);
-        LocalTime ultimoHorario = LocalTime.of(17, 20);
+        LocalTime ultimoHorario = LocalTime.of(18, 00);
 
         LocalDate data = LocalDate.of(2026, 06, 10);
 
         List<Disponibilidade> disponibilidades = new ArrayList<>();
 
-        while(horario.equals(ultimoHorario)) {
-            if (!(horario.equals(ultimoHorario))) {
-                Disponibilidade disponibilidade = new Disponibilidade(data, horario, horario.plusMinutes(Servico.getDuracao()));
-                disponibilidades.add(disponibilidade);
-            }
+        while(!(horario.isAfter(ultimoHorario))) {
+            Disponibilidade disponibilidade = new Disponibilidade(data, horario, horario.plusMinutes(Servico.getDuracao()), true);
+            disponibilidades.add(disponibilidade);
+            horario = horario.plusMinutes(Servico.getDuracao());
         }
         return disponibilidades;
     }
+
 
 
     public Servico cadastrarServico() {
@@ -247,7 +247,28 @@ public class Registrador {
             System.out.println("@ Usuario cadastrado com sucesso!");
         }
     }
+
+
+
+    public void armazenarDisponibilidade(List<Disponibilidade> disponibilidades, String identificadorBarbeiro) throws Exception {
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.DISPONIBILIDADES.getValue(), true))) {
+            arquivo.write(identificadorBarbeiro);
+            arquivo.newLine();
+
+            Iterator<Disponibilidade> iterador = disponibilidades.iterator();
+
+            while(iterador.hasNext()) {
+                arquivo.write(iterador.next().toString());
+                arquivo.newLine();
+            }
+
+            // Impressão de verificação para o programador;
+            //System.out.println("Disponibilidades armazenadas com sucesso.");
+        }
+    }
     
+
 
     public void armazenarServico(Servico servico) throws Exception {
         servico.setId(geradorId);
