@@ -21,6 +21,8 @@ public class Barbeiro extends Usuario{
         super(original);
         this.contratacao = original.contratacao;
         this.salario = original.salario;
+        this.especialidades.putAll(original.especialidades);
+        this.disponibilidades.addAll(original.disponibilidades);
     }
 
     public LocalDate getContratacao() {
@@ -47,12 +49,12 @@ public class Barbeiro extends Usuario{
         return new ArrayList<>(this.disponibilidades);
     }
 
-    public void adicionarEspecialidades(Map<Integer, Servico>servicos) {
-        this.especialidades.putAll(servicos);
-    }
-
     public void adicionarDisponibilidade(List<Disponibilidade>disponibilidades) {
         this.disponibilidades.addAll(disponibilidades);
+    }
+
+    public void adicionarEspecialidades(Map<Integer, Servico>servicos) {
+        this.especialidades.putAll(servicos);
     }
 
     @Override
@@ -84,8 +86,8 @@ public class Barbeiro extends Usuario{
         Consulta consulta = new Consulta();
 
         System.out.println("- Especialidades:");
-        consulta.exibirServicos(this.especialidades);
+        consulta.exibirServicos(this.getEspecialidades());
         System.out.println("- Disponibilidades para agendamento de servico:");
-        consulta.consultaDisponibilidade(this.disponibilidades);
+        consulta.consultaDisponibilidade(this.getDisponibilidade());
     }
 }
