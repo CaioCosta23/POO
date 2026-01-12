@@ -62,10 +62,10 @@ public class Servico {
     }
 
     public void exibirInformacoes() {
-        System.out.println("- ID: " + this.getId());
-        System.out.println("- Nome: " + this.getNome());
-        System.out.println("- Descricao: " + this.getDescricao());
-        System.out.printf("- Duracao: %02d minutos\n",  DURACAO);
-        System.out.printf("- Preco: %.2f\n",  this.getPreco());
+        System.out.println("\t#- ID: " + this.getId());
+        System.out.println("\t# Nome: " + this.getNome());
+        System.out.println("\t# Descricao: " + this.getDescricao());
+        System.out.printf("\t# Duracao: %02d minutos\n",  DURACAO);
+        System.out.printf("\t Preco: %.2f\n",  this.getPreco());
     }
 }
