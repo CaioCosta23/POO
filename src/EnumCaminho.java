@@ -1,11 +1,11 @@
 public enum EnumCaminho {
     BARBEARIA("dados/infoBarbearia.txt"),
+    ENDERECO("dados/endereco.txt"),
     ADMINISTRADOR("dados/administrador.txt"),
     AGENDAMENTO("dados/agendamento.txt"),
     BARBEIROS("dados/barbeiros.txt"),
     CLIENTES("dados/clientes.txt"),
-    SERVICOS("dados/servicos.txt"),
-    ENDERECO("endereco.txt");
+    SERVICOS("dados/servicos.txt");
 
     private final String value;
     
