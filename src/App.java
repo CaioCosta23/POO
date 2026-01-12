@@ -41,7 +41,7 @@ public class App {
             TimeUnit.SECONDS.sleep(1);
         } finally {
             System.out.println("................................................................................................................");
-            System.out.printf("Finalizando");
+            System.out.printf("+ Finalizando");
             TimeUnit.SECONDS.sleep(1);
             System.out.printf(".");
             TimeUnit.SECONDS.sleep(1);
