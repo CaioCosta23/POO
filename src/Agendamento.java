@@ -6,7 +6,7 @@ public class Agendamento {
     private Barbeiro barbeiro;
     private Servico servico;
     private LocalDate data;
-    private boolean status;
+    private final EnumStatusAgend status;
 
     public Agendamento(int id, Cliente cliente, Barbeiro barbeiro, Servico servico, LocalDate data) {
         this.id = id;
@@ -14,7 +14,7 @@ public class Agendamento {
         this.barbeiro = barbeiro;
         this.servico = servico;
         this.data = data;
-        this.status = false;
+        this.status = EnumStatusAgend.AGENDADO;
     }
 
     public int getId() {
@@ -56,12 +56,10 @@ public class Agendamento {
         this.data = data;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
+    @Override
+    public String toString() {
+        return String.format("%d;%s;%s;%d;%02d/%02d/%04d", this.getId(), this.getCliente().getCpf(), this.getBarbeiro().getCpf(), 
+                            this.getServico().getId(), this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getDayOfYear());
     }
 
     public void exibirInformacoes() {
