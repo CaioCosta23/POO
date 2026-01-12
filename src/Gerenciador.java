@@ -6,25 +6,29 @@ public class Gerenciador {
     public Gerenciador() {
     }
 
-    public void iniciarSistema(Barbearia barbearia)throws ExceptionObjetoInexistente {
+
+    public void iniciarSistema(Barbearia barbearia)throws Exception {
         // Verifica se a barbearia existe dentro do sistema;
         if (barbearia == null) {
-            throw new ExceptionObjetoInexistente("* Informacoes faltantes ou incompletos na criacao da barbearia. ");
+            throw new ExceptionObjetoInexistente(" Informacoes faltantes ou incompletos na criacao da barbearia. ");
         }
+        // Realiza a leitura do arquivo que contém o endereco da barbearia;
         Leitor leitor = new Leitor();
-        leitor.leEndereco(barbearia);
+
+        barbearia.adicionarClientes(leitor.lerCliente());
+        barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+        barbearia.adicionarServicos(leitor.lerServico());
 
         barbearia.exibirMenu();
     }
 
 
+
     public void executarPrograma(Barbearia barbearia) throws Exception {
-        String caminho = "dados/servicos.txt";
 
         Leitor leitor = new Leitor();
         Registrador registrador = new Registrador();
 
-        Map <String, Cliente> clientes;
         Map <Integer, Agendamento> agendamentos = new HashMap<>();
 
         //clientes = leitor.lerCliente();
@@ -33,11 +37,11 @@ public class Gerenciador {
 
         int opcao = leitor.leOpcoes();
 
-        if (opcao == EnumOpcao.OPCAO_CLIENTE.OPCAO) {
+        if (opcao == EnumOpcao.OPCAO_CLIENTE.getValue()) {
 
-        }else if (opcao == EnumOpcao.OPCAO_BARBEIRO.OPCAO) {
+        }else if (opcao == EnumOpcao.OPCAO_BARBEIRO.getValue()) {
             
-        }else if (opcao == EnumOpcao.OPCAO_ADMINISTRADOR.OPCAO) {
+        }else if (opcao == EnumOpcao.OPCAO_ADMINISTRADOR.getValue()) {
             Administrador administrador = leitor.lerAdministrador();
 
             if (leitor.lerLoginSenhaUsuarios(administrador) != null) {
@@ -45,108 +49,150 @@ public class Gerenciador {
 
                 switch (leitor.leOpcoes()) {
                     case 1:
-                        
-                        
+                        /* 
+                        if (!(leitor.lerCliente().isEmpty())) {
+                            clientes = leitor.lerCliente();
+                            String identificador = leitor.leIdentificadorUsuario();
+
+                            if (clientes.containsKey(identificador)) {
+                                Cliente cliente = new Cliente(clientes.get(identificador));
+
+                                if (!(leitor.lerServico().isEmpty())) {
+                                    System.out.println("* Digite o codigo de um dos servicos abaixo: ");
+                                    barbearia.adicionarServicos(leitor.lerServico());
+                                    
+                                    Consulta consulta = new Consulta();
+                                    consulta.exibirServicos(barbearia.getServicos());
+                                    
+                                    int opcaoServico = leitor.leOpcoes();
+
+                                    if (barbearia.getServicos().containsKey(opcaoServico)) {
+                                        Servico servico = new Servico(barbearia.getServicos().get(opcaoServico));
+
+                                        if (!(leitor.lerBarbeiro().isEmpty())) {
+                                            barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+                                            consulta.exibirUsuarios(barbearia.getBarbeiros());
+
+                                            String opcaoBarbeiro = leitor.leIdentificadorUsuario();
+                                            //if ((barbearia.getServicos().containsKey(opcaoServico))) {
+
+                                                Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(opcaoBarbeiro));
+
+                                                //if (barbeiro.getServicos().containsKey(servico.getId())) {
+                                                    //System.out.println("* Selecione um dos horarios disponiveis:");
+
+                                                    //int opcaoDisponibilidade = leitor.leOpcoes();
+                                                    //if (barbeiro.getDisponibilidade().get(opcaoDisponibilidade).getId() == opcaoDisponibilidade) {
+                                                        //Disponibilidade disponibilidade = barbeiro.getDisponibilidade().get(opcaoDisponibilidade);
+                                                        Agendamento agendamento = new Agendamento(1, cliente, barbeiro, servico, LocalDate.of(2026, 01, 10));
+                                                        agendamentos.put(1, agendamento);
+                                                        registrador.armazenarAgendamento(agendamento, "dados/agendamentos.txt");
+
+                                                        System.out.println("* Agendamento realizado com SUCESSO!");
+                                                    //}else {
+                                                        //throw new IllegalAccessException("* Data/horario indisponiveis.");
+                                                    //}
+                                                //}else {
+                                                    //throw new ExceptionObjetoInexistente("* Desculpe, o servico escolhido nao e oferecido pelo barbeiro.");
+                                                //}
+                                            //}else {
+                                                //throw new ExceptionObjetoInexistente("* Prestador de servico inexistente.");
+                                            //}
+                                        }else {
+                                            throw new ExceptionObjetoInexistente("Nenhum prestador de servicos dsponivel no momento.");
+                                        }
+
+                                    }else {
+                                        //throw new IllegalAccessException();
+                                    }
+                                }else {
+                                    throw new ExceptionObjetoInexistente("Nenhum servico disponivel no momento.");
+                                }
+                            }else {
+                                throw new ExceptionObjetoInexistente("Cliente nao cadastrado. Realize o cadastro para fazer um agendamento.");
+                            }
+                        }
+                            */
                         break;
                     case 2:
                         break;
                         
                     case 3:
                         Servico servico = registrador.cadastrarServico();
-                        registrador.armazenarServico(servico, caminho);
+                        registrador.armazenarServico(servico);
                         break;
-
                     case 4:
                         
                         break;
                     case 5:
                         System.out.println("* Selecione um dos tipos de usuario abaixo que deseja cadastrar:");
                         System.out.println("[1] Cliente\t[2] Barbeiro");
+
                         int opcaoAdicao = leitor.leOpcoes();
 
-                        if (opcaoAdicao == 1) {
-                            clientes = leitor.lerCliente();
+                        if (opcaoAdicao == EnumOpcao.ADICIONAR_CLIENTE.getValue()) {
                             Cliente novo = registrador.cadastrarCliente();
-                            clientes.put(novo.getCpf(), novo);
-                            registrador.armazenarUsuario(novo, "dados/clientes.txt");
-                        }else if (opcaoAdicao == 2) {
-                            Map<String, Barbeiro> barbeiros = new HashMap<>();
-                            
-                            barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+                            registrador.armazenarUsuario(novo, EnumCaminho.CLIENTES.getValue());
+                        }else if (opcaoAdicao == EnumOpcao.ADICIONAR_BARBEIRO.getValue()) {
                             Barbeiro novo = registrador.cadastrarBarbeiro();
-                            barbeiros.put(novo.getCpf(), novo);
-                            barbearia.adicionarBarbeiros(barbeiros);
-                            registrador.armazenarUsuario(novo, "dados/clientes.txt");
+                            registrador.armazenarUsuario(novo, EnumCaminho.BARBEIROS.getValue());
                         }else {
-                            throw new IllegalArgumentException("* Opcao Invalida ou inexistente!");
+                            throw new IllegalArgumentException("com opcao invalida ou inexistente!");
                         }
                         break;
-
                     case 6:
                         System.out.println("* Selecione um dos tipos de usuario abaixo que deseja excluir:");
                         System.out.println("[1] Cliente\t[2] Barbeiro");
+
                         int opcaoRemocao = leitor.leOpcoes();
 
-                        if (opcaoRemocao == 1) {
-                            if (!(leitor.lerCliente().isEmpty())) {
+                        if (opcaoRemocao == EnumOpcao.REMOVER_CLIENTE.getValue()) {
+                            if (!(barbearia.getClientes().isEmpty())) {
                                 String identificador = leitor.leIdentificadorUsuario();
-                                clientes = leitor.lerCliente();
-                                if (clientes.containsKey(identificador)) {
-                                    registrador.editarLista("dados/clientes.txt", clientes.get(identificador).getId());
+
+                                if (barbearia.getClientes().containsKey(identificador)) {
+                                    registrador.editarLista(EnumCaminho.CLIENTES.getValue(), barbearia.getClientes().get(identificador).getId());
                                 }else {
-                                    throw new ExceptionObjetoInexistente("Cliente nao encontrado/registrado.");
+                                    System.out.println("* Cliente nao encontrado/registrado.");
                                 }
-                            }else {
-                                throw new IllegalArgumentException();
                             }
-                            
-                        }else if (opcaoRemocao == 2) {
-                            if (!(leitor.lerBarbeiro().isEmpty())) {
+                        }else if (opcaoRemocao == EnumOpcao.REMOVER_CLIENTE.getValue()) {
+                            if (!(barbearia.getBarbeiros().isEmpty())) {
                                 String identificador = leitor.leIdentificadorUsuario();
-                                barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+
                                 if (barbearia.getBarbeiros().containsKey(identificador)) {
-                                    registrador.editarLista("dados/barbeiros.txt", barbearia.getBarbeiros().get(identificador).getId());
+                                    registrador.editarLista(EnumCaminho.BARBEIROS.getValue(), barbearia.getBarbeiros().get(identificador).getId());
                                 }else {
-                                    throw new ExceptionObjetoInexistente("Cliente nao encontrado/registrado.");
+                                    System.out.println("* Prestador de servicos nao encontrado/registrado.");
                                 }
-                            }else {
-                                throw new IllegalArgumentException();
                             }
                         }else {
-                            throw new IllegalArgumentException("* Opcao Invalida ou inexistente!");
+                            throw new IllegalArgumentException("com opcao invalida ou inexistente!");
                         }
                         break;
                     case 7:
                         break;
                     case 8:
-                        if (!(leitor.lerCliente().isEmpty())) {
-                            clientes = leitor.lerCliente();
-                            if (!(clientes.isEmpty())) {
-                                String identificador = leitor.leIdentificadorUsuario();
-                                if (clientes.containsKey(identificador)) {
-                                    clientes.get(identificador).exibirInformacoes();
-                                }else {
-                                    System.out.println("Prestador de servicos nao encontrado.");
-                                }
-                            }
-                        }else if (!(leitor.lerBarbeiro().isEmpty())) {
-                            barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
+                        String identificador = leitor.leIdentificadorUsuario();
 
-                            if (!(barbearia.getBarbeiros().isEmpty())) {
-                                String identificador = leitor.leIdentificadorUsuario();
+                        if (!(barbearia.getClientes().isEmpty())) {
+                            if (barbearia.getClientes().containsKey(identificador)){
+                                barbearia.getClientes().get(identificador).exibirInformacoes();
+                            }else if (!(barbearia.getBarbeiros().isEmpty())) {
                                 if (barbearia.getBarbeiros().containsKey(identificador)) {
-                                    barbearia.getBarbeiros().get(identificador).exibirInformacoes();;
+                                    barbearia.getBarbeiros().get(identificador).exibirInformacoes();
                                 }else {
-                                    System.out.println("Prestador de servicos nao encontrado.");
+                                    System.out.println("* Usuario nao encontrado.");
                                 }
+                            }else {
+                                System.out.println("Lista de usuarios (clientes e prestadores de servicos) vazia.");
                             }
-                        }else {
-                            System.out.println("Nenhum usuario registrado ate o momento.");
                         }
                         break;
                     case 9:
                         if (!(leitor.lerServico().isEmpty())) {
                             barbearia.adicionarServicos(leitor.lerServico());
+
                             int opcaoServico = leitor.leOpcoes();
                             
                             if (barbearia.getServicos().containsKey(opcaoServico)) {
@@ -167,7 +213,7 @@ public class Gerenciador {
                 }
             }
             
-        }else if (opcao == EnumOpcao.OPCAO_INFORMACOES.OPCAO) {
+        }else if (opcao == EnumOpcao.OPCAO_INFORMACOES.getValue()) {
             try {
                     barbearia.exibirInformacoes();
                 } catch (NullPointerException p) {
