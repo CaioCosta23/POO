@@ -137,6 +137,7 @@ public class Gerenciador {
                         }else if (opcaoAdicao == EnumOpcao.ADICIONAR_BARBEIRO.getValue()) {
                             Barbeiro novo = registrador.cadastrarBarbeiro();
                             registrador.armazenarUsuario(novo, EnumCaminho.BARBEIROS.getValue());
+                            registrador.armazenarDisponibilidade(novo.getDisponibilidade(), novo.getCpf());
                         }else {
                             throw new IllegalArgumentException("com opcao invalida ou inexistente!");
                         }
@@ -204,8 +205,31 @@ public class Gerenciador {
                         }
                         break;
                     case 10:
+                        System.out.println("* Selecione um dos tipos de usuario abaixo que deseja excluir:");
+                        System.out.println("[1] Cliente\t[2] Barbeiro");
+
+                        int opcaoUsuario = leitor.leOpcoes();
+
+                        if (opcaoUsuario == EnumOpcao.OPCAO_CLIENTE.getValue()) {
+                            if (!(barbearia.getClientes().isEmpty())) {
+                                consulta.exibirUsuarios(barbearia.getClientes());
+                            }else {
+                                System.out.println("* Lista de clientes vazia.");
+                            }
+                        }else if (opcaoUsuario == EnumOpcao.OPCAO_BARBEIRO.getValue()){
+                            if (!(barbearia.getBarbeiros().isEmpty())) {
+                                consulta.exibirUsuarios(barbearia.getBarbeiros());
+                            }else {
+                                System.out.println("* Lista de prestadores de servicos vazia.");
+                            }
+                        }
                         break;
                     case 11:
+                        if (!(barbearia.getServicos().isEmpty())) {
+                            consulta.exibirServicos(barbearia.getServicos());
+                        }else {
+                            System.out.println("Catalogo/Lista de servicos vazia.");
+                        }
                         break;
                     case 12:
                         break;
