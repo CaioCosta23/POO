@@ -8,18 +8,19 @@ public class Disponibilidade{
     private LocalTime horaFim;
     private boolean disponivel;
 
-    public Disponibilidade(LocalDate data, LocalTime horaInicio, LocalTime horaFim) {
+    public Disponibilidade(LocalDate data, LocalTime horaInicio, LocalTime horaFim, boolean disponivel) {
         Disponibilidade.id++;
         this.data = data;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
-        this.disponivel = true;
+        this.disponivel = disponivel;
     }
 
     public Disponibilidade(Disponibilidade original) {
         this.data = original.getData();
         this.horaInicio = original.getHoraInicio();
         this.horaFim = original.getHoraFim();
+        this.disponivel = original.isDisponivel();
     }
 
     public static int getId() {
