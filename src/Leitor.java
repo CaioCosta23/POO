@@ -17,14 +17,14 @@ public class Leitor {
     public Leitor() {
     }
 
-    public Barbearia leDadosBarbearia(String camminho) throws Exception {
+    public Barbearia leDadosBarbearia() throws Exception {
         Barbearia barbearia = null;
 
         // Número de linhas que serão ignoradas no arquivo (Linhas de comentarios);
         final int SALTOS = 2;
        
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
-        InputStream arquivo= new FileInputStream("dados/infoBarbearia.txt");
+        InputStream arquivo= new FileInputStream(EnumCaminho.BARBEARIA.getValue());
          // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
@@ -44,6 +44,10 @@ public class Leitor {
             */
             String[] campos = linha.split(";");
 
+            // Valida a quantidade de dados que possui cada linha do arquivo lido;
+            ValidacaoQtdDados.validacao(campos, EnumCaminho.BARBEARIA.getValue(), EnumQtdDados.QTD_DADOS_BARBEARIA.getValue());
+
+            // Valida alguns dos dados da barbearia;
             ValidacaoFormato.validacao(campos[2], EnumFormato.EMAIL.FORMATO);
             ValidacaoFormato.validacao(campos[3], EnumFormato.HORARIO.FORMATO);
             ValidacaoFormato.validacao(campos[4], EnumFormato.HORARIO.FORMATO);
@@ -54,9 +58,7 @@ public class Leitor {
             LocalTime fechamento = LocalTime.parse(campos[4], DateTimeFormatter.ofPattern("HH:mm"));
                 
             // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
-            barbearia = new Barbearia(campos[0], this.leEndereco(barbearia, EnumCaminho.ENDERECO.getValue()), campos[1], campos[2], abertura, fechamento, campos[5]);
-
-            
+            barbearia = new Barbearia(campos[0], this.leEndereco(barbearia), campos[1], campos[2], abertura, fechamento, campos[5], this.lerAdministrador());    
         }
         
         if (barbearia == null) {
@@ -67,12 +69,12 @@ public class Leitor {
 
 
 
-    public Endereco leEndereco(Barbearia barbearia, String caminho) throws Exception {
+    public Endereco leEndereco(Barbearia barbearia) throws Exception {
         Endereco endereco = null;
 
         final int SALTOS = 2;
 
-        InputStream arquivo = new FileInputStream(caminho);
+        InputStream arquivo = new FileInputStream(EnumCaminho.ENDERECO.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
         String linha;
@@ -85,21 +87,17 @@ public class Leitor {
 
             /*
              * Verifica se é um endereço simples ou um endereço completo e cria o mesmo com as informações retiradas da(s) linha(s) do arquivo;
+             * Mesmo que Algum dos dados dê algum problema de formato, o endereço ainda é criado, mas com campos 'setados' para valores que representam "vazio";
 
-             * OBS: Verifique o arquivo de entrada "endereco.txt" para entender melhor o formato dos dados;
+             * OBS: Neste caso não é possível usar a função de validação de quantidade de dados por ser duas possibilidades quantidade de dados;
             */
-
             try {
-                if ((campos.length != 4) && (campos.length != 7)) {
-                    if (campos.length == 4) {
-                        ValidacaoFormato.validacao(campos[3], EnumFormato.CEP.FORMATO);
-                        endereco = new Endereco(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3]);
-                    }else if (campos.length == 7) {
-                        ValidacaoFormato.validacao(campos[6], EnumFormato.CEP.FORMATO);
-                        endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
-                    }else{
-                        throw new IllegalArgumentException("Quantidade de dados incorreta no arquivo de leitura.");
-                    }
+                if (campos.length == EnumQtdDados.QTD_DADOS_ENDERECO_SIMPLES.getValue()) {
+                    ValidacaoFormato.validacao(campos[3], EnumFormato.CEP.FORMATO);
+                    endereco = new Endereco(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3]);
+                }else if (campos.length == EnumQtdDados.QTD_DADOS_EMDERECO_COMPLETO.getValue()) {
+                    ValidacaoFormato.validacao(campos[6], EnumFormato.CEP.FORMATO);
+                    endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
                 }
             }catch (ExceptionFormato c) {
                 System.out.println("|AVISO|");
@@ -132,7 +130,7 @@ public class Leitor {
         }
         
         if (endereco == null) {
-            throw new ExceptionObjetoInexistente("Endereco nao lido corretamente");
+            throw new ExceptionObjetoInexistente(" Endereco nao lido corretamente.");
         }
         return endereco;
     }
@@ -150,146 +148,107 @@ public class Leitor {
 
 
     public String leIdentificadorUsuario() {
-        System.out.printf("\n- Digite o CPF cliente ou prestador de servico: ");
+        System.out.printf("- Digite o CPF cliente ou prestador de servico: ");
         String identificador = entrada.nextLine();
         System.out.println("................................................................................................................");
             
         return identificador;
-    }    
+    }
 
 
-    public Map<String, Cliente>lerCliente() throws ExceptionObjetoInexistente {
+
+    public Map<String, Cliente>lerCliente() throws Exception {
         Map<String, Cliente> clientes = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/clientes.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
-            
-            String linha;
-                
-            while ((linha = br.readLine()) != null) {
-                String[] campos = linha.split(";");
+        String caminho = EnumCaminho.CLIENTES.getValue();
 
-                clientes.put(campos[4], new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-                
-            }
-        } catch(IOException c) {
-            System.out.println("................................................................................................................");
-            //System.out.println("\n* Lista de clientes vazia! Nenhum cliente registrado ate o momento.\n");
+        InputStream arquivo = new FileInputStream(caminho);
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
+        
+        String linha;
+            
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+            ValidacaoQtdDados.validacao(campos, caminho, EnumQtdDados.QTD_DADOS_CLIENTES.getValue());
+
+            clientes.put(campos[4], new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
         }
         return clientes;
     }
 
-    public Map<String, Barbeiro>lerBarbeiro() {
+
+
+    public Map<String, Barbeiro>lerBarbeiro() throws Exception {
         Map<String, Barbeiro> barbeiros = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/barbeiros.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivoEndereco = new FileInputStream(EnumCaminho.BARBEIROS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        
+        String linha;
             
-            String linha;
-                
-            while ((linha = br.readLine()) != null) {
-                String[] campos = linha.split(";");
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+            ValidacaoQtdDados.validacao(campos, EnumCaminho.BARBEIROS.getValue(), EnumQtdDados.QTD_DADOS_BARBEIRO.getValue());
 
-                barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8])));
-                
-            }
-        } catch(IOException c) {
-            System.out.println("................................................................................................................");
-            //System.out.println("\n* Lista de barbeiros vazia! Nenhum barbeiro foi registrado ate o momento.");
+            barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
+            LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8])));
+            
         }
         return barbeiros;
     }
+    
 
     public Administrador lerAdministrador() throws Exception {
         final int SALTOS = 2;
         Administrador administrador = null;
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/administrador.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivoEndereco = new FileInputStream(EnumCaminho.ADMINISTRADOR.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        
+        String linha;
+        for (int l = 0; l < SALTOS; l++) {
+            br.readLine();
+        }
             
-            String linha;
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+            ValidacaoQtdDados.validacao(campos, EnumCaminho.ADMINISTRADOR.getValue(), EnumQtdDados.QTD_DADOS_ADMINISTRADOR.getValue());
 
-            for (int l = 0; l < SALTOS; l++) {
-                br.readLine();
-            }
-                
-            while ((linha = br.readLine()) != null) {
-                String[] campos = linha.split(";");
-
-                administrador = new Administrador(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6]);
-            }
-            if (administrador == null) {
-                throw new ExceptionObjetoInexistente("");
-            }
-        } catch(IOException c) {
-            System.out.println("Administrador nao registrado.");
+            administrador = new Administrador(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6]);
+        }
+        if (administrador == null) {
+            throw new ExceptionObjetoInexistente("O Administrador não foi criado.");
         }
         return administrador;
     }
 
 
 
-    public Map<Integer, Servico>lerServico() {
+    public Map<Integer, Servico>lerServico() throws Exception {
         Map<Integer, Servico> servicos = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/servicos.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivoEndereco = new FileInputStream(EnumCaminho.SERVICOS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        
+        String linha;
             
-            String linha;
-                
-            while ((linha = br.readLine()) != null) {
-                String[] campos = linha.split(";");
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
 
-                servicos.put(Integer.valueOf(campos[0]), new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3])));
-                
-            }
-        } catch(IOException c) {
-            //System.out.println("* Lista de servicos vazia! Nenhum servico registrado ate o momento.");
+            ValidacaoQtdDados.validacao(campos, EnumCaminho.SERVICOS.getValue(), EnumQtdDados.QTD_DADOS_SERVICOS.getValue());
+
+            servicos.put(Integer.valueOf(campos[0]), new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3])));
         }
         return servicos;
     }
-    
-    public Map<String, Barbeiro> lerEspecialidade(Barbearia barbearia) throws ExceptionObjetoInexistente{
-        Map<String, Barbeiro> barbeiros = new HashMap<>();
-        Map<Integer, Servico> servicos = new HashMap<>();
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/servicos.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
-            
-            String linha;
-            int contador = 0;
-                
-            while ((linha = br.readLine()) != null) {
-                if (contador % 2 == 1) {
-                    String[] campos = linha.split(";");
 
-                    if (barbearia.getServicos().isEmpty()) {
-                        throw new ExceptionObjetoInexistente("* Servico nao registrado na barbearia.");
-                    }
-
-                    int id = Integer.parseInt(campos[1]);
-                    if (barbearia.getServicos().containsKey(id)) {
-                        servicos.put(id, new Servico(barbearia.getServicos().get(id)));
-                    }
-                }else {
-                    try {
-                        if (barbearia.getBarbeiros().containsKey(linha)) {
-                            throw new ExceptionObjetoInexistente("|Aviso|");
-                        }
-                        Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(linha));
-                        barbeiro.adicionarServicos(servicos);
-                        barbeiros.put(linha, barbeiro);   
-                    }catch (ExceptionObjetoInexistente s) {
-                        System.out.format(s.getMessage(),"\n* O prestador de servico com o documento %s nao existe ou foi removido do sistema.\n", linha);
-                        System.out.println("................................................................................................................");
-                    }
-                }
-            }
-        } catch(IOException u) {
-            //System.out.println("* Lista de servicos vazia! Nenhum servico registrado ate o momento.");
-        }
-        return barbeiros;
+    /* 
+    public Map<Integer, Servico> lerEspecialidades() throws Exception{
+        
     }
+    */
+
 
     public Map<Integer, Agendamento>lerAgendamento(Map<String, Cliente> clientes, Barbearia barbearia) {
         Map<Integer, Agendamento> agendamentos = new HashMap<>();
@@ -323,7 +282,10 @@ public class Leitor {
         return agendamentos;
     }
 
+
+
     public Usuario lerLoginSenhaUsuarios(Object usuarios) {
+        Usuario usuario = null;
 
         System.out.printf("@ Login: ");
         String login = entrada.nextLine();
@@ -355,6 +317,6 @@ public class Leitor {
                 }
             }
         }
-        return null;
+        return usuario;
     }
 }
