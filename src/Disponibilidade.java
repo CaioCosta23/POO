@@ -2,21 +2,32 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Disponibilidade{
+    private static int id = 0;
     private LocalDate data;
     private LocalTime horaInicio;
     private LocalTime horaFim;
     private boolean disponivel;
 
     public Disponibilidade(LocalDate data, LocalTime horaInicio, LocalTime horaFim) {
+        Disponibilidade.id++;
         this.data = data;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
+        this.disponivel = true;
     }
 
     public Disponibilidade(Disponibilidade original) {
         this.data = original.getData();
         this.horaInicio = original.getHoraInicio();
         this.horaFim = original.getHoraFim();
+    }
+
+    public static int getId() {
+        return id;
+    }
+
+    public static void setId(int id) {
+        Disponibilidade.id = id;
     }
 
     public LocalDate getData() {
@@ -52,8 +63,8 @@ public class Disponibilidade{
     }
 
     public void exibirInformacoes() {
-        System.out.printf("- Data: %02d/%02d/%04d\n", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear());
-        System.out.printf("%02d:%02d - %02d:¨%02d", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
+        System.out.printf("- Data: %02d/%02d/%04d | ", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear());
+        System.out.printf("%02d:%02d - %02d:%02d\n", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
                                                             this.getHoraFim().getHour(), this.getHoraFim().getMinute());
     }
 }
