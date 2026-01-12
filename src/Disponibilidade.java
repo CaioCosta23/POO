@@ -76,8 +76,13 @@ public class Disponibilidade{
     }
 
     public void exibirInformacoes() {
-        System.out.printf("- Data: %02d/%02d/%04d | ", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear());
-        System.out.printf("%02d:%02d - %02d:%02d\n", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
+        System.out.printf("\t# Data: %02d/%02d/%04d | ", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear());
+        System.out.printf("%02d:%02d - %02d:%02d ", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
                                                             this.getHoraFim().getHour(), this.getHoraFim().getMinute());
+        if (this.isDisponivel()) {
+            System.out.println("(DISPONIVEL)\n");
+        }else {
+            System.out.println("(INDISPONIVEL)\\n");
+        }
     }
 }
