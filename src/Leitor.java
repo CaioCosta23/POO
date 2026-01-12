@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -195,12 +197,12 @@ public class Leitor {
             Barbeiro barbeiro = new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
             LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8]));
 
-            barbeiro.adicionarDisponibilidade(this.leDisponibilidades());
+            barbeiro.adicionarDisponibilidade(this.lerDisponibilidades(barbeiro.getCpf()));
 
             barbeiros.put(campos[4], barbeiro);
-            
-            
         }
+        this.lerEspecialidades(barbeiros, this.lerServico());
+
         return barbeiros;
     }
     
@@ -250,12 +252,10 @@ public class Leitor {
     }
 
 
-    public Map<String, Barbeiro> lerEspecialidades(Map<String,Barbeiro> barbeiros, Map<Integer, Servico> servicos) throws Exception{
-        InputStream arquivo = new FileInputStream(EnumCaminho.SERVICOS.getValue());
+    public void lerEspecialidades(Map<String,Barbeiro> barbeiros, Map<Integer, Servico> servicos) throws Exception{
+        InputStream arquivo = new FileInputStream(EnumCaminho.ESPECIALIDADES.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
-
-        Map<String, Barbeiro> copiaBarbeiros = new HashMap<>(barbeiros);
-
+        
         int contador = 0;
         String linha, identificador = "";
         
@@ -263,48 +263,65 @@ public class Leitor {
             String[] campos = linha.split(";");
 
             if (contador % 2 == 0) {
-                identificador = campos[0];
+                identificador = linha;
             }else {
-                for (Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
-                    for (String campo : campos) {
-                        if (Objects.equals(valor.getKey(), Integer.valueOf(campo))) {
-                            copiaBarbeiros.get(identificador).getServicos().put(Integer.valueOf(campo), valor.getValue());
+                if (barbeiros.containsKey(identificador)) {
+                    Map<Integer, Servico> especialidades = new HashMap<>();
+                    for (Map.Entry<Integer, Servico> valor : servicos.entrySet()) {                  
+                        for (String id : campos) {
+                            if (Objects.equals(valor.getKey(), Integer.valueOf(id))) {
+                                especialidades.put(valor.getKey(), new Servico(valor.getValue()));
+                            }
                         }
                     }
+                    Barbeiro barbeiro = new Barbeiro(barbeiros.get(identificador));
+                    barbeiro.adicionarEspecialidades(especialidades);
+
+                    barbeiros.replace(identificador, barbeiro);
                 }
             }
             contador++;
         }
-        return copiaBarbeiros;
     }
 
 
 
-    public List<Disponibilidade> leDisponibilidades() throws Exception {
+    public List<Disponibilidade> lerDisponibilidades(String identificador) throws Exception {
         InputStream arquivo = new FileInputStream(EnumCaminho.DISPONIBILIDADES.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
+        long linhas = Files.lines(Path.of(EnumCaminho.DISPONIBILIDADES.getValue())).count();
         
         List<Disponibilidade> disponibilidades = new ArrayList<>();
 
-        String linha;
+        String linha, prestadorServicos = "";
         boolean livre = false;
+        int contador = 0;
         
         while ((linha = br.readLine()) != null) {
             String[] campos = linha.split(";");
-
-            if (campos[0].length() != 11) {
-                if (campos[2].equals("DISPONIVEL")) {
-                    livre = true;
-                }else if (campos[2].equals("INDISPONIVEL")) {
-                    livre = false;
+            
+            if (contador % 17 != 0) {
+                if (prestadorServicos.equals(identificador)) {
+                    if (campos[2].equals("DISPONIVEL")) {
+                        livre = true;
+                    }else if (campos[2].equals("INDISPONIVEL")) {
+                        livre = false;
+                    }
+                    LocalTime horario = LocalTime.parse(campos[1], DateTimeFormatter.ofPattern("HH:mm"));
+                    disponibilidades.add(new Disponibilidade(LocalDate.parse(campos[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")),horario, 
+                                                            horario.plusMinutes(Servico.getDuracao()),  livre));
+                }else {
+                    contador += 16;
                 }
-
-                LocalTime horario = LocalTime.parse(campos[1], DateTimeFormatter.ofPattern("HH:mm"));
-                disponibilidades.add(new Disponibilidade(LocalDate.parse(campos[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")),horario, 
-                                                        horario.plusMinutes(Servico.getDuracao()),  livre));
+            }else {
+                prestadorServicos = campos[0];
             }
             
+            if (contador >= linhas) {
+                break;
+            }
+            contador++;
         }
         return disponibilidades;
     }
