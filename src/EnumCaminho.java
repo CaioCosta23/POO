@@ -1,5 +1,5 @@
 public enum EnumCaminho {
-    BARBEARIA("infoBarbearia.txt"),
+    BARBEARIA("dados/infoBarbearia.txt"),
     ADMINISTRADOR("dados/administrador.txt"),
     AGENDAMENTO("dados/agendamento.txt"),
     BARBEIROS("dados/barbeiros.txt"),
