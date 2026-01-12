@@ -62,7 +62,7 @@ public class Servico {
     }
 
     public void exibirInformacoes() {
-        System.out.println("\t#- ID: " + this.getId());
+        System.out.println("\t# ID: " + this.getId());
         System.out.println("\t# Nome: " + this.getNome());
         System.out.println("\t# Descricao: " + this.getDescricao());
         System.out.printf("\t# Duracao: %02d minutos\n",  DURACAO);
