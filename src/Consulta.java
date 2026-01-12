@@ -23,24 +23,18 @@ public class Consulta {
 
 
     public void exibirUsuarios(Object usuarios) {
-        if (usuarios instanceof Map) {
-            Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
+        Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
             
-            for (Object valor : mapeados.entrySet()) {
-                if (valor instanceof Barbeiro) {
-                    ((Barbeiro)valor).exibirInformacoes();
-                }
-            }
-        }else if (usuarios instanceof Set){
-            Set<?> mapeados = (Set<?>)usuarios;
-
-            Iterator<?> iterador = mapeados.iterator();
-
-            while(iterador.hasNext()) {
-                Object valor = iterador.next();
-
+        for (Object valor : mapeados.entrySet()) {
+            if (valor instanceof Barbeiro) {
+                Barbeiro barbeiro = (Barbeiro)valor;
+                barbeiro.exibirInformacoes();
+                System.out.println("----------------------------------------------------------------------------------------------------------------");
+            }else {
                 if (valor instanceof Cliente) {
-                    ((Cliente)valor).exibirInformacoes();
+                    Cliente cliente = (Cliente)valor;
+                    cliente.exibirInformacoes();
+                    System.out.println("----------------------------------------------------------------------------------------------------------------");
                 }
             }
         }
@@ -49,6 +43,7 @@ public class Consulta {
     public void exibirServicos(Map<Integer, Servico> servicos) {
         for(Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
             valor.getValue().exibirInformacoes();
+            System.out.println("----------------------------------------------------------------------------------------------------------------");
         }
     }
 
