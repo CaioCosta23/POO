@@ -29,6 +29,19 @@ public class Barbearia{
         Barbearia.administrador = administrador;
     }
 
+    // Construtor para cópia profunda de TODOS os dados da Barbearia;
+    public Barbearia(Barbearia original) {
+        this.nome = original.nome;
+        this.endereco = original.endereco;
+        this.telefone = original.telefone;
+        this.email = original.email;
+        this.abertura = original.abertura;
+        this.fechamento = original.fechamento;
+        this.cnpj = original.cnpj;
+        //this.politica = null;
+        Barbearia.administrador = adicionarAdministrador(administrador);
+    }
+
 
     public String getNome() {
         return this.nome;
@@ -138,8 +151,8 @@ public class Barbearia{
         return this.agendamentos;
     }
 
-    public Administrador getAdministrador() {
-        return Barbearia.administrador;
+    private static Administrador adicionarAdministrador(Administrador original) {
+        return original;
     }
     
     public void exibirMenu() {
