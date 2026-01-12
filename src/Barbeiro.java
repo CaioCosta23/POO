@@ -7,7 +7,7 @@ import java.util.Map;
 public class Barbeiro extends Usuario{
     private LocalDate contratacao;
     private float salario;
-    private final Map <Integer, Servico> servicos = new HashMap<>();
+    private final Map <Integer, Servico> especialidades = new HashMap<>();
     private final List<Disponibilidade> disponibilidades = new ArrayList<>();
     
     public Barbeiro(int id, String nome, String email, String telefone, String cpf, String login, String senha, LocalDate contratacao, float salario) {
@@ -39,16 +39,16 @@ public class Barbeiro extends Usuario{
         this.salario = salario;
     }
 
-    public Map<Integer, Servico> getServicos() {
-        return new HashMap<>(this.servicos);
+    public Map<Integer, Servico> getEspecialidades() {
+        return new HashMap<>(this.especialidades);
     }
 
     public List<Disponibilidade> getDisponibilidade() {
         return new ArrayList<>(this.disponibilidades);
     }
 
-    public void adicionarServicos(Map<Integer, Servico>servicos) {
-        this.servicos.putAll(servicos);
+    public void adicionarEspecialidades(Map<Integer, Servico>servicos) {
+        this.especialidades.putAll(servicos);
     }
 
     public void adicionarDisponibilidade(List<Disponibilidade>disponibilidades) {
@@ -83,7 +83,9 @@ public class Barbeiro extends Usuario{
         
         Consulta consulta = new Consulta();
 
-        consulta.exibirServicos(this.servicos);
+        System.out.println("- Especialidades:");
+        consulta.exibirServicos(this.especialidades);
+        System.out.println("- Disponibilidades para agendamento de servico:");
         consulta.consultaDisponibilidade(this.disponibilidades);
     }
 }
