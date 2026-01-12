@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Agendamento {
     private int id;
@@ -6,14 +7,26 @@ public class Agendamento {
     private Barbeiro barbeiro;
     private Servico servico;
     private LocalDate data;
+    private LocalTime horario;
     private final EnumStatusAgend status;
 
-    public Agendamento(int id, Cliente cliente, Barbeiro barbeiro, Servico servico, LocalDate data) {
+    public Agendamento(int id, Cliente cliente, Barbeiro barbeiro, Servico servico, LocalDate data, LocalTime horario) {
         this.id = id;
         this.cliente = cliente;
         this.barbeiro = barbeiro;
         this.servico = servico;
         this.data = data;
+        this.horario = horario;
+        this.status = EnumStatusAgend.AGENDADO;
+    }
+
+    public Agendamento(Agendamento original) {
+        this.id = original.id;
+        this.cliente = original.cliente;
+        this.barbeiro = original.barbeiro;
+        this.servico = original.servico;
+        this.data = original.data;
+        this.horario = original.horario;
         this.status = EnumStatusAgend.AGENDADO;
     }
 
@@ -56,10 +69,19 @@ public class Agendamento {
         this.data = data;
     }
 
+    public LocalTime getHorario() {
+        return horario;
+    }
+
+    public void setHorario(LocalTime horario) {
+        this.horario = horario;
+    }
+
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%d;%02d/%02d/%04d", this.getId(), this.getCliente().getCpf(), this.getBarbeiro().getCpf(), 
-                            this.getServico().getId(), this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getDayOfYear());
+        return String.format("%d;%s;%s;%d;%02d/%02d/%04d;%02d:%02d", this.getId(), this.getCliente().getCpf(), this.getBarbeiro().getCpf(), 
+                            this.getServico().getId(), this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getDayOfYear(),
+                            this.getHorario().getHour(), this.getHorario().getMinute());
     }
 
     public void exibirInformacoes() {
