@@ -62,6 +62,18 @@ public class Disponibilidade{
         this.disponivel = disponivel;
     }
 
+    @Override
+    public String toString() {
+        String disponibilidade;
+        if (this.disponivel) {
+            disponibilidade = "DISPONIVEL";
+        }else {
+            disponibilidade = "INDISPONIVEL";
+        }
+        return String.format("%02d/%02d/%04d;%02d:%02d;%s", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear(),
+                            this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(), disponibilidade);
+    }
+
     public void exibirInformacoes() {
         System.out.printf("- Data: %02d/%02d/%04d | ", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear());
         System.out.printf("%02d:%02d - %02d:%02d\n", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
