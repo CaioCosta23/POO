@@ -19,8 +19,8 @@ public class Barbeiro extends Usuario{
     // Realiza uma cópia profunda de todos os dados de um objeto para outro (sem ligar a referência de um objeto ao outro);
     public Barbeiro(Barbeiro original) {
         super(original);
-        this.contratacao = original.getContratacao();
-        this.salario = original.getSalario();
+        this.contratacao = original.contratacao;
+        this.salario = original.salario;
     }
 
     public LocalDate getContratacao() {
@@ -57,10 +57,11 @@ public class Barbeiro extends Usuario{
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d", this.getId(), this.getNome(), this.getEmail(), 
-                                                                                    this.getTelefone(), this.getCpf(), this.getLogin(),
-                                                                                    this.getSenha(), this.contratacao.getDayOfMonth(),
-                                                                                    this.contratacao.getMonthValue(),this.contratacao.getYear());
+        return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d;%d", this.getId(), this.getNome(), this.getEmail(), 
+                                                                                this.getTelefone(), this.getCpf(), this.getLogin(),
+                                                                                this.getSenha(), this.contratacao.getDayOfMonth(),
+                                                                                this.contratacao.getMonthValue(),this.contratacao.getYear(),
+                                                                                (int)this.getSalario());
     }
 
     @Override
@@ -79,8 +80,8 @@ public class Barbeiro extends Usuario{
         System.out.printf("- Salario: R$%.2f\n" , this.getSalario());
         System.out.printf("- Data de Admissao: %02d/%02d/%04d\n", this.getContratacao().getDayOfMonth(),
                                                                         this.getContratacao().getMonthValue(), getContratacao().getYear());
-        Consulta consulta = new Consulta();
+        //Consulta consulta = new Consulta();
 
-        consulta.exibirServicos(this.servicos);
+        //consulta.exibirServicos(this.servicos);
     }
 }
