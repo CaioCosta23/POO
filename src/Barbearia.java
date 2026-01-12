@@ -10,12 +10,14 @@ public class Barbearia{
     protected LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
-    private Map<String, Cliente> clientes = new HashMap<>();
-    private Map <String, Barbeiro> barbeiros = new HashMap<>();
-    private Map<Integer, Servico> servicos = new HashMap<>();
+    private final Map<String, Cliente> clientes = new HashMap<>();
+    private final Map <String, Barbeiro> barbeiros = new HashMap<>();
+    final private Map<Integer, Servico> servicos = new HashMap<>();
+    private final Map<Integer, Agendamento> agendamentos = new HashMap<>();
+    private static Administrador administrador;
     
     public Barbearia(String nome, Endereco endereco, String telefone, String email, LocalTime abertura,
-            LocalTime fechamento, String cnpj) {
+            LocalTime fechamento, String cnpj, Administrador administrador) {
         this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
@@ -24,6 +26,7 @@ public class Barbearia{
         this.fechamento = fechamento;
         this.cnpj = cnpj;
         //this.politica = null;
+        Barbearia.administrador = administrador;
     }
 
 
@@ -111,29 +114,38 @@ public class Barbearia{
         return new HashMap<>(this.clientes);
     }
 
+    public void adicionarClientes(Map<String, Cliente>clientes) {
+        this.clientes.putAll(clientes);
+    }
+
     public Map<String, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
+    }
+
+    public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
+        this.barbeiros.putAll(barbeiros);
     }
 
     public Map<Integer, Servico> getServicos() {
         return new HashMap<>(this.servicos);
     }
 
-    public void adicionarClientes(Map<String, Cliente>clientes) {
-        this.clientes.putAll(clientes);
-    }
-    
-    public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
-        this.barbeiros.putAll(barbeiros);
-    }
-
     public void adicionarServicos(Map<Integer, Servico>servicos) {
         this.servicos.putAll(servicos);
+    }
+
+    public Map<Integer, Agendamento> getAgendamentos() {
+        return this.agendamentos;
+    }
+
+    public Administrador getAdministrador() {
+        return Barbearia.administrador;
     }
     
     public void exibirMenu() {
         System.out.print("\033[H\033[2J");
-        System.out.flush(); 
+        System.out.flush();
+
         // Menu de exibição;
         System.out.println("===============================================================================================================");
         System.out.println("\t\t\t\t\t" + this.getNome());
