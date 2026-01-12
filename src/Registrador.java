@@ -13,12 +13,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 
 public class Registrador {
     private static final Scanner entrada = new Scanner(System.in);
+    private static int geradorId;
 
     public Registrador() {   
+        UUID uuid = UUID.randomUUID();
+        Registrador.geradorId = uuid.hashCode() ^ (int) System.currentTimeMillis();
+
+        if (Registrador.geradorId < 0) {
+            Registrador.geradorId *= -1;
+        }
     }
 
     public Cliente cadastrarCliente() {
@@ -71,11 +79,11 @@ public class Registrador {
         System.out.printf("- Digite uma senha (com ao menos 5 caracteres): ");
         String senha = entrada.nextLine();
 
-        System.out.printf("- Informe a data de nascimento (no formato dd/MM/yyyy): ");
+        System.out.printf("- Informe a data de admissao (no formato dd/MM/yyyy): ");
         String nascimento = entrada.nextLine();
         LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         
-        System.out.println("- Digite o valor do salario a ser recebido (em R$): ");
+        System.out.printf("- Digite o valor do salario a ser recebido (em R$): ");
         Float salario = Float.valueOf(entrada.nextLine());
 
         //entrada.close();
@@ -87,6 +95,26 @@ public class Registrador {
         // O ID do barbeiro será registrado quando for feito o armazenamento do mesmo no arquivo;
         return barbeiro;
     }
+
+
+
+    public Barbeiro cadastrarEspecialidade(Barbeiro barbeiro, Map<Integer, Servico> servicos) throws Exception{
+        Map<Integer, Servico> especialidades = new HashMap<>();
+
+        System.out.printf("- Digite o numero do ID do servico: ");
+        int idServico = Integer.parseInt(entrada.nextLine());
+
+        if (servicos.containsKey(idServico)) {
+            Servico servico = servicos.get(idServico);
+            especialidades.put(idServico, servico);
+            barbeiro.adicionarServicos(especialidades);
+        }else {
+            System.out.println("* Servico nao disponivel no catalogo.");
+        }
+        return barbeiro;
+    }
+
+    
 
     private List<Disponibilidade> criarDisponibilidade() {
         LocalTime horario = LocalTime.of(8, 0);
@@ -192,7 +220,7 @@ public class Registrador {
                 throw new NullPointerException();
             }
 
-            agendamentos.put(-1, new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData(), EnumStatusAgend.AGENDADO));
+            agendamentos.put(-1, new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData()));
         } catch (NullPointerException d) {
             System.out.println("Erro! Disponibilidade nao encontrada.");
         }
@@ -200,15 +228,8 @@ public class Registrador {
 
 
 
-    public void armazenarUsuario(Usuario usuario, String caminhoUsuario) throws IOException {
-        Path caminho = Path.of(caminhoUsuario);
-        
-        if (!caminho.toFile().exists()) {
-            usuario.setId(1);
-        }else {
-            long qtdUsuarios = Files.lines(caminho).count();
-            usuario.setId((int)qtdUsuarios + 1);
-        }
+    public void armazenarUsuario(Usuario usuario, String caminhoUsuario) throws Exception {
+        usuario.setId(geradorId);
 
         try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoUsuario, true))) {
 
@@ -222,35 +243,45 @@ public class Registrador {
                 arquivo.write(barbeiro.toString());
                 arquivo.newLine();
             }
-
             System.out.println("................................................................................................................");
             System.out.println("@ Usuario cadastrado com sucesso!");
-
-        }catch (IOException a) {
-            System.out.println("Erro! Nao foi possivel realizar o cadastro.");
         }
     }
     
 
-    public void armazenarServico(Servico servico, String caminhoServico) throws IOException {
-        Path caminho = Path.of(caminhoServico);
-        
-        if (!caminho.toFile().exists()) {
-            servico.setId(1);
-        }else {
-            long qtdUsuarios = Files.lines(caminho).count();
-            servico.setId((int)qtdUsuarios + 1);
-        }
+    public void armazenarServico(Servico servico) throws Exception {
+        servico.setId(geradorId);
 
-        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoServico, true))) {
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.SERVICOS.getValue(), true))) {
             arquivo.write(servico.toString());
             arquivo.newLine();
 
             System.out.println("................................................................................................................");
             System.out.println("@ Servico cadastrado com sucesso!");
+        }
+    }
+
+
+
+    public void armazenarAgendamento(Agendamento agendamento, String caminhoServico) throws IOException {
+        Path caminho = Path.of(caminhoServico);
+        
+        if (!caminho.toFile().exists()) {
+            agendamento.setId(1);
+        }else {
+            long qtdAgendamentos = Files.lines(caminho).count();
+            agendamento.setId((int)qtdAgendamentos + 1);
+        }
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoServico, true))) {
+            arquivo.write(agendamento.toString());
+            arquivo.newLine();
+
+            System.out.println("................................................................................................................");
+            System.out.println("@ Agendamento registrado com sucesso!");
 
         }catch (IOException a) {
-            System.out.println("Erro! Nao foi possivel realizar o cadastro.");
+            System.out.println("Erro! Nao foi possivel registrar o agendamento.");
         }
     }
 
