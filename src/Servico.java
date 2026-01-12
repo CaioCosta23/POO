@@ -57,7 +57,7 @@ public class Servico {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%df%d", this.getId(), this.getNome(), this.getDescricao(), (int)this.getPreco(), DURACAO);
+        return String.format("%d;%s;%s;%d;%d", this.getId(), this.getNome(), this.getDescricao(), (int)this.getPreco(), DURACAO);
     }
 
     public void exibirInformacoes() {
