@@ -135,6 +135,10 @@ public class Barbearia{
         return new HashMap<>(this.barbeiros);
     }
 
+    public Map<Integer, Agendamento> getAgendamentos() {
+        return new HashMap<>(this.agendamentos);
+    }
+
     public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
         this.barbeiros.putAll(barbeiros);
     }
@@ -147,8 +151,8 @@ public class Barbearia{
         this.servicos.putAll(servicos);
     }
 
-    public Map<Integer, Agendamento> getAgendamentos() {
-        return this.agendamentos;
+    public void adicionarAgendamentos(Map<Integer, Agendamento> agendamentos) {
+        this.agendamentos.putAll(agendamentos);
     }
 
     private static Administrador adicionarAdministrador(Administrador original) {
