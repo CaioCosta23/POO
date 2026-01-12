@@ -1,12 +1,13 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
@@ -88,7 +89,7 @@ public class Leitor {
 
             /*
              * Verifica se é um endereço simples ou um endereço completo e cria o mesmo com as informações retiradas da(s) linha(s) do arquivo;
-             * Mesmo que Algum dos dados dê algum problema de formato, o endereço ainda é criado, mas com campos 'setados' para valores que representam "vazio";
+             * Mesmo que algum dos dados dê algum problema de formato, o endereço ainda é criado, mas com campos 'setados' para valores que representam "vazio";
 
              * OBS: Neste caso não é possível usar a função de validação de quantidade de dados por ser duas possibilidades quantidade de dados;
             */
@@ -191,8 +192,13 @@ public class Leitor {
             String[] campos = linha.split(";");
             ValidacaoQtdDados.validacao(campos, EnumCaminho.BARBEIROS.getValue(), EnumQtdDados.QTD_DADOS_BARBEIRO.getValue());
 
-            barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
-            LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8])));
+            Barbeiro barbeiro = new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
+            LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8]));
+
+            barbeiro.adicionarDisponibilidade(this.leDisponibilidades());
+
+            barbeiros.put(campos[4], barbeiro);
+            
             
         }
         return barbeiros;
@@ -273,6 +279,38 @@ public class Leitor {
     }
 
 
+
+    public List<Disponibilidade> leDisponibilidades() throws Exception {
+        InputStream arquivo = new FileInputStream(EnumCaminho.DISPONIBILIDADES.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
+
+        
+        List<Disponibilidade> disponibilidades = new ArrayList<>();
+
+        String linha;
+        boolean livre = false;
+        
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+
+            if (campos.length != 11) {
+                if (campos[3].equals("DISPONIVEL")) {
+                    livre = true;
+                }else if (campos[3].equals("INDISPONIVEL")) {
+                    livre = false;
+                }
+
+                LocalTime horario = LocalTime.parse(campos[1], DateTimeFormatter.ofPattern("HH:mm"));
+                disponibilidades.add(new Disponibilidade(LocalDate.parse(campos[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")),horario, 
+                                                        horario.plusMinutes(Servico.getDuracao()),  livre));
+            }
+            
+        }
+        return disponibilidades;
+    }
+
+
+/*     
     public Map<Integer, Agendamento>lerAgendamento(Map<String, Cliente> clientes, Barbearia barbearia) {
         Map<Integer, Agendamento> agendamentos = new HashMap<>();
         Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
@@ -304,6 +342,7 @@ public class Leitor {
         }
         return agendamentos;
     }
+*/
 
 
 
