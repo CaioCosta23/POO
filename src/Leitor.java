@@ -27,42 +27,42 @@ public class Leitor {
        
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
         InputStream arquivo= new FileInputStream(EnumCaminho.BARBEARIA.getValue());
-         // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
-        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
-
-        String linha;
-        /* 
-         * Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
-         * estas linhas são a linha de instruções e uma quebra de linha. Caso elas sejam retiradas do arquivo, pode-se retirar esse trecho 'for';
-        */
-        for (int l = 0; l < SALTOS; l++) {
-            br.readLine();
-        }
-
-        while ((linha = br.readLine()) != null) {
-            /*
-                * Lê o a(s) linhas do arquivo (de forma parecida com um arquivo .csv) e divide as informações, usando como referência o ";"
-                * indicando onde começa e onde termina cada dado/informação;
+         try (// Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo))) {
+            String linha;
+            /* 
+             * Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
+             * estas linhas são a linha de instruções e uma quebra de linha. Caso elas sejam retiradas do arquivo, pode-se retirar esse trecho 'for';
             */
-            String[] campos = linha.split(";");
+            for (int l = 0; l < SALTOS; l++) {
+                br.readLine();
+            }
 
-            // Valida a quantidade de dados que possui cada linha do arquivo lido;
-            ValidacaoQtdDados.validacao(campos, EnumCaminho.BARBEARIA.getValue(), EnumQtdDados.QTD_DADOS_BARBEARIA.getValue());
+            while ((linha = br.readLine()) != null) {
+                /*
+                    * Lê o a(s) linhas do arquivo (de forma parecida com um arquivo .csv) e divide as informações, usando como referência o ";"
+                    * indicando onde começa e onde termina cada dado/informação;
+                */
+                String[] campos = linha.split(";");
 
-            // Valida alguns dos dados da barbearia;
-            ValidacaoFormato.validacao(campos[2], EnumFormato.EMAIL.FORMATO);
-            ValidacaoFormato.validacao(campos[3], EnumFormato.HORARIO.FORMATO);
-            ValidacaoFormato.validacao(campos[4], EnumFormato.HORARIO.FORMATO);
-            ValidacaoFormato.validacao(campos[5], EnumFormato.CNPJ.FORMATO);
+                // Valida a quantidade de dados que possui cada linha do arquivo lido;
+                ValidacaoQtdDados.validacao(campos, EnumCaminho.BARBEARIA.getValue(), EnumQtdDados.QTD_DADOS_BARBEARIA.getValue());
 
-            // Coverte a informação de horário lida de "String" para "LocalTime";
-            LocalTime abertura = LocalTime.parse(campos[3], DateTimeFormatter.ofPattern("HH:mm"));
-            LocalTime fechamento = LocalTime.parse(campos[4], DateTimeFormatter.ofPattern("HH:mm"));
-                
-            // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
-            barbearia = new Barbearia(campos[0], this.leEndereco(barbearia), campos[1], campos[2], abertura, fechamento, campos[5], this.lerAdministrador());    
+                // Valida alguns dos dados da barbearia;
+                ValidacaoFormato.validacao(campos[2], EnumFormato.EMAIL.FORMATO);
+                ValidacaoFormato.validacao(campos[3], EnumFormato.HORARIO.FORMATO);
+                ValidacaoFormato.validacao(campos[4], EnumFormato.HORARIO.FORMATO);
+                ValidacaoFormato.validacao(campos[5], EnumFormato.CNPJ.FORMATO);
+
+                // Coverte a informação de horário lida de "String" para "LocalTime";
+                LocalTime abertura = LocalTime.parse(campos[3], DateTimeFormatter.ofPattern("HH:mm"));
+                LocalTime fechamento = LocalTime.parse(campos[4], DateTimeFormatter.ofPattern("HH:mm"));
+                    
+                // Cria a barbearia com as informações lidas no arquivo (e o endereço será lido em outro método - aqui ele apenas é "inicializado");
+                barbearia = new Barbearia(campos[0], this.leEndereco(barbearia), campos[1], campos[2], abertura, fechamento, campos[5], this.lerAdministrador());    
+            }
         }
-        
+
         if (barbearia == null) {
             throw new NullPointerException(" (arquivo) de barbearia");
         }
@@ -293,10 +293,10 @@ public class Leitor {
         while ((linha = br.readLine()) != null) {
             String[] campos = linha.split(";");
 
-            if (campos.length != 11) {
-                if (campos[3].equals("DISPONIVEL")) {
+            if (campos[0].length() != 11) {
+                if (campos[2].equals("DISPONIVEL")) {
                     livre = true;
-                }else if (campos[3].equals("INDISPONIVEL")) {
+                }else if (campos[2].equals("INDISPONIVEL")) {
                     livre = false;
                 }
 
