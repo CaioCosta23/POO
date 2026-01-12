@@ -32,10 +32,6 @@ public class Gerenciador {
 
         Map <Integer, Agendamento> agendamentos = new HashMap<>();
 
-        //clientes = leitor.lerCliente();
-        //barbearia.barbeiros = leitor.lerBarbeiro();
-        //servicos = leitor.lerServico();
-
         int opcao = leitor.leOpcoes();
 
         if (opcao == EnumOpcao.OPCAO_CLIENTE.getValue()) {
@@ -119,13 +115,38 @@ public class Gerenciador {
                         break;
                         
                     case 3:
+                        break;
+                    case 4:
                         Servico servico = registrador.cadastrarServico();
                         registrador.armazenarServico(servico);
                         break;
-                    case 4:
+                    case 5:
+                        System.out.println("Escolha e insira o ID de um dos servicos que deseja excluir:");
+                        consulta.exibirServicos(barbearia.getServicos());
+
+                        int opcaoServicoExcluido = leitor.leOpcoes();
+                        if (barbearia.getServicos().containsKey(opcaoServicoExcluido)) {
+                            registrador.editarLista(EnumCaminho.SERVICOS.getValue(), barbearia.getServicos().get(opcaoServicoExcluido).getId());
+                        }else {
+                            System.out.println("*Servico nao existente ou excluido do(no) catalogo de servicos da barbearia");
+                        }
                         
                         break;
-                    case 5:
+                    case 6:
+                        if (!(leitor.lerServico().isEmpty())) {
+                            barbearia.adicionarServicos(leitor.lerServico());
+
+                            int opcaoServico = leitor.leOpcoes();
+                            
+                            if (barbearia.getServicos().containsKey(opcaoServico)) {
+                                barbearia.getServicos().get(opcaoServico).exibirInformacoes();
+                            }
+                        }else {
+                            System.out.println("* Lista de servicos vazia.");
+                        }
+                        break;
+                        
+                    case 7:
                         System.out.println("* Selecione um dos tipos de usuario abaixo que deseja cadastrar:");
                         System.out.println("[1] Cliente\t[2] Barbeiro");
 
@@ -142,7 +163,8 @@ public class Gerenciador {
                             throw new IllegalArgumentException("com opcao invalida ou inexistente!");
                         }
                         break;
-                    case 6:
+                        
+                    case 8:
                         System.out.println("* Selecione um dos tipos de usuario abaixo que deseja excluir:");
                         System.out.println("[1] Cliente\t[2] Barbeiro");
 
@@ -157,8 +179,10 @@ public class Gerenciador {
                                 }else {
                                     System.out.println("* Cliente nao encontrado/registrado.");
                                 }
+                            }else {
+                                System.out.println("* Lista de clientes vazia.");
                             }
-                        }else if (opcaoRemocao == EnumOpcao.REMOVER_CLIENTE.getValue()) {
+                        }else if (opcaoRemocao == EnumOpcao.REMOVER_BARBEIRO.getValue()) {
                             if (!(barbearia.getBarbeiros().isEmpty())) {
                                 String identificador = leitor.leIdentificadorUsuario();
 
@@ -167,14 +191,15 @@ public class Gerenciador {
                                 }else {
                                     System.out.println("* Prestador de servicos nao encontrado/registrado.");
                                 }
+                            }else {
+                                System.out.println("* Lista de prestadores de servicos vazia.");
                             }
                         }else {
                             throw new IllegalArgumentException("com opcao invalida ou inexistente!");
                         }
                         break;
-                    case 7:
-                        break;
-                    case 8:
+
+                    case 9:
                         String identificador = leitor.leIdentificadorUsuario();
 
                         if (!(barbearia.getClientes().isEmpty())) {
@@ -186,26 +211,14 @@ public class Gerenciador {
                                 barbearia.getBarbeiros().get(identificador).exibirInformacoes();
                             }else {
                                 System.out.println("* Usuario nao encontrado.");
-                                }
-                            }else {
-                                System.out.println("Lista de usuarios (clientes e/ou prestadores de servicos) vazia.");
-                            }
-                        break;
-                    case 9:
-                        if (!(leitor.lerServico().isEmpty())) {
-                            barbearia.adicionarServicos(leitor.lerServico());
-
-                            int opcaoServico = leitor.leOpcoes();
-                            
-                            if (barbearia.getServicos().containsKey(opcaoServico)) {
-                                barbearia.getServicos().get(opcaoServico).exibirInformacoes();
                             }
                         }else {
-                            System.out.println("* Lista de servicos vazia.");
+                            System.out.println("Lista de usuarios (clientes e/ou prestadores de servicos) vazia.");
                         }
                         break;
+
                     case 10:
-                        System.out.println("* Selecione um dos tipos de usuario abaixo que deseja excluir:");
+                        System.out.println("* Selecione um dos tipos de usuarios do qual deseja ver a lista:");
                         System.out.println("[1] Cliente\t[2] Barbeiro");
 
                         int opcaoUsuario = leitor.leOpcoes();
@@ -234,7 +247,7 @@ public class Gerenciador {
                     case 12:
                         break;
                     default:
-                        throw new IllegalArgumentException();
+                        throw new IllegalArgumentException(" pois a opcao nao e oferecida.");
                 }
             }
             
