@@ -80,8 +80,10 @@ public class Barbeiro extends Usuario{
         System.out.printf("- Salario: R$%.2f\n" , this.getSalario());
         System.out.printf("- Data de Admissao: %02d/%02d/%04d\n", this.getContratacao().getDayOfMonth(),
                                                                         this.getContratacao().getMonthValue(), getContratacao().getYear());
-        //Consulta consulta = new Consulta();
+        
+        Consulta consulta = new Consulta();
 
-        //consulta.exibirServicos(this.servicos);
+        consulta.exibirServicos(this.servicos);
+        consulta.consultaDisponibilidade(this.disponibilidades);
     }
 }
