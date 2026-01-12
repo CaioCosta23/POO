@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -181,8 +182,8 @@ public class Leitor {
     public Map<String, Barbeiro>lerBarbeiro() throws Exception {
         Map<String, Barbeiro> barbeiros = new HashMap<>();
 
-        InputStream arquivoEndereco = new FileInputStream(EnumCaminho.BARBEIROS.getValue());
-        BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivo = new FileInputStream(EnumCaminho.BARBEIROS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
         
         String linha;
             
@@ -202,8 +203,8 @@ public class Leitor {
         final int SALTOS = 2;
         Administrador administrador = null;
 
-        InputStream arquivoEndereco = new FileInputStream(EnumCaminho.ADMINISTRADOR.getValue());
-        BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivo = new FileInputStream(EnumCaminho.ADMINISTRADOR.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
         
         String linha;
         for (int l = 0; l < SALTOS; l++) {
@@ -227,8 +228,8 @@ public class Leitor {
     public Map<Integer, Servico>lerServico() throws Exception {
         Map<Integer, Servico> servicos = new HashMap<>();
 
-        InputStream arquivoEndereco = new FileInputStream(EnumCaminho.SERVICOS.getValue());
-        BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivo = new FileInputStream(EnumCaminho.SERVICOS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
         
         String linha;
             
@@ -243,11 +244,33 @@ public class Leitor {
     }
 
 
-    /* 
-    public Map<Integer, Servico> lerEspecialidades() throws Exception{
+    public Map<String, Barbeiro> lerEspecialidades(Map<String,Barbeiro> barbeiros, Map<Integer, Servico> servicos) throws Exception{
+        InputStream arquivo = new FileInputStream(EnumCaminho.SERVICOS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
+
+        Map<String, Barbeiro> copiaBarbeiros = new HashMap<>(barbeiros);
+
+        int contador = 0;
+        String linha, identificador = "";
         
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+
+            if (contador % 2 == 0) {
+                identificador = campos[0];
+            }else {
+                for (Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
+                    for (String campo : campos) {
+                        if (Objects.equals(valor.getKey(), Integer.valueOf(campo))) {
+                            copiaBarbeiros.get(identificador).getServicos().put(Integer.valueOf(campo), valor.getValue());
+                        }
+                    }
+                }
+            }
+            contador++;
+        }
+        return copiaBarbeiros;
     }
-    */
 
 
     public Map<Integer, Agendamento>lerAgendamento(Map<String, Cliente> clientes, Barbearia barbearia) {
