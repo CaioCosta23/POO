@@ -2,7 +2,7 @@ public enum EnumCaminho {
     BARBEARIA("dados/infoBarbearia.txt"),
     ENDERECO("dados/endereco.txt"),
     ADMINISTRADOR("dados/administrador.txt"),
-    AGENDAMENTO("dados/agendamento.txt"),
+    AGENDAMENTO("dados/agendamentos.txt"),
     BARBEIROS("dados/barbeiros.txt"),
     CLIENTES("dados/clientes.txt"),
     SERVICOS("dados/servicos.txt"),
