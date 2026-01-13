@@ -4,11 +4,19 @@ public enum EnumOpcao {
     AGENDAR(1), EXCLUIR_AGENDAMENTO(2), ADICIONAR_SERVICO(3),
     REMOVER_SERVICO(4), CADASTRAR_USUARIO(5), EXCLUIR_USUARIO(6),
     CONSULTAR_AGENDAMENTO(7), CONSULTAR_DADOS_USUARIO(8),
-    BUSCAR_SERVICO(9), INFORMACOES_BARBEARIA(10);
+    BUSCAR_SERVICO(9), INFORMACOES_BARBEARIA(10),
 
-    public final int OPCAO;
+    ADICIONAR_CLIENTE(1), ADICIONAR_BARBEIRO(2),
+
+    REMOVER_CLIENTE(1), REMOVER_BARBEIRO(2);
+
+    private final int OPCAO;
 
     EnumOpcao(int opcao) {
         this.OPCAO = opcao;
+    }
+
+    public int getValue() {
+        return this.OPCAO;
     }
 }
