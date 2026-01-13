@@ -72,7 +72,7 @@ public class Barbeiro extends Usuario{
         
         System.out.println("[1] Criar agendamento\t[2]Excluir Agendamento");
         System.out.println("[3] Adicionar Especialidade\t[4] Remover Especialidade");
-        System.out.println("[5] Alterar senha de usuario\t[6]Consultar Dados Cadastrais");
+        System.out.println("[5] Alterar senha de usuario\t[6] Consultar Dados Cadastrais");
     }
 
     @Override
@@ -88,6 +88,6 @@ public class Barbeiro extends Usuario{
         System.out.println("- Especialidades:");
         consulta.exibirServicos(this.getEspecialidades());
         System.out.println("- Disponibilidades para agendamento de servico:");
-        consulta.consultaDisponibilidade(this.getDisponibilidade());
+        consulta.exibirDisponibilidade(this.getDisponibilidade());
     }
 }
