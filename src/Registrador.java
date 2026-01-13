@@ -107,7 +107,7 @@ public class Registrador {
         if (servicos.containsKey(idServico)) {
             Servico servico = servicos.get(idServico);
             especialidades.put(idServico, servico);
-            barbeiro.adicionarServicos(especialidades);
+            barbeiro.adicionarEspecialidades(especialidades);
         }else {
             System.out.println("* Servico nao disponivel no catalogo.");
         }
@@ -150,7 +150,7 @@ public class Registrador {
 
 
 
-    public void criarAgendamento(Map<Integer, Agendamento> agendamentos, Barbearia barbearia, Cliente cliente) throws Exception {
+    public Agendamento criarAgendamento(Barbearia barbearia) throws Exception {
         Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
         Map<Integer, Servico> servicos = new HashMap<>(barbearia.getServicos());
 
@@ -159,31 +159,37 @@ public class Registrador {
         Servico servico;
         Barbeiro barbeiro;
 
+        String numeroCliente = leitor.leIdentificadorUsuario();
+        Cliente cliente = null;
+        
+        if (barbearia.getClientes().containsKey(numeroCliente)) {
+            cliente = new Cliente(barbearia.getClientes().get(numeroCliente));
+        }else {
+            throw new ExceptionObjetoInexistente(" cliente nao registrado.");
+        }
+
 
         System.out.println("* Selecione o servico a ser prestado: ");
         for(Map.Entry<Integer, Servico> valor : servicos.entrySet()) {
             valor.getValue().exibirInformacoes();
             System.out.println();
         }
-        servico = servicos.get((int)leitor.leOpcoes());
+        servico = new Servico(servicos.get((int)leitor.leOpcoes()));
 
         if (servico == null) {
-            throw new ExceptionObjetoInexistente("- Servico nao pertencente ao catalogo.");
+            throw new ExceptionObjetoInexistente("Servico nao pertencente ao catalogo.");
         }
-        System.out.println("----------------------------------------------------------------------------------------------------------------");
 
 
         System.out.println("* Selecione o prestador de servico que desejado: ");
         for(Map.Entry<String, Barbeiro> valor : barbeiros.entrySet()) {
-            System.out.printf("(%d)%s\n", (int)valor.getValue().getId(), valor.getValue().getNome());
+            System.out.printf("(%s) %s\n", valor.getValue().getCpf(), valor.getValue().getNome());
         }
-        barbeiro = barbeiros.get(leitor.leIdentificadorUsuario());
+        barbeiro = new Barbeiro(barbeiros.get(leitor.leIdentificadorUsuario()));
 
         if (barbeiro == null) {
-            throw new ExceptionObjetoInexistente("- Prestador de servico nao registrado.");
+            throw new ExceptionObjetoInexistente(" Prestador de servico nao registrado.");
         }
-        System.out.println("----------------------------------------------------------------------------------------------------------------");
-
 
         Iterator<Disponibilidade> impressao = barbeiro.getDisponibilidade().iterator();
 
@@ -193,37 +199,31 @@ public class Registrador {
             disponibilidade.exibirInformacoes();
             System.out.println();
         }        
-        System.out.println("+ Digite a data: ");
-        LocalDate data = LocalDate.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
         System.out.printf("+ Digite o horario inicial para selecionar um dos horarios: ");
         LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
 
         boolean disponivel = false;
 
         Iterator<Disponibilidade> iterador = barbeiro.getDisponibilidade().iterator();
-        System.out.println("* Selecione o horario desejado: ");
 
         Disponibilidade disponibilidade = null;
         while(iterador.hasNext()) {
             disponibilidade = iterador.next();
-            if ((disponibilidade.getData().equals(data)) && (disponibilidade.getHoraInicio().equals(horario))) {
+            if (disponibilidade.getHoraInicio().equals(horario)) {
                 disponivel = true;
                 disponibilidade.setDisponivel(disponivel);
                 break;
             }
         }        
         if (!(disponivel)) {
-            System.out.println("Data e/ou horario indisponivel ou inexistente");
+            throw new ExceptionObjetoInexistente(" Data e/ou horario indisponivel ou inexistente");
         }
-        try {
-            if (disponibilidade == null) {
-                throw new NullPointerException();
-            }
+        if (disponibilidade == null) {
+            throw new NullPointerException();
+        }
 
-            agendamentos.put(-1, new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData()));
-        } catch (NullPointerException d) {
-            System.out.println("Erro! Disponibilidade nao encontrada.");
-        }
+            return new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData(), horario);
     }
 
 
@@ -284,17 +284,10 @@ public class Registrador {
 
 
 
-    public void armazenarAgendamento(Agendamento agendamento, String caminhoServico) throws IOException {
-        Path caminho = Path.of(caminhoServico);
-        
-        if (!caminho.toFile().exists()) {
-            agendamento.setId(1);
-        }else {
-            long qtdAgendamentos = Files.lines(caminho).count();
-            agendamento.setId((int)qtdAgendamentos + 1);
-        }
+    public void armazenarAgendamento(Agendamento agendamento) throws IOException {
+        agendamento.setId(geradorId);
 
-        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoServico, true))) {
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.AGENDAMENTO.getValue(), true))) {
             arquivo.write(agendamento.toString());
             arquivo.newLine();
 
