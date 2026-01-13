@@ -326,40 +326,32 @@ public class Leitor {
         return disponibilidades;
     }
 
-
-/*     
-    public Map<Integer, Agendamento>lerAgendamento(Map<String, Cliente> clientes, Barbearia barbearia) {
+    
+    public Map<Integer, Agendamento>lerAgendamento(Barbearia barbearia) throws Exception {
         Map<Integer, Agendamento> agendamentos = new HashMap<>();
         Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
 
-        try (InputStream arquivoEndereco = new FileInputStream("dados/agendamentos.txt")) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(arquivoEndereco));
+        InputStream arquivo = new FileInputStream(EnumCaminho.AGENDAMENTO.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
+        
+        String linha;
             
-            String linha;
-                
-            while ((linha = br.readLine()) != null) {
-                String[] campos = linha.split(";");
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
 
-                
-                if (clientes.containsKey(campos[1]) && (barbearia.getBarbeiros().containsKey(campos[2]))) {
-                    if (barbeiros.get(campos[2]).getServicos().containsKey(Integer.valueOf(campos[3]))) {
-                        Cliente cliente = new Cliente(clientes.get(campos[1]));
-                        Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(campos[2]));
-                        Servico servico = new Servico(barbeiros.get(campos[2]).getServicos().get(Integer.valueOf(campos[3])));
-                        Disponibilidade disponibilidade = new Disponibilidade(barbeiro.getDisponibilidade().get(0));
+            if (barbearia.getClientes().containsKey(campos[1]) && (barbearia.getBarbeiros().containsKey(campos[2]))) {
+                if (barbeiros.get(campos[2]).getEspecialidades().containsKey(Integer.valueOf(campos[3]))) {
+                    Cliente cliente = new Cliente(barbearia.getClientes().get(campos[1]));
+                    Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(campos[2]));
+                    Servico servico = new Servico(barbeiros.get(campos[2]).getEspecialidades().get(Integer.valueOf(campos[3])));
 
-                        agendamentos.put(Integer.valueOf(campos[0]), new Agendamento(Integer.parseInt(campos[0]), cliente, 
-                        barbeiro, servico, disponibilidade.getData()));
-                    }
+                    agendamentos.put(Integer.valueOf(campos[0]), new Agendamento(Integer.parseInt(campos[0]), cliente, 
+                    barbeiro, servico, LocalDate.parse(campos[4], DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(campos[5], DateTimeFormatter.ofPattern("HH:mm"))));
                 }
-                
             }
-        } catch(IOException c) {
-            System.out.println("Erro na leitura de dados e do arquivo da lista de barbeiros");
         }
         return agendamentos;
     }
-*/
 
 
 
