@@ -44,7 +44,7 @@ public class Cliente extends Usuario {
         System.out.println("- E-mail: " + this.getEmail());
         System.out.println("- Telefone: " + this.getTelefone());
         System.out.println("- CPF: " + this.getCpf());
-        System.out.printf("- Data de Nascimento: %02d/%02d/%04d", this.getNascimento().getDayOfMonth(), this.getNascimento().getMonthValue(),
+        System.out.printf("- Data de Nascimento: %02d/%02d/%04d\n", this.getNascimento().getDayOfMonth(), this.getNascimento().getMonthValue(),
                                                                           this.getNascimento().getYear());
     }
 
