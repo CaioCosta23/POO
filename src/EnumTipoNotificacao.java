@@ -1,3 +1,4 @@
+
 public enum EnumTipoNotificacao {
 
     CONFIRMACAO_AGANDAMENTO {
@@ -15,13 +16,13 @@ public enum EnumTipoNotificacao {
     LEMBRETE_24H {
         @Override
         public void notificacao() {
-            System.out.println("");
+            System.out.println("⏰ Lembrete: Seu agendamento é em 24 horas!");
         }
     },
     NOVOS_SERVICOS {
         @Override
         public void notificacao() {
-            System.out.println("");
+            System.out.println("✨ Novos serviços disponíveis! Confira agora!");
         }
     };
 
