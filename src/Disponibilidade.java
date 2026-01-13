@@ -80,9 +80,9 @@ public class Disponibilidade{
         System.out.printf("%02d:%02d - %02d:%02d ", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
                                                             this.getHoraFim().getHour(), this.getHoraFim().getMinute());
         if (this.isDisponivel()) {
-            System.out.println("(DISPONIVEL)");
+            System.out.printf("(DISPONIVEL)");
         }else {
-            System.out.println("(INDISPONIVEL)");
+            System.out.printf("(INDISPONIVEL)");
         }
     }
 }
