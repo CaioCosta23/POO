@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,6 +24,13 @@ public class Leitor {
 
     public Barbearia leDadosBarbearia() throws Exception {
         Barbearia barbearia = null;
+
+        File file = new File(EnumCaminho.BARBEARIA.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
 
         // Número de linhas que serão ignoradas no arquivo (Linhas de comentarios);
         final int SALTOS = 2;
@@ -75,6 +83,13 @@ public class Leitor {
 
     public Endereco leEndereco(Barbearia barbearia) throws Exception {
         Endereco endereco = null;
+
+        File file = new File(EnumCaminho.ENDERECO.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
 
         final int SALTOS = 2;
 
@@ -164,19 +179,25 @@ public class Leitor {
     public Map<String, Cliente>lerCliente() throws Exception {
         Map<String, Cliente> clientes = new HashMap<>();
 
-        String caminho = EnumCaminho.CLIENTES.getValue();
+        File file = new File(EnumCaminho.CLIENTES.getValue());
 
-        InputStream arquivo = new FileInputStream(caminho);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
+
+        InputStream arquivo = new FileInputStream(EnumCaminho.CLIENTES.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
         
         String linha;
             
         while ((linha = br.readLine()) != null) {
             String[] campos = linha.split(";");
-            ValidacaoQtdDados.validacao(campos, caminho, EnumQtdDados.QTD_DADOS_CLIENTES.getValue());
+            ValidacaoQtdDados.validacao(campos, EnumCaminho.CLIENTES.getValue(), EnumQtdDados.QTD_DADOS_CLIENTES.getValue());
 
             clientes.put(campos[4], new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
         }
+
         return clientes;
     }
 
@@ -184,6 +205,13 @@ public class Leitor {
 
     public Map<String, Barbeiro>lerBarbeiro() throws Exception {
         Map<String, Barbeiro> barbeiros = new HashMap<>();
+
+        File file = new File(EnumCaminho.BARBEIROS.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
 
         InputStream arquivo = new FileInputStream(EnumCaminho.BARBEIROS.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
@@ -196,6 +224,9 @@ public class Leitor {
 
             Barbeiro barbeiro = new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
             LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8]));
+
+            barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
+            LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8])));
 
             barbeiro.adicionarDisponibilidade(this.lerDisponibilidades(barbeiro.getCpf()));
 
@@ -210,6 +241,13 @@ public class Leitor {
     public Administrador lerAdministrador() throws Exception {
         final int SALTOS = 2;
         Administrador administrador = null;
+
+        File file = new File(EnumCaminho.ADMINISTRADOR.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
 
         InputStream arquivo = new FileInputStream(EnumCaminho.ADMINISTRADOR.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
@@ -236,6 +274,13 @@ public class Leitor {
     public Map<Integer, Servico>lerServico() throws Exception {
         Map<Integer, Servico> servicos = new HashMap<>();
 
+        File file = new File(EnumCaminho.SERVICOS.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
+
         InputStream arquivo = new FileInputStream(EnumCaminho.SERVICOS.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
         
@@ -253,6 +298,13 @@ public class Leitor {
 
 
     public void lerEspecialidades(Map<String,Barbeiro> barbeiros, Map<Integer, Servico> servicos) throws Exception{
+        File file = new File(EnumCaminho.ESPECIALIDADES.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
+
         InputStream arquivo = new FileInputStream(EnumCaminho.ESPECIALIDADES.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
         
@@ -287,6 +339,13 @@ public class Leitor {
 
 
     public List<Disponibilidade> lerDisponibilidades(String identificador) throws Exception {
+        File file = new File(EnumCaminho.DISPONIBILIDADES.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
+
         InputStream arquivo = new FileInputStream(EnumCaminho.DISPONIBILIDADES.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
 
@@ -328,6 +387,13 @@ public class Leitor {
 
     
     public Map<Integer, Agendamento>lerAgendamento(Barbearia barbearia) throws Exception {
+        File file = new File(EnumCaminho.AGENDAMENTO.getValue());
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs(); // cria pastas, se necessário
+            file.createNewFile();          // cria o arquivo
+        }
+
         Map<Integer, Agendamento> agendamentos = new HashMap<>();
         Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
 
