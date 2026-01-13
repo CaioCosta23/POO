@@ -127,16 +127,16 @@ public class Barbearia{
         return new HashMap<>(this.clientes);
     }
 
-    public void adicionarClientes(Map<String, Cliente>clientes) {
-        this.clientes.putAll(clientes);
-    }
-
     public Map<String, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
     }
 
     public Map<Integer, Agendamento> getAgendamentos() {
         return new HashMap<>(this.agendamentos);
+    }
+
+    public void adicionarClientes(Map<String, Cliente>clientes) {
+        this.clientes.putAll(clientes);
     }
 
     public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
