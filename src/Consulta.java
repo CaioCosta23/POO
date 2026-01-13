@@ -47,11 +47,18 @@ public class Consulta {
         }
     }
 
-    public void consultaDisponibilidade(List<Disponibilidade> disponibilidades) {
+    public void exibirDisponibilidade(List<Disponibilidade> disponibilidades) {
         Iterator<Disponibilidade> iterador = disponibilidades.iterator();
 
         while(iterador.hasNext()) {
             iterador.next().exibirInformacoes();
+        }
+    }
+
+    public void exibirAgendamentos(Map<Integer, Agendamento> agendamentos) {
+        for(Map.Entry<Integer, Agendamento> valor : agendamentos.entrySet()) {
+            valor.getValue().exibirInformacoes();
+            System.out.println("----------------------------------------------------------------------------------------------------------------");
         }
     }
 }
