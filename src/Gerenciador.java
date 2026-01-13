@@ -194,13 +194,13 @@ public class Gerenciador {
 
                         if (opcaoUsuario == EnumOpcao.OPCAO_CLIENTE.getValue()) {
                             if (!(barbearia.getClientes().isEmpty())) {
-                                consulta.exibirUsuarios(barbearia.getClientes());
+                                consulta.exibirClientes(barbearia.getClientes());
                             }else {
                                 System.out.println("* Lista de clientes vazia.");
                             }
                         }else if (opcaoUsuario == EnumOpcao.OPCAO_BARBEIRO.getValue()){
                             if (!(barbearia.getBarbeiros().isEmpty())) {
-                                consulta.exibirUsuarios(barbearia.getBarbeiros());
+                                consulta.exibirBarbeiros(barbearia.getBarbeiros());
                             }else {
                                 System.out.println("* Lista de prestadores de servicos vazia.");
                             }
