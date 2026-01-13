@@ -80,7 +80,7 @@ public class Agendamento {
     @Override
     public String toString() {
         return String.format("%d;%s;%s;%d;%02d/%02d/%04d;%02d:%02d", this.getId(), this.getCliente().getCpf(), this.getBarbeiro().getCpf(), 
-                            this.getServico().getId(), this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getDayOfYear(),
+                            this.getServico().getId(), this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear(),
                             this.getHorario().getHour(), this.getHorario().getMinute());
     }
 
@@ -89,7 +89,9 @@ public class Agendamento {
         System.out.println("- Cliente: " + this.getCliente().getNome());
         System.out.println("- Pretador de servico (barbeiro): " + this.getBarbeiro().getNome());
         System.out.printf("- Servico: %s(%s)\n", this.getServico().getNome(), this.getServico().getDescricao());
-        System.out.println("- Cliente: " + this.getBarbeiro().getNome());
-        System.out.println("Status: " + this.status);
+        System.out.printf("- Data/Horario: %02d/%02d/%04d | %02d:%02d\n", this.getData().getDayOfMonth(), this.getData().getMonthValue(), 
+                                                                                this.getData().getYear(), this.getHorario().getHour(),
+                                                                                this.getHorario().getMinute() );
+        System.out.println("- Status: " + this.status);
     }
 }
