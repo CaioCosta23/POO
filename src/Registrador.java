@@ -111,15 +111,19 @@ public class Registrador {
 
 
     public List<Disponibilidade> criarDisponibilidade() {
-        LocalTime horario = LocalTime.of(8, 0);
-        LocalTime ultimoHorario = LocalTime.of(18, 00);
+        LocalTime horario = LocalTime.of(Barbearia.getAbertura().getHour(), Barbearia.getAbertura().getMinute());
+        LocalTime ultimoHorario = LocalTime.of(Barbearia.getFechamento().getHour(), Barbearia.getFechamento().getMinute());
 
-        LocalDate data = LocalDate.of(2026, 06, 10);
+        LocalDate data = LocalDate.parse(LocalDate.now().toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         List<Disponibilidade> disponibilidades = new ArrayList<>();
+        boolean disponivel = true;
 
         while(!(horario.isAfter(ultimoHorario))) {
-            Disponibilidade disponibilidade = new Disponibilidade(data, horario, horario.plusMinutes(Servico.getDuracao()), true);
+            if (LocalTime.now().isAfter(horario)) {
+                disponivel = false;
+            }
+            Disponibilidade disponibilidade = new Disponibilidade(data, horario, horario.plusMinutes(Servico.getDuracao()), disponivel);
             disponibilidades.add(disponibilidade);
             horario = horario.plusMinutes(Servico.getDuracao());
         }
