@@ -79,10 +79,6 @@ public class Disponibilidade{
         System.out.printf("\t# Data: %02d/%02d/%04d | ", this.getData().getDayOfMonth(), this.getData().getMonthValue(), this.getData().getYear());
         System.out.printf("%02d:%02d - %02d:%02d ", this.getHoraInicio().getHour(), this.getHoraInicio().getMinute(),
                                                             this.getHoraFim().getHour(), this.getHoraFim().getMinute());
-        if (this.isDisponivel()) {
-            System.out.printf("(DISPONIVEL)");
-        }else {
-            System.out.printf("(INDISPONIVEL)");
-        }
+        System.out.println("# Status de disponibilidade: " + (this.disponivel ? "(DISPONIVEL)": "(INDISPONIVEL)"));
     }
 }
