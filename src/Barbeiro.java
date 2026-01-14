@@ -10,8 +10,8 @@ public class Barbeiro extends Usuario{
     private final Map <Integer, Servico> especialidades = new HashMap<>();
     private final List<Disponibilidade> disponibilidades = new ArrayList<>();
     
-    public Barbeiro(int id, String nome, String email, String telefone, String cpf, String login, String senha, LocalDate contratacao, float salario) {
-        super(id, nome, email, telefone, cpf, login, senha);
+    public Barbeiro(int id, String nome, String email, String telefone, String cpf, String senha, LocalDate contratacao, float salario) {
+        super(id, nome, email, telefone, cpf, senha);
         this.contratacao = contratacao;
         this.salario = salario;
     }
@@ -59,15 +59,15 @@ public class Barbeiro extends Usuario{
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%s;%02d/%02d/%04d;%d", this.getId(), this.getNome(), this.getEmail(), 
-                                                                                this.getTelefone(), this.getCpf(), this.getLogin(),
+        return String.format("%d;%s;%s;%s;%s;%s;%02d/%02d/%04d;%d", this.getId(), this.getNome(), this.getEmail(), 
+                                                                                this.getTelefone(), this.getCpf(),
                                                                                 this.getSenha(), this.contratacao.getDayOfMonth(),
                                                                                 this.contratacao.getMonthValue(),this.contratacao.getYear(),
                                                                                 (int)this.getSalario());
     }
 
-    @Override
-    public void exibirMenu() {
+
+    public static void exibirMenu() {
         System.out.println("* Escolha uma das opcoes abaixo:");
         
         System.out.println("[1] Criar agendamento\t[2]Excluir Agendamento");
