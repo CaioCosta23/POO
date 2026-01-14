@@ -17,7 +17,7 @@ public class Agendamento {
         this.servico = servico;
         this.data = data;
         this.horario = horario;
-        this.status = EnumStatusAgend.AGENDADO;
+        this.status = EnumStatusAgend.PENDENTE;
     }
 
     public Agendamento(Agendamento original) {
@@ -27,7 +27,7 @@ public class Agendamento {
         this.servico = original.servico;
         this.data = original.data;
         this.horario = original.horario;
-        this.status = EnumStatusAgend.AGENDADO;
+        this.status = EnumStatusAgend.PENDENTE;
     }
 
     public int getId() {
