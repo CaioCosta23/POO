@@ -25,20 +25,13 @@ public class Leitor {
     public Barbearia leDadosBarbearia() throws Exception {
         Barbearia barbearia = null;
 
-        File file = new File(EnumCaminho.BARBEARIA.getValue());
-
-        if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
-            file.createNewFile();          // cria o arquivo
-        }
-
         // Número de linhas que serão ignoradas no arquivo (Linhas de comentarios);
         final int SALTOS = 2;
        
         // Lê o caminho de endereço do arquivo (que neste caso está dentro de uma subpasta);
-        InputStream arquivo= new FileInputStream(EnumCaminho.BARBEARIA.getValue());
-         try (// Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
-        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo))) {
+        InputStream arquivo = new FileInputStream(EnumCaminho.BARBEARIA.getValue());
+        // Cria um objeto que permite ler os dados do arquivo da "Stream" criada;
+         try (BufferedReader br = new BufferedReader(new InputStreamReader(arquivo))) {
             String linha;
             /* 
              * Lê as linhas do arquivo e as consome no buffer (fazendo com que sejam ignoradas), sem afetar leituras futuras;
@@ -84,13 +77,6 @@ public class Leitor {
     public Endereco leEndereco(Barbearia barbearia) throws Exception {
         Endereco endereco = null;
 
-        File file = new File(EnumCaminho.ENDERECO.getValue());
-
-        if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
-            file.createNewFile();          // cria o arquivo
-        }
-
         final int SALTOS = 2;
 
         InputStream arquivo = new FileInputStream(EnumCaminho.ENDERECO.getValue());
@@ -114,7 +100,7 @@ public class Leitor {
                 if (campos.length == EnumQtdDados.QTD_DADOS_ENDERECO_SIMPLES.getValue()) {
                     ValidacaoFormato.validacao(campos[3], EnumFormato.CEP.FORMATO);
                     endereco = new Endereco(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3]);
-                }else if (campos.length == EnumQtdDados.QTD_DADOS_EMDERECO_COMPLETO.getValue()) {
+                }else if (campos.length == EnumQtdDados.QTD_DADOS_ENDERECO_COMPLETO.getValue()) {
                     ValidacaoFormato.validacao(campos[6], EnumFormato.CEP.FORMATO);
                     endereco = new Endereco(campos[0], Integer.parseInt(campos[1]), campos[2], campos[3], campos[4], campos[5], campos[6]);
                 }
@@ -182,7 +168,6 @@ public class Leitor {
         File file = new File(EnumCaminho.CLIENTES.getValue());
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
             file.createNewFile();          // cria o arquivo
         }
 
@@ -195,7 +180,7 @@ public class Leitor {
             String[] campos = linha.split(";");
             ValidacaoQtdDados.validacao(campos, EnumCaminho.CLIENTES.getValue(), EnumQtdDados.QTD_DADOS_CLIENTES.getValue());
 
-            clientes.put(campos[4], new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+            clientes.put(campos[4], new Cliente(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], LocalDate.parse(campos[6], DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
         }
 
         return clientes;
@@ -209,7 +194,6 @@ public class Leitor {
         File file = new File(EnumCaminho.BARBEIROS.getValue());
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
             file.createNewFile();          // cria o arquivo
         }
 
@@ -221,16 +205,12 @@ public class Leitor {
         while ((linha = br.readLine()) != null) {
             String[] campos = linha.split(";");
             ValidacaoQtdDados.validacao(campos, EnumCaminho.BARBEIROS.getValue(), EnumQtdDados.QTD_DADOS_BARBEIRO.getValue());
-
-            Barbeiro barbeiro = new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
-            LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8]));
-
-            barbeiros.put(campos[4], new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], 
-            LocalDate.parse(campos[7], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[8])));
+            
+            Barbeiro barbeiro = new Barbeiro(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], 
+            LocalDate.parse(campos[6], DateTimeFormatter.ofPattern("dd/MM/yyyy")), Float.parseFloat(campos[7]));
 
             barbeiro.adicionarDisponibilidade(this.lerDisponibilidades(barbeiro.getCpf()));
-
-            barbeiros.put(campos[4], barbeiro);
+            barbeiros.put(barbeiro.getCpf(), barbeiro);
         }
         this.lerEspecialidades(barbeiros, this.lerServico());
 
@@ -238,16 +218,10 @@ public class Leitor {
     }
     
 
+
     public Administrador lerAdministrador() throws Exception {
         final int SALTOS = 2;
         Administrador administrador = null;
-
-        File file = new File(EnumCaminho.ADMINISTRADOR.getValue());
-
-        if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
-            file.createNewFile();          // cria o arquivo
-        }
 
         InputStream arquivo = new FileInputStream(EnumCaminho.ADMINISTRADOR.getValue());
         BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
@@ -261,7 +235,7 @@ public class Leitor {
             String[] campos = linha.split(";");
             ValidacaoQtdDados.validacao(campos, EnumCaminho.ADMINISTRADOR.getValue(), EnumQtdDados.QTD_DADOS_ADMINISTRADOR.getValue());
 
-            administrador = new Administrador(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5], campos[6]);
+            administrador = new Administrador(Integer.parseInt(campos[0]), campos[1], campos[2], campos[3], campos[4], campos[5]);
         }
         if (administrador == null) {
             throw new ExceptionObjetoInexistente("O Administrador não foi criado.");
@@ -277,7 +251,6 @@ public class Leitor {
         File file = new File(EnumCaminho.SERVICOS.getValue());
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
             file.createNewFile();          // cria o arquivo
         }
 
@@ -297,11 +270,11 @@ public class Leitor {
     }
 
 
+
     public void lerEspecialidades(Map<String,Barbeiro> barbeiros, Map<Integer, Servico> servicos) throws Exception{
         File file = new File(EnumCaminho.ESPECIALIDADES.getValue());
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
             file.createNewFile();          // cria o arquivo
         }
 
@@ -342,7 +315,6 @@ public class Leitor {
         File file = new File(EnumCaminho.DISPONIBILIDADES.getValue());
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
             file.createNewFile();          // cria o arquivo
         }
 
@@ -385,12 +357,12 @@ public class Leitor {
         return disponibilidades;
     }
 
+
     
     public Map<Integer, Agendamento>lerAgendamento(Barbearia barbearia) throws Exception {
         File file = new File(EnumCaminho.AGENDAMENTO.getValue());
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs(); // cria pastas, se necessário
             file.createNewFile();          // cria o arquivo
         }
 
@@ -417,43 +389,5 @@ public class Leitor {
             }
         }
         return agendamentos;
-    }
-
-
-
-    public Usuario lerLoginSenhaUsuarios(Object usuarios) {
-        Usuario usuario = null;
-
-        System.out.printf("@ Login: ");
-        String login = entrada.nextLine();
-
-        System.out.printf("@ Senha: ");
-        String senha = entrada.nextLine();
-
-        if (usuarios instanceof Administrador) {
-            Administrador administrador = (Administrador)usuarios;
-            if (administrador.autenticar(login, senha)) {
-                return administrador;
-            }
-        }else {
-            Map<String, ?> mapeados  = (Map<String, ?>)usuarios;
-            
-            for (Object valor : mapeados.entrySet()) {
-                if (valor instanceof Barbeiro) {
-                    Barbeiro barbeiro = (Barbeiro)valor;
-
-                    if (barbeiro.autenticar(login, senha)) {
-                        return barbeiro;
-                    }
-                }else if (valor instanceof Cliente) {
-                    Cliente cliente = (Cliente)valor;
-
-                    if (cliente.autenticar(login, senha)) {
-                        return cliente;
-                    }
-                }
-            }
-        }
-        return usuario;
     }
 }
