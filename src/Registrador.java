@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.UUID;
 
 
@@ -293,6 +294,27 @@ public class Registrador {
 
         }catch (IOException a) {
             System.out.println("Erro! Nao foi possivel registrar o agendamento.");
+        }
+    }
+
+    public void armazenarEspecialidades(Barbeiro barbeiro) throws Exception {
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.DISPONIBILIDADES.getValue(), true))) {
+            arquivo.write(barbeiro.getCpf());
+            arquivo.newLine();
+
+            TreeMap<Integer, Servico> lista = new TreeMap<>(barbeiro.getEspecialidades());
+
+            for(Map.Entry<Integer, Servico> especialidades : lista.entrySet()) {
+                if (especialidades.getKey().equals(lista.lastKey())) {
+                    arquivo.write(Integer.toString(especialidades.getValue().getId()) + ";");
+                }else {
+                    arquivo.write(Integer.toString(especialidades.getValue().getId()));
+                }
+            }
+
+            // Impressão de verificação para o programador;
+            //System.out.println("Especialidade armazenadas com sucesso.");
         }
     }
 
