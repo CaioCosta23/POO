@@ -1,13 +1,13 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Barbeiro extends Usuario{
     private LocalDate contratacao;
     private float salario;
-    private final Map <Integer, Servico> especialidades = new HashMap<>();
+    private final Map <Integer, Servico> especialidades = new TreeMap<>();
     private final List<Disponibilidade> disponibilidades = new ArrayList<>();
     
     public Barbeiro(int id, String nome, String email, String telefone, String cpf, String senha, LocalDate contratacao, float salario) {
@@ -42,7 +42,7 @@ public class Barbeiro extends Usuario{
     }
 
     public Map<Integer, Servico> getEspecialidades() {
-        return new HashMap<>(this.especialidades);
+        return new TreeMap<>(this.especialidades);
     }
 
     public List<Disponibilidade> getDisponibilidade() {
