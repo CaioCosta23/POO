@@ -1,11 +1,10 @@
 public class Administrador extends Usuario {
 
-    public Administrador(int id, String nome, String email, String telefone, String cpf, String login, String senha) {
-        super(id, nome, email, telefone, cpf, login, senha);
+    public Administrador(int id, String nome, String email, String telefone, String cpf, String senha) {
+        super(id, nome, email, telefone, cpf, senha);
     }
 
-    @Override
-    public void exibirMenu() {
+    public static void exibirMenu() {
         System.out.println("# Informe o servico do qual deseja acessar:\n");
 
         System.out.println("[1] Adicionar agendamento\t\t[2] Excluir agendamento \t\t[3] Buscar agendamento");
