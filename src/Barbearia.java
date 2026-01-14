@@ -81,11 +81,11 @@ public class Barbearia{
     }
 
 
-    public LocalTime getAbertura() {
+    public static LocalTime getAbertura() {
         return Barbearia.abertura;
     }
 
-    public LocalTime getFechamento() {
+    public static LocalTime getFechamento() {
         return Barbearia.fechamento;
     }
 
@@ -171,8 +171,8 @@ public class Barbearia{
         System.out.println("- Endereco:");
         this.getEndereco().imprimeEndereco();
 
-        System.out.printf("- Horario de Funcionamento %02d:%02d - %02d:%02d\n", this.getAbertura().getHour(), this.getAbertura().getMinute(),
-                                                                                      this.getFechamento().getHour(), this.getFechamento().getMinute());
+        System.out.printf("- Horario de Funcionamento %02d:%02d - %02d:%02d\n", Barbearia.getAbertura().getHour(), Barbearia.getAbertura().getMinute(),
+                                                                                      Barbearia.getFechamento().getHour(), Barbearia.getFechamento().getMinute());
         System.out.println("- CNPJ: " + this.getCnpj());
     }
 }
