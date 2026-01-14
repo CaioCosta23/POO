@@ -6,8 +6,8 @@ public class Barbearia{
     protected Endereco endereco;
     private String telefone;
     private String email;
-    protected LocalTime abertura;
-    protected LocalTime fechamento;
+    protected static LocalTime abertura;
+    protected static LocalTime fechamento;
     private String cnpj;
     //private PoliticaCancelamento politica;
     private final Map<String, Cliente> clientes = new HashMap<>();
@@ -22,8 +22,8 @@ public class Barbearia{
         this.endereco = endereco;
         this.telefone = telefone;
         this.email = email;
-        this.abertura = abertura;
-        this.fechamento = fechamento;
+        Barbearia.abertura = abertura;
+        Barbearia.fechamento = fechamento;
         this.cnpj = cnpj;
         //this.politica = null;
         Barbearia.administrador = administrador;
@@ -35,8 +35,6 @@ public class Barbearia{
         this.endereco = original.endereco;
         this.telefone = original.telefone;
         this.email = original.email;
-        this.abertura = original.abertura;
-        this.fechamento = original.fechamento;
         this.cnpj = original.cnpj;
         //this.politica = null;
         Barbearia.administrador = adicionarAdministrador(administrador);
@@ -84,24 +82,12 @@ public class Barbearia{
 
 
     public LocalTime getAbertura() {
-        return this.abertura;
+        return Barbearia.abertura;
     }
-
-
-    public void setAbertura(LocalTime abertura) {
-        this.abertura = abertura;
-    }
-
 
     public LocalTime getFechamento() {
-        return this.fechamento;
+        return Barbearia.fechamento;
     }
-
-
-    public void setFechamento(LocalTime fechamento) {
-        this.fechamento = fechamento;
-    }
-
 
     public String getCnpj() {
         return this.cnpj;
