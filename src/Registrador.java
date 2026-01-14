@@ -193,7 +193,7 @@ public class Registrador {
                     System.out.println();
                 } 
 
-                System.out.printf("+ Digite o horario inicial para selecionar um dos horarios: ");
+                System.out.printf("- Digite o horario inicial para selecionar um dos horarios: ");
                 LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
 
                 boolean disponivel = false;
@@ -204,8 +204,9 @@ public class Registrador {
                 while(iterador.hasNext()) {
                     disponibilidade = iterador.next();
                     if (disponibilidade.getHoraInicio().equals(horario)) {
-                        disponivel = true;
-                        disponibilidade.setDisponivel(disponivel);
+                        if (!(disponibilidade.isDisponivel())) {
+                            throw new IllegalArgumentException(" o horario selecionado nao se encontra disponivel");
+                        }
                         break;
                     }
                 }
