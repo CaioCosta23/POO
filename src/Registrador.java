@@ -178,7 +178,9 @@ public class Registrador {
 
             System.out.println("* Selecione o prestador de servico que desejado: ");
             for(Map.Entry<String, Barbeiro> valor : barbeiros.entrySet()) {
-                System.out.printf("(%s) %s\n", valor.getValue().getCpf(), valor.getValue().getNome());
+                if (valor.getValue().getEspecialidades().containsKey(opcaoServico)) {
+                    System.out.printf("(%s) %s\n", valor.getValue().getCpf(), valor.getValue().getNome());
+                }
             }
 
             String opcaoBarbeiro = leitor.leIdentificadorUsuario();
@@ -192,7 +194,7 @@ public class Registrador {
                     Disponibilidade disponibilidade = impressao.next();
                     disponibilidade.exibirInformacoes();
                     System.out.println();
-                } 
+                }
 
                 System.out.printf("- Digite o horario inicial para selecionar um dos horarios: ");
                 LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
