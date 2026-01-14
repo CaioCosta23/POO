@@ -43,9 +43,6 @@ public class Registrador {
         System.out.printf("- Digite o CPF: ");
         String cpf = entrada.nextLine();
 
-        System.out.printf("- Digite um nome de Login: ");
-        String login = entrada.nextLine();
-
         System.out.printf("- Digite uma senha (com ao menos 5 caracteres): ");
         String senha = entrada.nextLine();
 
@@ -55,7 +52,7 @@ public class Registrador {
         LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         
         // O ID do cliente será registrado quando for feito o armazenamento do mesmo no arquivo;
-        return new Cliente(-1, nome, email, telefone, cpf, login, senha, data);
+        return new Cliente(-1, nome, email, telefone, cpf, senha, data);
     }
 
 
@@ -73,9 +70,6 @@ public class Registrador {
         System.out.printf("- Digite o CPF: ");
         String cpf = entrada.nextLine();
 
-        System.out.printf("- Digite um nome de Login: ");
-        String login = entrada.nextLine();
-
         System.out.printf("- Digite uma senha (com ao menos 5 caracteres): ");
         String senha = entrada.nextLine();
 
@@ -88,7 +82,7 @@ public class Registrador {
 
         //entrada.close();
 
-        Barbeiro barbeiro = new Barbeiro(-1, nome, email, telefone, cpf, login, senha, data, salario);
+        Barbeiro barbeiro = new Barbeiro(-1, nome, email, telefone, cpf, senha, data, salario);
 
         barbeiro.adicionarDisponibilidade(criarDisponibilidade());
         
@@ -156,8 +150,6 @@ public class Registrador {
 
 
         Leitor leitor = new Leitor();
-        Servico servico;
-        Barbeiro barbeiro;
 
         String numeroCliente = leitor.leIdentificadorUsuario();
         Cliente cliente = null;
@@ -174,56 +166,56 @@ public class Registrador {
             valor.getValue().exibirInformacoes();
             System.out.println();
         }
-        servico = new Servico(servicos.get((int)leitor.leOpcoes()));
 
-        if (servico == null) {
-            throw new ExceptionObjetoInexistente("Servico nao pertencente ao catalogo.");
-        }
+        int opcaoServico = (int)leitor.leOpcoes();
+        if (servicos.containsKey(opcaoServico)) {
+            Servico servico = new Servico(servicos.get(opcaoServico));
 
-
-        System.out.println("* Selecione o prestador de servico que desejado: ");
-        for(Map.Entry<String, Barbeiro> valor : barbeiros.entrySet()) {
-            System.out.printf("(%s) %s\n", valor.getValue().getCpf(), valor.getValue().getNome());
-        }
-        barbeiro = new Barbeiro(barbeiros.get(leitor.leIdentificadorUsuario()));
-
-        if (barbeiro == null) {
-            throw new ExceptionObjetoInexistente(" Prestador de servico nao registrado.");
-        }
-
-        Iterator<Disponibilidade> impressao = barbeiro.getDisponibilidade().iterator();
-
-        System.out.println("* Selecione o horario desejado: ");
-        while(impressao.hasNext()) {
-            Disponibilidade disponibilidade = impressao.next();
-            disponibilidade.exibirInformacoes();
-            System.out.println();
-        }        
-
-        System.out.printf("+ Digite o horario inicial para selecionar um dos horarios: ");
-        LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
-
-        boolean disponivel = false;
-
-        Iterator<Disponibilidade> iterador = barbeiro.getDisponibilidade().iterator();
-
-        Disponibilidade disponibilidade = null;
-        while(iterador.hasNext()) {
-            disponibilidade = iterador.next();
-            if (disponibilidade.getHoraInicio().equals(horario)) {
-                disponivel = true;
-                disponibilidade.setDisponivel(disponivel);
-                break;
+            System.out.println("* Selecione o prestador de servico que desejado: ");
+            for(Map.Entry<String, Barbeiro> valor : barbeiros.entrySet()) {
+                System.out.printf("(%s) %s\n", valor.getValue().getCpf(), valor.getValue().getNome());
             }
-        }        
-        if (!(disponivel)) {
-            throw new ExceptionObjetoInexistente(" Data e/ou horario indisponivel ou inexistente");
-        }
-        if (disponibilidade == null) {
-            throw new NullPointerException();
-        }
 
-            return new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData(), horario);
+            String opcaoBarbeiro = leitor.leIdentificadorUsuario();
+            if (barbeiros.containsKey(opcaoBarbeiro)) {
+                Barbeiro barbeiro = new Barbeiro(barbeiros.get(opcaoBarbeiro));
+
+                Iterator<Disponibilidade> impressao = barbeiro.getDisponibilidade().iterator();
+
+                System.out.println("* Selecione o horario desejado: ");
+                while(impressao.hasNext()) {
+                    Disponibilidade disponibilidade = impressao.next();
+                    disponibilidade.exibirInformacoes();
+                    System.out.println();
+                } 
+
+                System.out.printf("+ Digite o horario inicial para selecionar um dos horarios: ");
+                LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
+
+                boolean disponivel = false;
+
+                Iterator<Disponibilidade> iterador = barbeiro.getDisponibilidade().iterator();
+
+                Disponibilidade disponibilidade = null;
+                while(iterador.hasNext()) {
+                    disponibilidade = iterador.next();
+                    if (disponibilidade.getHoraInicio().equals(horario)) {
+                        disponivel = true;
+                        disponibilidade.setDisponivel(disponivel);
+                        break;
+                    }
+                }
+                if (!(disponivel)) {
+                    throw new ExceptionObjetoInexistente(" Data e/ou horario indisponivel ou inexistente");
+                }
+
+                return new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData(), horario);
+            }else {
+                throw new ExceptionObjetoInexistente(" O barbeiro selecionado nao esta registrado.");
+            }
+        }else {
+            throw new ExceptionObjetoInexistente(" O servico selecionado nao esta registrado.");
+        }
     }
 
 
@@ -309,12 +301,15 @@ public class Registrador {
             List<String> novoConjunto = new ArrayList<>();
 
             for (int c = 0; c < conjuntoDados.size(); c++) {
-                if (c != (id - 1)) {
+                String[] campos = conjuntoDados.get(c).split(";");
+                
+                if (!(campos[0].equals(Integer.toString(id)))) {
                     novoConjunto.add(conjuntoDados.get(c));
                 }
             }
             Files.write(caminho, novoConjunto);
-            System.out.println("* Usuario removido com sucesso");
+            System.out.println("................................................................................................................");
+            System.out.println("@ Item removido com sucesso.");
         } catch (IOException f)  {
             System.out.println("* Caminho ou arquivo nao encontrado(s).");
         } 
