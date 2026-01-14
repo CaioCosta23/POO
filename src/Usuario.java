@@ -6,16 +6,14 @@ public abstract class Usuario{
     private String email;
     private String telefone;
     private String cpf;
-    private String login;
     private String senha;
 
-    public Usuario(int id, String nome, String email, String telefone, String cpf, String login, String senha) {
+    public Usuario(int id, String nome, String email, String telefone, String cpf, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.cpf = cpf;
-        this.login = login;
         this.senha = senha;
     }
 
@@ -25,7 +23,6 @@ public abstract class Usuario{
         this.email = original.email;
         this.telefone = original.telefone;
         this.cpf = original.cpf;
-        this.login = original.login;
         this.senha = original.senha;
     }
 
@@ -69,14 +66,6 @@ public abstract class Usuario{
         this.cpf = cpf;
     }
 
-    public String getLogin() {
-        return this.login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public String getSenha() {
         return this.senha;
     }
@@ -87,15 +76,15 @@ public abstract class Usuario{
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s;%s", this.getId(), this.getNome(), this.getEmail(), this.getTelefone(),
-                                                     this.getCpf(), this.getLogin(), this.getSenha());
+        return String.format("%d;%s;%s;%s;%s;%s", this.getId(), this.getNome(), this.getEmail(), this.getTelefone(),
+                                                     this.getCpf(), this.getSenha());
     }
 
     // O retorno desa função foi criado com o tipo 'booleano' para que possa ser usado para comparações em outras partes do projeto;
     public boolean autenticar(String login, String senha) {
         boolean logado;
 
-        if (login.equals(this.getLogin()) && senha.equals(this.getSenha())) {
+        if (login.equals(this.getCpf()) && senha.equals(this.getSenha())) {
             System.out.println("LOGADO.");
             logado = true;
         }else {
@@ -112,7 +101,8 @@ public abstract class Usuario{
          * (neste caso, executa um "entrada.close()" se o objeto for criado ou não) de forma segura.
         */
         try (Scanner entrada = new Scanner(System.in)) {
-            if (this.autenticar(entrada.nextLine(), entrada.nextLine())) {
+            if (this.autenticar(this.getCpf(), this.getSenha())) {
+                System.out.println("----------------------------------------------------------------------------------------------------------------");
                 System.out.printf("# Digite uma nova senha: ");
                 this.setSenha(entrada.nextLine());
                 System.out.println("- Senha Alterada!");
@@ -126,6 +116,4 @@ public abstract class Usuario{
         System.out.println("- Telefone:" + this.getTelefone());
         System.out.println("- CPF:" + this.getCpf());
     }
-
-    public abstract void exibirMenu();
 }
