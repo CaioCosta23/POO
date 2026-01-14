@@ -1,5 +1,12 @@
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+
 public class Gerenciador {
+
+    private final Scanner entrada = new Scanner(System.in);
 
     public Gerenciador() {
     }
@@ -12,7 +19,7 @@ public class Gerenciador {
         }
         // Realiza a leitura do arquivo que contém o endereco da barbearia;
         Leitor leitor = new Leitor();
-
+        
         barbearia.adicionarClientes(leitor.lerCliente());
         barbearia.adicionarBarbeiros(leitor.lerBarbeiro());
         barbearia.adicionarServicos(leitor.lerServico());
@@ -32,14 +39,139 @@ public class Gerenciador {
         int opcao = leitor.leOpcoes();
 
         if (opcao == EnumOpcao.OPCAO_CLIENTE.getValue()) {
+            System.out.println("Selecione uma das opcoes abaixo:\n");
+            System.out.println("[1] Cadastrar-se\t[2] Acessar area do cliente\n");
+            
+            opcao = leitor.leOpcoes();
 
+            if (opcao == 1) {
+                Cliente novo = registrador.cadastrarCliente();
+                registrador.armazenarUsuario(novo, EnumCaminho.CLIENTES.getValue());
+                    
+            }else {
+                System.out.printf("@ Login: ");
+                String login = entrada.nextLine();
+
+                System.out.printf("@ Senha: ");
+                String senha = entrada.nextLine();
+
+                if (barbearia.getClientes().containsKey(login)) {
+                    Cliente cliente = new Cliente(barbearia.getClientes().get(login));
+                
+                    if ((opcao == 2) && (cliente.autenticar(login, senha))) {
+                        Cliente.exibirMenu();
+                        
+                        switch (leitor.leOpcoes()) {
+                            case 1:
+                                if (!(barbearia.getBarbeiros()).isEmpty()){
+                                    if (!(barbearia.getServicos()).isEmpty()) {
+                                        Agendamento agendamento = registrador.criarAgendamento(barbearia);
+                                        registrador.armazenarAgendamento(agendamento);
+                                    }else {
+                                        System.out.println("* Lista de servicos vazia.");
+                                    }
+                                }else {
+                                    System.out.println("* Lista de prestadores de servicos vazia.");
+                                }
+                                break;
+                            case 2:
+                                System.out.printf("- Digite o numero do agendamento: ");
+                                int identificadorAgendamento = Integer.parseInt(entrada.nextLine());
+
+                                if (!(barbearia.getAgendamentos().isEmpty())){
+                                    registrador.editarLista(EnumCaminho.AGENDAMENTO.getValue(), barbearia.getAgendamentos().get(identificadorAgendamento).getId());
+                                }else {
+                                    System.out.println("* Lista de Agendamentos vazia.");
+                                }
+                                break;
+                            case 3:
+                                if (barbearia.getClientes().containsKey(cliente.getCpf())) {
+                                    cliente.exibirInformacoes();
+                                }
+                                break;
+                                
+                            case 4:
+                                int numeroAgendamento = leitor.leOpcoes();
+
+                                if (!(barbearia.getAgendamentos().isEmpty())){
+                                    if (!(barbearia.getClientes().isEmpty())) { 
+                                        if (!(barbearia.getBarbeiros()).isEmpty()){
+                                            if (!(barbearia.getServicos()).isEmpty()) {
+                                                if (barbearia.getAgendamentos().containsKey(numeroAgendamento)) {
+                                                    barbearia.getAgendamentos().get(numeroAgendamento).exibirInformacoes();
+                                                }else {
+                                                    System.out.println("Agendamento nao encontrado.");
+                                                }
+                                            }else {
+                                                System.out.println("* Lista de servicos vazia.");
+                                            }
+                                        }else {
+                                            System.out.println("* Lista de prestadores de servicos vazia.");
+                                        }
+                                    }else {
+                                        System.out.println("* Lista de clientes vazia.");
+                                    }
+                                }else {
+                                    System.out.println("* Lista de agendamentos vazia.");
+                                }
+                                break;
+
+                            case 5:
+                                if (!(leitor.lerServico().isEmpty())) {
+                                    barbearia.adicionarServicos(leitor.lerServico());
+
+                                    int opcaoServico = leitor.leOpcoes();
+                                    
+                                    if (barbearia.getServicos().containsKey(opcaoServico)) {
+                                        barbearia.getServicos().get(opcaoServico).exibirInformacoes();
+                                    }
+                                }else {
+                                    System.out.println("* Lista de servicos vazia.");
+                                }
+                                break;
+
+                            case 6:
+                                if (!(barbearia.getBarbeiros().isEmpty())) {
+                                    consulta.exibirBarbeiros(barbearia.getBarbeiros());
+                                }else {
+                                    System.out.println("* Lista de prestadores de servicos vazia.");
+                                }
+                                break;
+
+                            case 7:
+                                cliente.alterarSenha();
+                                Map<String, Cliente> clientes = new HashMap<>(barbearia.getClientes());
+                                clientes.replace(cliente.getCpf(), cliente);
+                                barbearia.adicionarClientes(clientes);
+                                break;
+                            case 8:
+                                if (!(barbearia.getClientes().isEmpty())) {
+                                    if (barbearia.getClientes().containsKey(cliente.getCpf())) {
+                                        registrador.editarLista(EnumCaminho.CLIENTES.getValue(), barbearia.getClientes().get(cliente.getCpf()).getId());
+                                    }else {
+                                        System.out.println("* Cliente nao encontrado/registrado.");
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new IllegalArgumentException(" pois a opcao nao e oferecida.");
+                        }
+                    }
+                }
+            }
         }else if (opcao == EnumOpcao.OPCAO_BARBEIRO.getValue()) {
             
         }else if (opcao == EnumOpcao.OPCAO_ADMINISTRADOR.getValue()) {
             Administrador administrador = leitor.lerAdministrador();
 
-            if (leitor.lerLoginSenhaUsuarios(administrador) != null) {
-                administrador.exibirMenu();
+            System.out.printf("@ Login: ");
+            String login = entrada.nextLine();
+
+            System.out.printf("@ Senha: ");
+            String senha = entrada.nextLine();
+
+            if (administrador.autenticar(login, senha)) {
+                Administrador.exibirMenu();
 
                 switch (leitor.leOpcoes()) {
                     case 1:
@@ -59,6 +191,14 @@ public class Gerenciador {
                         }
                         break;
                     case 2:
+                        System.out.printf("- Digite o numero do agendamento: ");
+                        int identificadorAgendamento = Integer.parseInt(entrada.nextLine());
+
+                        if (!(barbearia.getAgendamentos().isEmpty())){
+                            registrador.editarLista(EnumCaminho.AGENDAMENTO.getValue(), barbearia.getAgendamentos().get(identificadorAgendamento).getId());
+                        }else {
+                            System.out.println("* Lista de Agendamentos vazia.");
+                        }
                         break;
                         
                     case 3:
