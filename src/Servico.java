@@ -1,3 +1,5 @@
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Servico {
     private int id;
@@ -5,6 +7,7 @@ public class Servico {
     private String descricao;
     private float preco;
     private static final int DURACAO = 40;
+    private Map<Integer, Recurso> recursos = new TreeMap<>();
 
     public Servico(int id, String nome, String descricao, float preco) {
         this.id = id;
@@ -54,6 +57,14 @@ public class Servico {
 
     public static int getDuracao() {
         return DURACAO;
+    }
+
+    public Map<Integer, Recurso> getRecursos() {
+        return new TreeMap<>(this.recursos);
+    }
+
+    public void adicionarRecursos(Map<Integer, Recurso> recursos) {
+        this.recursos.putAll(recursos);
     }
 
     @Override
