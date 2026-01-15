@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 public class Leitor {
@@ -264,9 +265,41 @@ public class Leitor {
 
             ValidacaoQtdDados.validacao(campos, EnumCaminho.SERVICOS.getValue(), EnumQtdDados.QTD_DADOS_SERVICOS.getValue());
 
-            servicos.put(Integer.valueOf(campos[0]), new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3])));
+            Servico servico = new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3]));
+            servicos.put(Integer.valueOf(campos[0]), servico);
         }
+
         return servicos;
+    }
+
+    public Map<Integer, Recurso>lerRecurso() throws Exception {
+        Map<Integer, Recurso> recursos = new TreeMap<>();
+
+        File file = new File(EnumCaminho.RECURSOS.getValue());
+
+        if (!file.exists()) {
+            file.createNewFile();          // cria o arquivo
+        }
+
+        InputStream arquivo = new FileInputStream(EnumCaminho.RECURSOS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
+        
+        String linha;
+        boolean disponivel = true;
+            
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+
+            ValidacaoQtdDados.validacao(campos, EnumCaminho.RECURSOS.getValue(), EnumQtdDados.QTD_DADOS_RECURSOS.getValue());
+            
+            if (campos[3].equals("DISPONIVEL")) {
+                disponivel = true;
+            }else if(campos[3].equals("INDISPONIVEL")){
+                disponivel = false;
+            }
+            recursos.put(Integer.valueOf(campos[0]), new Recurso(Integer.parseInt(campos[0]), campos[1], campos[2], disponivel));
+        }
+        return recursos;
     }
 
 
@@ -308,7 +341,6 @@ public class Leitor {
             contador++;
         }
     }
-
 
 
     public List<Disponibilidade> lerDisponibilidades(String identificador) throws Exception {
