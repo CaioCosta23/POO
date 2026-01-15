@@ -34,9 +34,9 @@ public class Registrador {
         System.out.printf("- Informe o nome: ");
         String nome = entrada.nextLine();
 
+        //ValidacaoFormato.validacao(email, EnumFormato.EMAIL.FORMATO);
         System.out.printf("- Insira um endereco de e-mail: ");
         String email = entrada.nextLine();
-        //ValidacaoFormato.validacao(email, EnumFormato.EMAIL.FORMATO);
 
         System.out.printf("- Insira um telefone (com o DDD, como 027, por exemplo, e 9 digitos): ");
         String telefone = entrada.nextLine();
@@ -52,8 +52,7 @@ public class Registrador {
 
         LocalDate data = LocalDate.parse(nascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         
-        // O ID do cliente será registrado quando for feito o armazenamento do mesmo no arquivo;
-        return new Cliente(-1, nome, email, telefone, cpf, senha, data);
+        return new Cliente(geradorId, nome, email, telefone, cpf, senha, data);
     }
 
 
@@ -83,11 +82,10 @@ public class Registrador {
 
         //entrada.close();
 
-        Barbeiro barbeiro = new Barbeiro(-1, nome, email, telefone, cpf, senha, data, salario);
+        Barbeiro barbeiro = new Barbeiro(geradorId, nome, email, telefone, cpf, senha, data, salario);
 
         barbeiro.adicionarDisponibilidade(criarDisponibilidade());
         
-        // O ID do barbeiro será registrado quando for feito o armazenamento do mesmo no arquivo;
         return barbeiro;
     }
 
@@ -144,7 +142,7 @@ public class Registrador {
         System.out.printf("- Digite o preco do servico: ");
         float preco = Float.parseFloat(entrada.nextLine());
 
-        return new Servico(-1, nome, descricao, preco);
+        return new Servico(geradorId, nome, descricao, preco);
     }
 
 
@@ -216,7 +214,7 @@ public class Registrador {
                     throw new ExceptionObjetoInexistente(" Data e/ou horario indisponivel ou inexistente");
                 }
 
-                return new Agendamento(-1, cliente, barbeiro, servico, disponibilidade.getData(), horario);
+                return new Agendamento(geradorId, cliente, barbeiro, servico, disponibilidade.getData(), horario);
             }else {
                 throw new ExceptionObjetoInexistente(" O barbeiro selecionado nao esta registrado.");
             }
@@ -228,7 +226,6 @@ public class Registrador {
 
 
     public void armazenarUsuario(Usuario usuario, String caminhoUsuario) throws Exception {
-        usuario.setId(geradorId);
 
         try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(caminhoUsuario, true))) {
 
@@ -270,7 +267,6 @@ public class Registrador {
 
 
     public void armazenarServico(Servico servico) throws Exception {
-        servico.setId(geradorId);
 
         try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.SERVICOS.getValue(), true))) {
             arquivo.write(servico.toString());
@@ -284,7 +280,6 @@ public class Registrador {
 
 
     public void armazenarAgendamento(Agendamento agendamento) throws IOException {
-        agendamento.setId(geradorId);
 
         try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.AGENDAMENTO.getValue(), true))) {
             arquivo.write(agendamento.toString());
@@ -337,6 +332,22 @@ public class Registrador {
 
             // Impressão de verificação para o programador;
             //System.out.println("Recursos de servicos armazenados com sucesso.");
+        }
+    }
+
+    public void armazenarNotificacao(NotificacaoServico notificacao) throws Exception {
+        notificacao.setId(geradorId);
+
+        // garante que o arquivo exista
+        java.io.File file = new java.io.File(EnumCaminho.NOTIFICACOES.getValue());
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        }
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.NOTIFICACOES.getValue(), true))) {
+            arquivo.write(notificacao.toString());
+            arquivo.newLine();
         }
     }
 
