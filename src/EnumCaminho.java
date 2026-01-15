@@ -8,7 +8,8 @@ public enum EnumCaminho {
     SERVICOS("dados/servicos.txt"),
     ESPECIALIDADES("dados/especialidades.txt"),
     DISPONIBILIDADES("dados/disponibilidades.txt"),
-    RECURSOS("dados/recursos.txt");
+    RECURSOS("dados/recursos.txt"),
+    NOTIFICACOES("dados/notificacoes.txt");
 
     private final String value;
     
