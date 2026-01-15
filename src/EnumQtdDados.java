@@ -6,7 +6,8 @@ public enum EnumQtdDados {
     QTD_DADOS_SERVICOS(5),
     QTD_DADOS_ENDERECO_SIMPLES(4),
     QTD_DADOS_ENDERECO_COMPLETO(7),
-    QTD_DADOS_BARBEARIA(6);
+    QTD_DADOS_BARBEARIA(6),
+    QTD_DADOS_RECURSOS(4);
     
 
     private final int quantidade;
