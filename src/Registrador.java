@@ -199,8 +199,6 @@ public class Registrador {
                 System.out.printf("- Digite o horario inicial para selecionar um dos horarios: ");
                 LocalTime horario = LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
 
-                boolean disponivel = false;
-
                 Iterator<Disponibilidade> iterador = barbeiro.getDisponibilidade().iterator();
 
                 Disponibilidade disponibilidade = null;
@@ -210,10 +208,11 @@ public class Registrador {
                         if (!(disponibilidade.isDisponivel())) {
                             throw new IllegalArgumentException(" o horario selecionado nao se encontra disponivel");
                         }
+                        disponibilidade.setDisponivel(false);
                         break;
                     }
                 }
-                if (!(disponivel)) {
+                if (disponibilidade == null) {
                     throw new ExceptionObjetoInexistente(" Data e/ou horario indisponivel ou inexistente");
                 }
 
@@ -317,6 +316,27 @@ public class Registrador {
 
             // Impressão de verificação para o programador;
             //System.out.println("Especialidade armazenadas com sucesso.");
+        }
+    }
+
+    public void armazenarRecuros(Servico servico) throws Exception {
+
+        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.DISPONIBILIDADES.getValue(), true))) {
+            arquivo.write(servico.getId());
+            arquivo.newLine();
+
+            TreeMap<Integer, Recurso> lista = new TreeMap<>(servico.getRecursos());
+
+            for(Map.Entry<Integer, Recurso> recursos : lista.entrySet()) {
+                if (recursos.getKey().equals(lista.lastKey())) {
+                    arquivo.write(Integer.toString(recursos.getValue().getId()) + ";");
+                }else {
+                    arquivo.write(Integer.toString(recursos.getValue().getId()));
+                }
+            }
+
+            // Impressão de verificação para o programador;
+            //System.out.println("Recursos de servicos armazenados com sucesso.");
         }
     }
 
