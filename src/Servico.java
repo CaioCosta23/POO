@@ -7,7 +7,7 @@ public class Servico {
     private String descricao;
     private float preco;
     private static final int DURACAO = 40;
-    private Map<Integer, Recurso> recursos = new TreeMap<>();
+    private final Map<Integer, Recurso> recursos = new TreeMap<>();
 
     public Servico(int id, String nome, String descricao, float preco) {
         this.id = id;
