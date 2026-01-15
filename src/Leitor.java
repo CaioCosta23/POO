@@ -265,9 +265,9 @@ public class Leitor {
 
             ValidacaoQtdDados.validacao(campos, EnumCaminho.SERVICOS.getValue(), EnumQtdDados.QTD_DADOS_SERVICOS.getValue());
 
-            Servico servico = new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3]));
-            servicos.put(Integer.valueOf(campos[0]), servico);
+            servicos.put(Integer.valueOf(campos[0]), new Servico(Integer.parseInt(campos[0]), campos[1], campos[2], Float.parseFloat(campos[3])));
         }
+        this.lerRecursosPorServico(servicos, this.lerRecurso());
 
         return servicos;
     }
@@ -336,6 +336,44 @@ public class Leitor {
                     barbeiro.adicionarEspecialidades(especialidades);
 
                     barbeiros.replace(identificador, barbeiro);
+                }
+            }
+            contador++;
+        }
+    }
+
+    public void lerRecursosPorServico(Map<Integer,Servico> servicos, Map<Integer, Recurso> recursos) throws Exception{
+        File file = new File(EnumCaminho.RECURSOS.getValue());
+
+        if (!file.exists()) {
+            file.createNewFile();          // cria o arquivo
+        }
+
+        InputStream arquivo = new FileInputStream(EnumCaminho.RECURSOS.getValue());
+        BufferedReader br = new BufferedReader(new InputStreamReader(arquivo));
+        
+        int contador = 0;
+        String linha, identificador = "";
+        
+        while ((linha = br.readLine()) != null) {
+            String[] campos = linha.split(";");
+
+            if (contador % 2 == 0) {
+                identificador = linha;
+            }else {
+                if (recursos.containsKey(Integer.valueOf(identificador))) {
+                    Map<Integer, Recurso> recursosPorServico = new TreeMap<>();
+                    for (Map.Entry<Integer, Recurso> valor : recursos.entrySet()) {                  
+                        for (String id : campos) {
+                            if (Objects.equals(valor.getKey(), Integer.valueOf(id))) {
+                                recursosPorServico.put(valor.getKey(), new Recurso(valor.getValue()));
+                            }
+                        }
+                    }
+                    Servico servico = new Servico(servicos.get(Integer.valueOf(identificador)));
+                    servico.adicionarRecursos(recursosPorServico);
+
+                    servicos.replace(Integer.valueOf(identificador), servico);
                 }
             }
             contador++;
