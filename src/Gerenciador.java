@@ -1,5 +1,9 @@
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -143,6 +147,7 @@ public class Gerenciador {
                                 Map<String, Cliente> clientes = new HashMap<>(barbearia.getClientes());
                                 clientes.replace(cliente.getCpf(), cliente);
                                 barbearia.adicionarClientes(clientes);
+                                registrador.armazenarUsuario(cliente, senha);
                                 break;
                             case 8:
                                 if (!(barbearia.getClientes().isEmpty())) {
@@ -160,7 +165,191 @@ public class Gerenciador {
                 }
             }
         }else if (opcao == EnumOpcao.OPCAO_BARBEIRO.getValue()) {
-            
+            System.out.printf("@ Login (CPF): ");
+            String login = entrada.nextLine();
+
+            System.out.printf("@ Senha: ");
+            String senha = entrada.nextLine();
+
+            if (barbearia.getBarbeiros().containsKey(login)) {
+                Map<String, Barbeiro> barbeirosAtualizado = new HashMap<>(barbearia.getBarbeiros());
+                Barbeiro barbeiro = new Barbeiro(barbearia.getBarbeiros().get(login));
+
+                if (barbeiro.autenticar(login, senha)) {
+                    Barbeiro.exibirMenu();
+                    
+
+                    switch (leitor.leOpcoes()) {
+                        case 1:
+                            if (!(barbearia.getClientes().isEmpty())) {
+                                if (!(barbearia.getServicos()).isEmpty()) {
+                                    Agendamento agendamento = registrador.criarAgendamento(barbearia);
+                                    registrador.armazenarAgendamento(agendamento);
+                                } else {
+                                    System.out.println("* Lista de servicos vazia.");
+                                }
+                            } else {
+                                System.out.println("* Lista de clientes vazia.");
+                            }
+                            break;
+
+                        case 2:
+                            System.out.printf("- Digite o numero do agendamento: ");
+                            int identificadorAgendamento = Integer.parseInt(entrada.nextLine());
+
+                            if (!(barbearia.getAgendamentos().isEmpty())) {
+                                if (barbearia.getAgendamentos().containsKey(identificadorAgendamento)) {
+                                    Agendamento agendamento = barbearia.getAgendamentos().get(identificadorAgendamento);
+
+                                    if (agendamento.getBarbeiro().getCpf().equals(barbeiro.getCpf())) {
+                                        registrador.editarLista(EnumCaminho.AGENDAMENTO.getValue(), agendamento.getId());
+                                    } else {
+                                        System.out.println("* Este agendamento nao pertence a este barbeiro.");
+                                    }
+                                } else {
+                                    System.out.println("* Agendamento nao encontrado.");
+                                }
+                            } else {
+                                System.out.println("* Lista de Agendamentos vazia.");
+                            }
+                            break;
+
+                        case 3:
+                            // Adicionar especialidade
+
+                            Barbeiro novoBarbeiro = new Barbeiro(registrador.cadastrarEspecialidade(barbeiro, barbearia.getServicos()));
+
+                            registrador.armazenarEspecialidades(novoBarbeiro);
+
+                            
+                            barbeirosAtualizado.replace(novoBarbeiro.getCpf(), novoBarbeiro);
+                            barbearia.adicionarBarbeiros(barbeirosAtualizado);
+
+                            System.out.println("@ Especialidade adicionada com sucesso!");
+                        
+                            break;
+                        case 4:
+                            // Remover especialidade
+                            if (barbeiro.getEspecialidades().isEmpty()) {
+                                System.out.println("* Voce nao possui especialidades cadastradas.");
+                                break;
+                            }
+
+                            System.out.println("* Suas especialidades:");
+                            consulta.exibirServicos(barbeiro.getEspecialidades());
+
+                            System.out.printf("- Digite o ID do servico que deseja remover: ");
+                            int idRemover = Integer.parseInt(entrada.nextLine());
+
+                            
+                            if (barbeiro.getEspecialidades().containsKey(idRemover)) {
+                                Map<Integer, Servico> novasEsp = new HashMap<>(barbeiro.getEspecialidades());
+                                novasEsp.remove(idRemover);
+
+                                barbeiro.adicionarEspecialidades(novasEsp);
+
+                                registrador.armazenarEspecialidades(barbeiro);
+
+                                
+                                barbeirosAtualizado.replace(barbeiro.getCpf(), barbeiro);
+                                barbearia.adicionarBarbeiros(barbeirosAtualizado);
+
+                                System.out.println("@ Especialidade removida com sucesso!");
+                            } else {
+                                System.out.println("* Especialidade nao encontrada.");
+                            }
+                            break;
+
+                        case 5:
+                            if (barbeiro.getEspecialidades().isEmpty()) {
+                                System.out.println("* Lista de especialidades vazia.");
+                            } else {
+                                consulta.exibirServicos(barbeiro.getEspecialidades());
+                            }
+                            break;
+
+                        case 6:
+                            barbeiro.exibirInformacoes();
+                            break;
+
+                        case 7:
+                            if (barbeiro.getDisponibilidade().isEmpty()) {
+                                System.out.println("* Disponibilidades nao encontradas.");
+                            } else {
+                                consulta.exibirDisponibilidade(barbeiro.getDisponibilidade());
+                            }
+                            break;
+
+                        case 8:
+                            // Alterar disponibilidade (toggle)
+                            if (barbeiro.getDisponibilidade().isEmpty()) {
+                                System.out.println("* Disponibilidades nao encontradas.");
+                                break;
+                            }
+
+                            System.out.println("* Informe o horario inicial (HH:mm) para alterar:");
+                            LocalTime horarioAlt = java.time.LocalTime.parse(entrada.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
+
+                            List<Disponibilidade> listaDisp = new ArrayList<>(barbeiro.getDisponibilidade());
+                            boolean achou = false;
+                            
+                            for (int i = 0; i < listaDisp.size(); i++) {
+                                Disponibilidade d = listaDisp.get(i);
+                                if (d.getHoraInicio().equals(horarioAlt)) {
+                                    d.setDisponivel(!d.isDisponivel());
+                                    achou = true;
+                                    break;
+                                }
+                            }
+
+                            if (achou) {
+                                Barbeiro atualBarbeiro = new Barbeiro(barbeiro);
+                                barbeirosAtualizado.replace(atualBarbeiro.getCpf(), atualBarbeiro);
+                                barbearia.adicionarBarbeiros(barbeirosAtualizado);
+                                registrador.armazenarDisponibilidade(listaDisp, atualBarbeiro.getCpf());
+
+                                System.out.println("@ Disponibilidade atualizada com sucesso!");
+                            } else {
+                                System.out.println("* Horario nao encontrado.");
+                            }
+                            break;
+
+                        case 9:
+                            // Confirmar agendamento -> envia notificacao para o cliente do agendamento
+                            System.out.printf("* Digite o numero do agendamento a confirmar: ");
+                            int idAgConf = Integer.parseInt(entrada.nextLine());
+
+                            if (barbearia.getAgendamentos().containsKey(idAgConf)) {
+                                Agendamento ag = barbearia.getAgendamentos().get(idAgConf);
+                                if (ag.getBarbeiro().getCpf().equals(barbeiro.getCpf())) {
+                                    NotificacaoServico notif = new NotificacaoServico(-1, EnumTipoNotificacao.CONFIRMACAO_AGANDAMENTO,
+                                            ag.getCliente().getCpf(), "PUSH", java.time.LocalDate.now(), java.time.LocalTime.now());
+                                    notif.enviarPush();
+                                    registrador.armazenarNotificacao(notif);
+                                    System.out.println("@ Notificacao registrada em arquivo.");
+                                } else {
+                                    System.out.println("* Este agendamento nao pertence a este barbeiro.");
+                                }
+                            } else {
+                                System.out.println("* Agendamento nao encontrado.");
+                            }
+                            break;
+
+                        case 10:
+                            barbeiro.alterarSenha();
+                            Map<String, Barbeiro> barbeiros = new HashMap<>(barbearia.getBarbeiros());
+                            barbeiros.replace(barbeiro.getCpf(), barbeiro);
+                            barbearia.adicionarBarbeiros(barbeiros);
+                            registrador.armazenarUsuario(barbeiro, senha);
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException(" pois a opcao nao e oferecida.");
+                    }
+                }
+            } else {
+                System.out.println("* Barbeiro nao encontrado/registrado.");
+            }
         }else if (opcao == EnumOpcao.OPCAO_ADMINISTRADOR.getValue()) {
             Administrador administrador = leitor.lerAdministrador();
 
@@ -354,6 +543,62 @@ public class Gerenciador {
                         }
                         break;
                     case 12:
+                        // Enviar notificacoes de servico (ex: novos servicos)
+                        System.out.println("* Selecione o tipo de notificacao:");
+                        System.out.println("[1] Novos servicos	[2] Lembrete 24h	[3] Cancelamento	[4] Confirmacao de agendamento");
+
+                        int tipoNotifOpcao = leitor.leOpcoes();
+                        EnumTipoNotificacao tipoNotif;
+
+                        if (tipoNotifOpcao == 1) {
+                            tipoNotif = EnumTipoNotificacao.NOVOS_SERVICOS;
+                        } else if (tipoNotifOpcao == 2) {
+                            tipoNotif = EnumTipoNotificacao.LEMBRETE_24H;
+                        } else if (tipoNotifOpcao == 3) {
+                            tipoNotif = EnumTipoNotificacao.CANCELAMENTO;
+                        } else if (tipoNotifOpcao == 4) {
+                            tipoNotif = EnumTipoNotificacao.CONFIRMACAO_AGANDAMENTO;
+                        } else {
+                            throw new IllegalArgumentException("com opcao invalida para tipo de notificacao!");
+                        }
+
+                        System.out.println("* Selecione o canal de envio:");
+                        System.out.println("[1] Email	[2] SMS	[3] Push");
+
+                        int canalOpcao = leitor.leOpcoes();
+                        String canal;
+
+                        if (canalOpcao == 1) {
+                            canal = "EMAIL";
+                        } else if (canalOpcao == 2) {
+                            canal = "SMS";
+                        } else if (canalOpcao == 3) {
+                            canal = "PUSH";
+                        } else {
+                            throw new IllegalArgumentException("com opcao invalida para canal!");
+                        }
+
+                        if (barbearia.getClientes().isEmpty()) {
+                            System.out.println("* Lista de clientes vazia. Nao ha destinatarios.");
+                            break;
+                        }
+
+                        System.out.println("* Enviando notificacoes para todos os clientes cadastrados...");
+                        for (Map.Entry<String, Cliente> valor : barbearia.getClientes().entrySet()) {
+                            Cliente cli = valor.getValue();
+                            NotificacaoServico notif = new NotificacaoServico(-1, tipoNotif, cli.getCpf(), canal,
+                                    java.time.LocalDate.now(), java.time.LocalTime.now());
+
+                            if (canal.equals("EMAIL")) {
+                                notif.enviarEmail();
+                            } else if (canal.equals("SMS")) {
+                                notif.enviarSMS();
+                            } else {
+                                notif.enviarPush();
+                            }
+
+                            registrador.armazenarNotificacao(notif);
+                        }
                         break;
                     default:
                         throw new IllegalArgumentException(" pois a opcao nao e oferecida.");
