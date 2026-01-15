@@ -102,7 +102,7 @@ public class Registrador {
             especialidades.put(idServico, servico);
             barbeiro.adicionarEspecialidades(especialidades);
         }else {
-            System.out.println("* Servico nao disponivel no catalogo.");
+            throw new IllegalArgumentException("* Servico nao disponivel no catalogo.");
         }
         return barbeiro;
     }
@@ -293,6 +293,8 @@ public class Registrador {
         }
     }
 
+
+    
     public void armazenarEspecialidades(Barbeiro barbeiro) throws Exception {
 
         try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.DISPONIBILIDADES.getValue(), true))) {
