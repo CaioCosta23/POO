@@ -12,7 +12,7 @@ public class Barbearia{
     //private PoliticaCancelamento politica;
     private final Map<String, Cliente> clientes = new HashMap<>();
     private final Map <String, Barbeiro> barbeiros = new HashMap<>();
-    final private Map<Integer, Servico> servicos = new HashMap<>();
+    private final Map<Integer, Servico> servicos = new HashMap<>();
     private final Map<Integer, Agendamento> agendamentos = new HashMap<>();
     private static Administrador administrador;
     
