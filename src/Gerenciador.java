@@ -503,12 +503,12 @@ public class Gerenciador {
                         if (!(barbearia.getClientes().isEmpty())) {
                             if (barbearia.getClientes().containsKey(identificadorConsulta)){
                                 barbearia.getClientes().get(identificadorConsulta).exibirInformacoes();
-                            }
-                        }else if (!(barbearia.getBarbeiros().isEmpty())) {
-                            if (barbearia.getBarbeiros().containsKey(identificadorConsulta)) {
-                                barbearia.getBarbeiros().get(identificadorConsulta).exibirInformacoes();
-                            }else {
-                                System.out.println("* Usuario nao encontrado.");
+                            }else if (!(barbearia.getBarbeiros().isEmpty())) {
+                                if (barbearia.getBarbeiros().containsKey(identificadorConsulta)) {
+                                    barbearia.getBarbeiros().get(identificadorConsulta).exibirInformacoes();
+                                }else {
+                                    System.out.println("* Usuario nao encontrado.");
+                                }
                             }
                         }else {
                             System.out.println("Lista de usuarios (clientes e/ou prestadores de servicos) vazia.");
