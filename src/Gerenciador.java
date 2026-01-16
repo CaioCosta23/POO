@@ -1,4 +1,3 @@
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -6,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 
 public class Gerenciador {
@@ -243,7 +243,7 @@ public class Gerenciador {
 
                             
                             if (barbeiro.getEspecialidades().containsKey(idRemover)) {
-                                Map<Integer, Servico> novasEsp = new HashMap<>(barbeiro.getEspecialidades());
+                                Map<Integer, Servico> novasEsp = new TreeMap<>(barbeiro.getEspecialidades());
                                 novasEsp.remove(idRemover);
 
                                 barbeiro.adicionarEspecialidades(novasEsp);

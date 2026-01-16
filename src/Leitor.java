@@ -247,7 +247,7 @@ public class Leitor {
 
 
     public Map<Integer, Servico>lerServico() throws Exception {
-        Map<Integer, Servico> servicos = new HashMap<>();
+        Map<Integer, Servico> servicos = new TreeMap<>();
 
         File file = new File(EnumCaminho.SERVICOS.getValue());
 
