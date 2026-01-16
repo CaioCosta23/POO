@@ -50,10 +50,12 @@ public class Barbeiro extends Usuario{
     }
 
     public void adicionarDisponibilidade(List<Disponibilidade>disponibilidades) {
+        this.disponibilidades.clear();
         this.disponibilidades.addAll(disponibilidades);
     }
 
     public void adicionarEspecialidades(Map<Integer, Servico>servicos) {
+        this.especialidades.clear();
         this.especialidades.putAll(servicos);
     }
 

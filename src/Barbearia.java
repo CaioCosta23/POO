@@ -1,6 +1,7 @@
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 public class Barbearia{
     private String nome;
     protected Endereco endereco;
@@ -12,7 +13,7 @@ public class Barbearia{
     //private PoliticaCancelamento politica;
     private final Map<String, Cliente> clientes = new HashMap<>();
     private final Map <String, Barbeiro> barbeiros = new HashMap<>();
-    private final Map<Integer, Servico> servicos = new HashMap<>();
+    private final Map<Integer, Servico> servicos = new TreeMap<>();
     private final Map<Integer, Agendamento> agendamentos = new HashMap<>();
     private static Administrador administrador;
     
@@ -116,28 +117,32 @@ public class Barbearia{
     public Map<String, Barbeiro> getBarbeiros() {
         return new HashMap<>(this.barbeiros);
     }
+    
+    public Map<Integer, Servico> getServicos() {
+        return new HashMap<>(this.servicos);
+    }
 
     public Map<Integer, Agendamento> getAgendamentos() {
         return new HashMap<>(this.agendamentos);
     }
 
     public void adicionarClientes(Map<String, Cliente>clientes) {
+        this.clientes.clear();
         this.clientes.putAll(clientes);
     }
 
     public void adicionarBarbeiros(Map<String, Barbeiro>barbeiros) {
+        this.barbeiros.clear();
         this.barbeiros.putAll(barbeiros);
     }
 
-    public Map<Integer, Servico> getServicos() {
-        return new HashMap<>(this.servicos);
-    }
-
     public void adicionarServicos(Map<Integer, Servico>servicos) {
+        this.servicos.clear();
         this.servicos.putAll(servicos);
     }
 
     public void adicionarAgendamentos(Map<Integer, Agendamento> agendamentos) {
+        this.agendamentos.clear();
         this.agendamentos.putAll(agendamentos);
     }
 

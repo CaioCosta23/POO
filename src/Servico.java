@@ -64,6 +64,7 @@ public class Servico {
     }
 
     public void adicionarRecursos(Map<Integer, Recurso> recursos) {
+        this.recursos.clear();
         this.recursos.putAll(recursos);
     }
 
