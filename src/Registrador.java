@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -112,15 +113,19 @@ public class Registrador {
     public List<Disponibilidade> criarDisponibilidade() {
         LocalTime horario = LocalTime.of(Barbearia.getAbertura().getHour(), Barbearia.getAbertura().getMinute());
         LocalTime ultimoHorario = LocalTime.of(Barbearia.getFechamento().getHour(), Barbearia.getFechamento().getMinute());
+        
 
-        LocalDate data = LocalDate.parse(LocalDate.now().toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate data = LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                                        DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         List<Disponibilidade> disponibilidades = new ArrayList<>();
-        boolean disponivel = true;
+        boolean disponivel;
 
         while(!(horario.isAfter(ultimoHorario))) {
             if (LocalTime.now().isAfter(horario)) {
                 disponivel = false;
+            }else {
+                disponivel = true;
             }
             Disponibilidade disponibilidade = new Disponibilidade(data, horario, horario.plusMinutes(Servico.getDuracao()), disponivel);
             disponibilidades.add(disponibilidade);
@@ -294,27 +299,55 @@ public class Registrador {
     }
 
 
-    
+
     public void armazenarEspecialidades(Barbeiro barbeiro) throws Exception {
+        List<String>barbeiroEspecialidades = new ArrayList<>();
+        TreeMap<Integer, Servico> lista = new TreeMap<>(barbeiro.getEspecialidades());
 
-        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.DISPONIBILIDADES.getValue(), true))) {
-            arquivo.write(barbeiro.getCpf());
-            arquivo.newLine();
+        barbeiroEspecialidades.add(barbeiro.getCpf());
+        String linha = "";
 
-            TreeMap<Integer, Servico> lista = new TreeMap<>(barbeiro.getEspecialidades());
-
-            for(Map.Entry<Integer, Servico> especialidades : lista.entrySet()) {
-                if (especialidades.getKey().equals(lista.lastKey())) {
-                    arquivo.write(Integer.toString(especialidades.getValue().getId()) + ";");
-                }else {
-                    arquivo.write(Integer.toString(especialidades.getValue().getId()));
-                }
+        for (Map.Entry<Integer, Servico> especialidades : lista.entrySet()) {
+            if (especialidades.getKey().equals(lista.lastKey())) {
+                linha += String.format(Integer.toString(especialidades.getKey()));
+            }else {
+                linha += String.format(Integer.toString(especialidades.getKey()) + ";");
             }
-
-            // Impressão de verificação para o programador;
-            //System.out.println("Especialidade armazenadas com sucesso.");
         }
+        barbeiroEspecialidades.add(linha);
+
+        Path caminho = Paths.get(EnumCaminho.ESPECIALIDADES.getValue());
+        List<String>dados = Files.readAllLines(caminho);
+
+        boolean encontrado = false;
+        int localizacao = 0;
+
+        for (int l = 0; l < dados.size(); l++) {
+            if (dados.get(l).equals(barbeiroEspecialidades.get(0))) {
+                encontrado = true;
+                localizacao = l +1;
+                break;
+            }
+        }
+
+        if (encontrado) {
+            dados.set(localizacao, barbeiroEspecialidades.get(1));
+        }else {
+            dados.add(barbeiroEspecialidades.get(0));
+            dados.add(barbeiroEspecialidades.get(1));
+        }
+
+        Files.write(caminho, dados);
+
+        System.out.println("................................................................................................................");
+        System.out.println("@ Lista de especialidaes atualizada.");
+
+
+        // Impressão de verificação para o programador;
+        //System.out.println("Especialidade armazenadas com sucesso.");
     }
+
+
 
     public void armazenarRecuros(Servico servico) throws Exception {
 
