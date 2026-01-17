@@ -1,5 +1,4 @@
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -350,25 +349,48 @@ public class Registrador {
 
 
     public void armazenarRecuros(Servico servico) throws Exception {
+        List<String>servicoRecursos = new ArrayList<>();
+        TreeMap<Integer, Recurso> lista = new TreeMap<>(servico.getRecursos());
 
-        try (BufferedWriter arquivo = new BufferedWriter(new FileWriter(EnumCaminho.DISPONIBILIDADES.getValue(), true))) {
-            arquivo.write(servico.getId());
-            arquivo.newLine();
+        servicoRecursos.add(Integer.toString(servico.getId()));
+        String linha = "";
 
-            TreeMap<Integer, Recurso> lista = new TreeMap<>(servico.getRecursos());
-
-            for(Map.Entry<Integer, Recurso> recursos : lista.entrySet()) {
-                if (recursos.getKey().equals(lista.lastKey())) {
-                    arquivo.write(Integer.toString(recursos.getValue().getId()) + ";");
-                }else {
-                    arquivo.write(Integer.toString(recursos.getValue().getId()));
-                }
+        for (Map.Entry<Integer, Recurso> recursos : lista.entrySet()) {
+            if (recursos.getKey().equals(lista.lastKey())) {
+                linha += String.format(Integer.toString(recursos.getKey()));
+            }else {
+                linha += String.format(Integer.toString(recursos.getKey()) + ";");
             }
-
-            // Impressão de verificação para o programador;
-            //System.out.println("Recursos de servicos armazenados com sucesso.");
         }
+        servicoRecursos.add(linha);
+
+        Path caminho = Paths.get(EnumCaminho.RECURSOS.getValue());
+        List<String>dados = Files.readAllLines(caminho);
+
+        boolean encontrado = false;
+        int localizacao = 0;
+
+        for (int l = 0; l < dados.size(); l++) {
+            if (dados.get(l).equals(servicoRecursos.get(0))) {
+                encontrado = true;
+                localizacao = l +1;
+                break;
+            }
+        }
+
+        if (encontrado) {
+            dados.set(localizacao, servicoRecursos.get(1));
+        }else {
+            dados.add(servicoRecursos.get(0));
+            dados.add(servicoRecursos.get(1));
+        }
+
+        Files.write(caminho, dados);
+
+        System.out.println("................................................................................................................");
+        System.out.println("@ Lista de recursos atualizada.");
     }
+
 
     public void armazenarNotificacao(NotificacaoServico notificacao) throws Exception {
         notificacao.setId(geradorId);
